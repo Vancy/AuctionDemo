@@ -8,18 +8,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.servlet.DefaultServlet;
-public class LoginServlet extends DefaultServlet{
+public class BidServlet extends DefaultServlet{
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -2172189957056566935L;
-	private String logo;
-	
+	private static final long serialVersionUID = 2483175565395222277L;
+
 	public void init(){
-		logo = "Hello GHouan!";
+
 	}
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		hasCookie(request.getCookies());
 		
 		
@@ -36,7 +35,6 @@ public class LoginServlet extends DefaultServlet{
 		response.addCookie(nameCookie);
 		// Actual logic goes here.
 		PrintWriter out = response.getWriter();
-		out.println("<h1>" + logo + "</h1>");
 		out.println("<h2>" + "xing" + "</h2>");
 
 	}

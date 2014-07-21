@@ -20,7 +20,7 @@
 		createXMLHttpRequest();
 		xmlHttp.onreadystatechange = handleStateChange;
         name = document.getElementById("name").value;
-		xmlHttp.open("GET", "/servlet/login?name="+name+"&ip=127.0.0.1", true);
+		xmlHttp.open("GET", "login?name="+name+"&ip=127.0.0.1", true);
 	    xmlHttp.send();
 	}
 	function handleStateChange() {
