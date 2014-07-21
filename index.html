@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type"
+			content="text/html; charset=ISO-8859-1">
+		<title>Auction System</title>
+	</head>
+	<script type="text/javascript">
+	var xmlHttp;
+
+	function createXMLHttpRequest() {
+		if (window.ActiveXObject) {
+			xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}else if (window.XMLHttpRequest) {
+			xmlHttp = new XMLHttpRequest();
+		}
+	}
+	function startRequest() {
+		createXMLHttpRequest();
+		xmlHttp.onreadystatechange = handleStateChange;
+        name = document.getElementById("name").value;
+		xmlHttp.open("GET", "login?name="+name+"&ip=127.0.0.1", true);
+	    xmlHttp.send();
+	}
+	function handleStateChange() {
+		if(xmlHttp.readyState == 4) {
+			if(xmlHttp.status == 200) {
+		         //alert("You logined");
+			}
+		}
+	}
+	</script>
+	<body>
+		<h1>Auction System.</h1>
+        <form id="login_form">
+		<input type="text" id="name" value="input your name"/>
+		<input type="button" id="button" value="Enter" onclick="startRequest();"/>
+        </form>
+	</body>
+</html>
