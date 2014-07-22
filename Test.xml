@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<auction_context>
+<round final="no" value="1"/>
+<duration value="20"/>
+<item0 name="dogfood" owner="" price="100.0"/>
+<item1 name="kennel" owner="" price="250.0"/>
+</auction_context>

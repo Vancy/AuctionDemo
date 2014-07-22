@@ -8,12 +8,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.servlet.DefaultServlet;
+
+import dataRepresentation.AuctionContext;
 public class BidServlet extends DefaultServlet{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2483175565395222277L;
+	
+	private AuctionContext auctionContext = null;
+	
+	public BidServlet(AuctionContext ac) {
+		auctionContext = ac;
+	}
 
 	public void init(){
 
