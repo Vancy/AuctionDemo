@@ -41,7 +41,7 @@
 		        </tbody>
 		        </table>
 
-		        <button id="submit_auction">Bid!</button>
+		        <button id="submit_auction">Bid</button>
 		    </div> 
     	</div>
 	</body>

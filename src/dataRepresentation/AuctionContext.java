@@ -1,54 +1,47 @@
 package dataRepresentation;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import sun.misc.IOUtils;
+
 
 
 public class AuctionContext {
 	private int round;
 	private int duration_Sec;
 	private ArrayList<AuctionItem> itemList;
+	private float minIncreament;
 	private boolean finalRound;
 	
 	public AuctionContext() {
 		this.round = 1;
 		this.duration_Sec = 60;
 		this.itemList = new ArrayList<AuctionItem>();
-		finalRound = false;
+		this.minIncreament = 0;
+		this.finalRound = false;
 	}
 	
 	public AuctionContext(int time, ArrayList<AuctionItem> list) {
 		this.round = 1;
 		this.duration_Sec = time;
 		this.itemList = list;
-		finalRound = false;
+		this.minIncreament = 0;
+		this.finalRound = false;
 	}
 	
 	public String generateXml() {  
@@ -72,11 +65,14 @@ public class AuctionContext {
 	    child = doc.createElement("duration");
 	    child.setAttribute("value", Integer.toString(this.duration_Sec));
 	    root.appendChild(child);
+	    child = doc.createElement("minimum_increament");
+	    child.setAttribute("value", Float.toString(this.minIncreament));
+	    root.appendChild(child);
 	    
 	    int len = itemList.size();
 	    for (int i=0; i<len; i++) {  
 	    	AuctionItem item = itemList.get(i);  
-	    	child = doc.createElement("item"+i);  
+	    	child = doc.createElement("item");  
 	    	child.setAttribute("name", item.getName());  
 	    	child.setAttribute("price", Float.toString(item.getPrice())); 
 	    	child.setAttribute("owner", item.getOwner());  

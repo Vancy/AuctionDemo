@@ -9,7 +9,6 @@ $(document).ready(function(){
 	    // $.get("127.0.0.1:8080/login/?name=ghouan&ip=127.0.0.1", function(data, status){ 
 	    //Xing:发送get请求的时候要把自己的名字加上，同时还要把本机的ip地址加上，再发送
             //就像这样 url:"/WEB-INF/login.xml?name="+getName()+"&ip="+getIP()
-		//getName()收集用户输入的姓名 getIp()想办法搞到机器的ip地址
  	    $.ajax({
    	    	type: "GET",
                 url: "/WEB-INF/login.xml?name=ghouan&ip=1.1.1.1",

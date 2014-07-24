@@ -18,11 +18,12 @@ public class WebServer {
 		server = new Server(8080);
 		auctionContext = ac;
 		webappContextHandler = new WebAppContext();
+        webappContextHandler.setResourceBase("webapps/pages");
         webappContextHandler.setDescriptor("webapp/WEB-INF/web.xml");
-        webappContextHandler.setResourceBase("./");
+
         webappContextHandler.setContextPath("/");
 		servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-		servletContextHandler.setContextPath("/servlet");
+		servletContextHandler.setContextPath("/WEB-INF");
 		this.addServlets();
 	    ContextHandlerCollection contexts = new ContextHandlerCollection();
 	    contexts.setHandlers(new Handler[] { webappContextHandler, servletContextHandler });
@@ -30,8 +31,8 @@ public class WebServer {
 	}
 	
 	private void addServlets() {
-		servletContextHandler.addServlet(new ServletHolder(new LoginServlet(auctionContext)),"/login");
-		servletContextHandler.addServlet(new ServletHolder(new BidServlet(auctionContext)),"/bid");
+		servletContextHandler.addServlet(new ServletHolder(new LoginServlet(auctionContext)),"/login.xml");
+		servletContextHandler.addServlet(new ServletHolder(new BidServlet(auctionContext)),"/bid.xml");
 	}
 	
 	public void start() {
