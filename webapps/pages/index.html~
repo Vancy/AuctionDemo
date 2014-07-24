@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type"
+			content="text/html; charset=ISO-8859-1">
+		<title>Auction System</title>
+
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+		<script type="text/javascript" src="./script.js"></script>
+    	<link rel="stylesheet" href="./style.css" type="text/css" />
+	</head>
+	
+	<body>
+		<div id="headline">
+			<h1>Welcome to Auction System.</h1>
+		</div>
+		
+		<div id="content">
+		    <div id="login">
+			<p id="login_error_tips" class="login_error">Oops! Something is wrong.</p>
+		        <form id="login_form">
+				<input type="text" id="name" value="input your name"/>
+				<input type="button" id="button" value="Enter"/>
+		        </form>
+
+		    </div>
+
+		    <div id="bid">
+		    	<p id="round_infomation"></p>
+		    	<p id="timer"></p>
+		    	<table id="bid_table"> 
+		        <thead>
+		            <tr>
+			            <th>Item</th>
+			            <th>Price</th>
+			            <th>Your Price</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+		        	<!-- auction items here -->
+		        </tbody>
+		        </table>
+
+		        <button id="submit_auction">Bid</button>
+		    </div> 
+    	</div>
+	</body>
+</html>
