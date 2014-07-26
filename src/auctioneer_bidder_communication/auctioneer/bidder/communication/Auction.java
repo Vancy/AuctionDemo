@@ -18,18 +18,19 @@ public class Auction {
 
 	private List<Item> items;
 	
-	protected Auction(int numberOfBidders, int numberOfItems) {
+	protected Auction(int numberOfHumanBidders, int numberOfAgentBidders, int numberOfItems) {
 		bidders = new ArrayList<Bidder>();
 		items = new ArrayList<Item>();
 		
 		for (int i = 0; i < numberOfItems; i++) {
 			items.add(new Item());
 		}
-		bidders.add(new Bidder(items));
-		bidders.add(new Agent(items));
-		/*for (int i = 0; i < numberOfBidders; i++) {
+		for (int i = 0; i < numberOfHumanBidders; i++) {
 			bidders.add(new Bidder(items));
-		}*/
+		}
+		for (int i = 0; i < numberOfAgentBidders; i++) {
+			bidders.add(new Agent(items));
+		}
 		
 		auctioneer = new Auctioneer(bidders, items);
 	}

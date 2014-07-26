@@ -149,8 +149,6 @@ public class AuctionGUI extends Composite {
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				System.out.println(numberOfBidders.getDigits());
-				Auction a = new Auction(numberOfBidders.getDigits(), numberOfItems.getDigits());
 			}
 		});
 		btnNewButton.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 2, 1));

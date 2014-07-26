@@ -35,7 +35,11 @@ public class Bid implements Comparable<Bid> {
 			s += " - $" + value;
 			return s;
 		} else {
-			return "Bidder " + bidder.getID() + " - $" + value;
+			if (bidder instanceof Agent) {
+				return "Agent " + bidder.getID() + " - $" + value;
+			} else {
+				return "Bidder " + bidder.getID() + " - $" + value;
+			}
 		}
 	}
 	

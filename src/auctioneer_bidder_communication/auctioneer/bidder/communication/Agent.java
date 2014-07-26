@@ -20,14 +20,14 @@ public class Agent extends Bidder {
 		super(items);
 		this.items = new ArrayList<Item>(items);
 		powerSet = getPowerSet(items);
-		assignValuations();
+		assignValuationsAndSunkAwareness();
 	}
 	
 	public Agent(String name, List<Item> items) {
 		super(name, items);
 		this.items = new ArrayList<Item>(items);
 		powerSet = getPowerSet(items);
-		assignValuations();
+		assignValuationsAndSunkAwareness();
 	}
 	
 	public Agent(List<Item> items, double sunkAwarenessConstant) {
@@ -35,7 +35,7 @@ public class Agent extends Bidder {
 		this.setSunkAwarenessConstant(sunkAwarenessConstant);
 		this.items = new ArrayList<Item>(items);
 		powerSet = getPowerSet(items);
-		assignValuations();
+		assignValuationsAndSunkAwareness();
 	}
 	
 	public Agent(String name, List<Item> items, double sunkAwarenessConstant) {
@@ -43,7 +43,7 @@ public class Agent extends Bidder {
 		this.setSunkAwarenessConstant(sunkAwarenessConstant);
 		this.items = new ArrayList<Item>(items);
 		powerSet = getPowerSet(items);
-		assignValuations();
+		assignValuationsAndSunkAwareness();
 	}
 
 	public double getSunkAwarenessConstant() {
@@ -78,16 +78,19 @@ public class Agent extends Bidder {
 		return ps;
 	}
 	
-	private void assignValuations() {
+	private void assignValuationsAndSunkAwareness() {
 		for (List<Item> powerSetList : powerSet) {
 			if (powerSetList.size() == 1) {
-				System.out.print("Enter your value for item " + powerSetList.get(0).getID() + ": ");
+				System.out.print("Enter agent " + this.ID + "'s value for item " + powerSetList.get(0).getID() + ": ");
 				int value = Integer.parseInt(ScannerSingleton.getInstance().nextLine());
 				valuations.put(powerSetList, value);
 			} else {
 				valuations.put(powerSetList, 0);
 			}
 		}
+		System.out.print("Enter agent " + this.ID + "'s sunk-awareness constant: ");
+		int value = Integer.parseInt(ScannerSingleton.getInstance().nextLine());
+		setSunkAwarenessConstant(value);
 	}
 	
 	private double calculateSurplus(List<Item> itemSet) {
@@ -124,7 +127,9 @@ public class Agent extends Bidder {
 		
 		if (Auction.roundNumber == 1) {
 			for (Item i : items) {
-				nextRoundBehaviour.put(i, Auction.minimumIncrement);
+				List<Item> vItem = new ArrayList<Item>();
+				vItem.add(i);
+				nextRoundBehaviour.put(i, (double)valuations.get(vItem));
 			}
 			return nextRoundBehaviour;
 		}
