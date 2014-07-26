@@ -236,6 +236,7 @@ function submitAuction() {
 
 	console.log($xmlData);
 
+	lockScreen();
 
 	// other ....
 
@@ -249,9 +250,12 @@ function submitAuction() {
 		type: "POST",  // type should be POST
 		data: $xmlData, // send the string directly
 		success: function(response) {
+			unlockScreen();
 			update(response);
 		},
 		error: function(response) {
+			//################### ######
+			// unlockScreen();
 			updateError(response);
 		},
 		complete: function(response) {
@@ -330,6 +334,57 @@ function setAll2Valid() {
 			$(this).val(0);
 		}
 	});
+}
+
+function lockScreen() {
+	console.log("lock");
+	$('body').css('overflow-y', 'hidden');
+    $('<div id="overlay"></div>')
+        .css('top', 0)
+        .css('opacity', '0')
+        .animate({'opacity': '0.8'}, 'slow')
+        .appendTo('body');
+
+    $('<div id="lock_screen"></div>')
+        .hide()
+        .appendTo('body');
+
+    // $('<p id="ghouan"class="locking_msg">Please wait. Your bid is submitting.</p>').appendTo('#lock_screen');
+
+    $('<img>')
+        .attr('src', "./loader.gif")
+        .load(function() {
+            loading()
+        })
+        .click(function() {
+            // unlockScreen();
+        })
+        .appendTo('#lock_screen');
+
+}
+
+function loading() {
+	var top = (screen.availHeight - $('#lock_screen').height()) / 2;
+    var left = ($(window).width() - $('#lock_screen').width()) / 2;
+    console.log($(window).height(), $(window).width());
+    console.log(screen.availHeight, screen.availWidth);
+    console.log($('#lock_screen').height(), $('#lock_screen').width());
+    console.log(top, left);
+    $('#lock_screen')
+        .css({
+            'top': top-200,
+            'left': left
+    })
+.fadeIn();
+
+}
+
+function unlockScreen() {
+	$('#overlay, #lock_screen')
+        .fadeOut('slow', function() {
+            $(this).remove();
+            $('body').css('overflow-y', 'auto'); 
+         });     
 }
 
 

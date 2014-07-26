@@ -4,7 +4,7 @@ body {
 	font-size: 13px;
 	line-height: 16px;
 	color: #636363;
-
+	height: auto;
 
 }
 
@@ -238,8 +238,28 @@ tr.zhover {
 }
 
 /**/
+
+#overlay {
+  position:fixed;
+  top:0;
+  left:0;
+  height:100%;
+  width:100%;
+  background:black  no-repeat scroll center center;
+
+}
+
+#lock_screen {
+  position:fixed;
+  border: 2px solid black;
+}
+
+
+
+/**/
 #bid {
 	display: none;
+	height: auto;
 }
 
 .login_error {
