@@ -1,3 +1,238 @@
+body {
+	background: #eee;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 13px;
+	line-height: 16px;
+	color: #636363;
+
+
+}
+
+#login_box{
+	margin: auto;
+	margin-top: 100px;
+	width: 348px;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	box-shadow: 5px 5px 5px #d0d0d0;	
+
+}
+
+#login_box .title {
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	-moz-border-radius-topleft: 12px;
+	-moz-border-radius-topright: 12px;
+	
+	height: 49px;
+}
+
+.title {
+	background-color: #222223;
+}
+
+#login{
+	background-color: #fdfdfd;
+	border: 1px solid white;
+	margin-bottom: 0;
+	padding: 30px;
+	margin: 0 0 18px;
+}
+
+.title p {
+	font: white;
+	font-size: 20px;
+	vertical-align: middle;
+	text-align: center;
+	line-height: 50px;
+	box-shadow: 5px 5px 5px #ffffff;
+}
+
+html, div, h1, h2, h3, h4, h5, h6, p, label{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+
+#login div {
+	margin-bottom: 15px;
+}
+
+div {
+	display: block;
+}
+
+#login input[type=text] {
+	width: 274px;
+	height: 24px;
+	line-height: 22px;
+	font-size: 18px;
+	margin-top: 3px;
+	border: 1px solid #b0d3ee;
+	-webkit-border-radius: 3px;
+	box-shadow: inset 3px 3px 3px #f1f1f1;
+	-webkit-transition: -webkit-box-shadow .2s linear;
+
+	background: #fff;
+	padding-left: 6px;
+	margin: 0;
+
+	display: inline-block;
+
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-weight: normal;
+}
+
+#login label {
+	margin-left: 3px;
+	display: block;
+	font-size: 12px;
+	color: #727272;
+	margin-bottom: 5px;
+	font-weight: normal;
+	line-height: 18px;
+}
+
+#login_button_div {
+	height: 20px;
+	margin: 0;
+}
+
+#button {
+	float: right;
+	font-size: 18px;
+	display: inline-block;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+
+.submit_button {
+	display: inline-block;
+	margin-bottom: 0;
+	vertical-align: middle;
+	cursor: pointer;
+	border: 1px solid #ccc;
+	border-bottom-color: #b3b3b3;
+	box-shadow: inset 0 1px 0 rgba(255,255,255,.2),0 1px 2px rgba(0,0,0,.05);
+	line-height: normal;
+	border-radius: 5px;
+	padding: 6px 10px;
+	white-space: nowrap;
+	color: #fff;
+	text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+	padding-left: 16px;
+	padding-right: 16px;
+	background-color: #4186e7;
+	background-image: -webkit-linear-gradient(top,#4197e7,#416ee7);
+	background-repeat: repeat-x;
+	border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+}
+
+#submit_auction {
+	float: right;
+	font-size: 18px;
+	display: inline-block;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+/**/
+
+
+#bid .title {
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	-moz-border-radius-topleft: 12px;
+	-moz-border-radius-topright: 12px;
+	
+	height: 49px;
+	width: 462px;
+}
+
+
+
+
+tr.zhover {
+ 	background-color: #FFFACD;
+ 	box-shadow: inset 3px 3px 3px #f1f1f1;
+}
+
+#bid{
+	margin: auto;
+	margin-top: 100px;
+	text-align: center;
+	width: 400px;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+		
+
+}
+
+#submit_button_div {
+	height: 20px;
+	margin-top: 10px;
+	margin-right: 18px;
+}
+
+
+#data {
+	background-color: #fdfdfd;
+	border: 1px solid white;
+	margin-bottom: 0;
+	padding: 30px;
+	margin: 0 0 18px;
+
+	width: 400px;
+	height: initial;
+
+	text-align: center;
+	box-shadow: 5px 5px 5px #d0d0d0;
+}
+
+#data div {
+	margin-bottom: 15px;
+}
+
+#data input[type=text] {
+	width: 274px;
+	height: 24px;
+	line-height: 22px;
+	font-size: 18px;
+	margin-top: 3px;
+	border: 1px solid #b0d3ee;
+	-webkit-border-radius: 3px;
+	box-shadow: inset 3px 3px 3px #f1f1f1;
+	-webkit-transition: -webkit-box-shadow .2s linear;
+
+	background: #fff;
+	padding-left: 6px;
+	margin: 0;
+
+	display: inline-block;
+
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-weight: normal;
+}
+
+#data label {
+	margin-left: 3px;
+	display: block;
+	font-size: 12px;
+	color: #727272;
+	margin-bottom: 5px;
+	font-weight: normal;
+	line-height: 18px;
+}
+
+/**/
 #bid {
 	display: none;
 }
@@ -7,5 +242,24 @@
 }
 
 .invisible {
+	display: none;
+
+}
+
+.alert {
+	color: red;
+}
+
+.invalid_input {
+	background-color: green;
+	border: 2px solid #f00;
+}
+
+.invalid_price {
+	border: 1px solid red;
+	
+}
+
+.input_price_tips {
 	display: none;
 }
