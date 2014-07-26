@@ -7,6 +7,12 @@ $(document).ready(function(){
 	// # When the 'login button clicked', script below is called.
 	$("#button").click(function(){
 		$name = $("#name").val();
+
+		if ( ! checkUsername($name) ) {
+			$("#login_error_tips").show();
+			return;
+		}
+		$("#login_error_tips").hide();
  	    $.ajax({
    	    	type: "GET",
             url: "/WEB-INF/login.xml?name={0}&ip={1}".f(getName(), getIp()),
@@ -22,14 +28,35 @@ $(document).ready(function(){
 		submitAuction();
 	});
 
-	$("#name").focus(function() {
-		if ( $(this).val() === "input your name" ) {
-			$(this).val("");
+	// $("#name").focus(function() {
+	// 	if ( $(this).val() === "input your name" ) {
+	// 		$(this).val("");
+	// 	}
+	// });
+
+	// $("#name").focusout(function() {
+	// 	if ( $.trim($("this").val()) === "" ) {
+	// 		$(this).val("input your name");
+	// 	}
+	// });
+
+	$("#name").keypress(function( event ) {
+		if ( event.which == 13 ) {
+			event.preventDefault();
+			$("#button").click();
 		}
 	});
 
 
 });
+
+function checkUsername(name) {
+	if ( $.trim(name) == "" ) {
+		$("#login_error_tips").html("<b class='alert'>Please enter a username.</b>");
+		return false;
+	}
+	return true;
+}
 
 function getName() {
 	return $name;
@@ -120,13 +147,10 @@ function update(data) {
 
 		$("#bid_table").find("tbody").append($item);
 
-		// validate
-
 		
 	});	
 
 	$(".input_price").change(function() {
-		// console.log("hi", $(this), "gh");
 		validateInput($(this));
 	});
 
@@ -137,6 +161,13 @@ function update(data) {
 
         $(this).removeClass('zhover');
     });
+
+    $(".input_price").keypress(function( event ) {
+		if ( event.which == 13 ) {
+			event.preventDefault();
+			$("#submit_auction").click();
+		}
+	});
 
 	$("#bid").show();
 }
@@ -191,8 +222,8 @@ function submitAuction() {
 		}
 	}
 
-	$(".input_price").removeClass("invalid_input");
-	$(".input_price").removeClass("invalid_price");
+	// $(".input_price").removeClass("invalid_input");
+	// $(".input_price").removeClass("invalid_price");
 	
 
 	$(".input_price").next("p").hide();
@@ -251,17 +282,17 @@ function validateInput(input) {
 	console.log("validateInput", $id, $name, $price, $yprice);
 
 	if ( hasInvalidCharacters($yprice) ) {
-		input.addClass("invalid_input");
+		// input.addClass("invalid_input");
 		$("#price{0}_tips".f($id)).text("Please enter a positive number.");
 		$("#price{0}_tips".f($id)).show();
 		$valid = false;
 	} else {
-		input.removeClass("invalid_input");
-		input.addClass("invalid_price");
+		// input.removeClass("invalid_input");
+		// input.addClass("invalid_price");
 		$("#price{0}_tips".f($id)).hide();
 
 		if ( S2N($yprice) < S2N($price) + $minIncreament ) {
-			input.addClass("invalid_price");
+			// input.addClass("invalid_price");
 	
 			$("#price{0}_tips".f($id)).html("Your are aborting this bid.");
 			$("#price{0}_tips".f($id)).show();

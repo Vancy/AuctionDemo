@@ -20,7 +20,7 @@ public class BidServlet extends DefaultServlet{
 		auctionContext = ac;
 	}
 
-	public void init(){
+	public void init() {
 
 	}
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -55,6 +55,7 @@ public class BidServlet extends DefaultServlet{
 		System.out.println("request doesn't have cookie");
 		return false;
 	}
+	
 	public void destroy() {
 		// do nothing.
 	}
