@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.HashMap;
 
 public class Agent extends Bidder {
 	
@@ -14,32 +14,36 @@ public class Agent extends Bidder {
 	
 	List<List<Item>> powerSet;
 	
-	Map<List<Item>, Integer> valuations = new TreeMap<List<Item>, Integer>();
+	Map<List<Item>, Integer> valuations = new HashMap<List<Item>, Integer>();
 	
 	public Agent(List<Item> items) {
 		super(items);
-		items = new ArrayList<Item>(items);
+		this.items = new ArrayList<Item>(items);
 		powerSet = getPowerSet(items);
+		assignValuations();
 	}
 	
 	public Agent(String name, List<Item> items) {
 		super(name, items);
-		items = new ArrayList<Item>(items);
+		this.items = new ArrayList<Item>(items);
 		powerSet = getPowerSet(items);
+		assignValuations();
 	}
 	
 	public Agent(List<Item> items, double sunkAwarenessConstant) {
 		super(items);
 		this.setSunkAwarenessConstant(sunkAwarenessConstant);
-		items = new ArrayList<Item>(items);
+		this.items = new ArrayList<Item>(items);
 		powerSet = getPowerSet(items);
+		assignValuations();
 	}
 	
 	public Agent(String name, List<Item> items, double sunkAwarenessConstant) {
 		super(name, items);
 		this.setSunkAwarenessConstant(sunkAwarenessConstant);
-		items = new ArrayList<Item>(items);
+		this.items = new ArrayList<Item>(items);
 		powerSet = getPowerSet(items);
+		assignValuations();
 	}
 
 	public double getSunkAwarenessConstant() {
@@ -75,51 +79,78 @@ public class Agent extends Bidder {
 	}
 	
 	private void assignValuations() {
-		boolean printedFirstOne;
 		for (List<Item> powerSetList : powerSet) {
-			printedFirstOne = false;
-			System.out.print("Enter the value for the set of items {");
-			for (Item i : powerSetList) {
-				if (printedFirstOne) {
-					System.out.print(", ");
-				}
-				System.out.print(i.getID());
-				printedFirstOne = true;
+			if (powerSetList.size() == 1) {
+				System.out.print("Enter your value for item " + powerSetList.get(0).getID() + ": ");
+				int value = Integer.parseInt(ScannerSingleton.getInstance().nextLine());
+				valuations.put(powerSetList, value);
+			} else {
+				valuations.put(powerSetList, 0);
 			}
-			System.out.println("}");
-			int value = Integer.parseInt(ScannerSingleton.getInstance().nextLine());
-			valuations.put(powerSetList, value);
 		}
 	}
 	
 	private double calculateSurplus(List<Item> itemSet) {
+		
+		// ignore the empty set of items geenrated from the power set
+		if (itemSet.isEmpty()) {
+			return Double.NEGATIVE_INFINITY;
+		}
 		
 		double valuation = valuations.get(itemSet);
 		double perceivedPriceTotal = 0;
 		
 		for (Item item : itemSet) {
 			if (Auction.auctioneer.isBidderXLeadingItemY(this.ID, item)) {
-				perceivedPriceTotal += sunkAwarenessConstant * Auction.auctioneer.getLeadingBid(item).getValue();
+				perceivedPriceTotal += sunkAwarenessConstant * Auction.auctioneer.getLeadingBid(item);
 			} else {
-				perceivedPriceTotal += Auction.auctioneer.getLeadingBid(item).getValue() + Auction.minimumIncrement;
+				perceivedPriceTotal += Auction.auctioneer.getLeadingBid(item) + Auction.minimumIncrement;
 			}
 		}
-	
+		
+		System.out.print("{");
+		for (Item i : itemSet) {
+			System.out.print(i.getID() + " ");
+		}
+		System.out.print("}");
+		System.out.println("Valuation: " + valuation + " perceviedTotal: " + perceivedPriceTotal);
+		
 		return valuation - perceivedPriceTotal;
 	}
 	
-	private List<Item> getNextRoundBehaviour() {
+	protected Map<Item, Double> getNextRoundBehaviour() {
+		
+		Map<Item, Double> nextRoundBehaviour = new HashMap<Item, Double>();
+		
+		if (Auction.roundNumber == 1) {
+			for (Item i : items) {
+				nextRoundBehaviour.put(i, Auction.minimumIncrement);
+			}
+			return nextRoundBehaviour;
+		}
+		
 		List<Item> optimalItemsToBidOn = new ArrayList<Item>();
-		int maxSurplus = 0;
+		double maxSurplus = Double.NEGATIVE_INFINITY;
 		
 		for (List<Item> set : powerSet) {
-			if (calculateSurplus(set) > maxSurplus) {
+			double currentSurplus = calculateSurplus(set);
+			if (currentSurplus > maxSurplus) {
 				optimalItemsToBidOn = new ArrayList<Item>(set);
+				maxSurplus = currentSurplus;
 			}
 		}
 		
-		// if optimalItemsToBidOn is empty, it means all surpluses were negative
-		return optimalItemsToBidOn;
+		for (Item i : items) {
+			if (optimalItemsToBidOn.contains(i)) {
+				if (!Auction.auctioneer.isBidderXLeadingItemY(this.ID, i)) {
+					nextRoundBehaviour.put(i, Auction.auctioneer.scoreboard.get(i).get(Auction.auctioneer.scoreboard.get(i).size()-1).getValue() + Auction.minimumIncrement);
+				}
+			} else {
+				nextRoundBehaviour.put(i, 0.0);
+			}
+		}
+		
+		return nextRoundBehaviour;
 	}
 
 }

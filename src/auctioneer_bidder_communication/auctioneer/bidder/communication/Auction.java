@@ -10,7 +10,7 @@ public class Auction {
 	
 	protected static int roundNumber = 1;
 	
-	protected static double minimumIncrement = 10.0;
+	protected static double minimumIncrement = 1.0;
 	
 	protected static Auctioneer auctioneer;
 	
@@ -25,9 +25,11 @@ public class Auction {
 		for (int i = 0; i < numberOfItems; i++) {
 			items.add(new Item());
 		}
-		for (int i = 0; i < numberOfBidders; i++) {
+		bidders.add(new Bidder(items));
+		bidders.add(new Agent(items));
+		/*for (int i = 0; i < numberOfBidders; i++) {
 			bidders.add(new Bidder(items));
-		}
+		}*/
 		
 		auctioneer = new Auctioneer(bidders, items);
 	}

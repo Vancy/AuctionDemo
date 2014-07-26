@@ -36,21 +36,12 @@ public class Auctioneer {
 	}
 	
 	protected boolean performRound(int roundNumber) {
+		
 		System.out.println("====< ROUND " + roundNumber + " >====");
-		collectBids();
+		boolean noBids = collectBids();
 		processBids();
 		System.out.println("====< END OF ROUND " + roundNumber + " RESULTS >====");
-		/*for (Item item : items) {
-			System.out.print("Item " + item.getID() + "\t\t\t");
-		}
-		System.out.println();
-		for (List<Bid> b : scoreboard.values()) {
-			for (Bid bid : b) {
-				System.out.print(bid.toString());
-			}
-			System.out.print("\t");
-		}
-		System.out.println();*/
+
 		for (Item item : scoreboard.keySet()) {
 			System.out.print("Item " + item.getID() + ": ");
 			for (Bid b : scoreboard.get(item)) {
@@ -59,17 +50,41 @@ public class Auctioneer {
 			}
 			System.out.println();
 		}
-		return false;
+		
+		if (noBids) {
+			return true;
+		} else {
+			return false;	
+		}
 	}
 	
-	private void collectBids() {
+	private boolean collectBids() {
 		Item currentItem;
+		boolean noBids = true;
+		boolean isAgent;
+		
 		for (Bidder b : bidders) {
+			isAgent = false;
+			Map<Item, Double> agentBehaviour = null;
+			
+			if (b instanceof Agent) {
+				isAgent = true;
+				agentBehaviour = ((Agent) b).getNextRoundBehaviour();
+				for (Item i : agentBehaviour.keySet()) {
+					System.out.println("Item " + i.getID() + " - " + agentBehaviour.get(i));
+				}
+			}
+			
 			for (int i = 0; i < items.size(); i++) {
 				currentItem = items.get(i);
+				double value;
 				
-				System.out.print("Enter bidder " + b.getID() + "'s bid for item number " + currentItem.getID() + ": ");
-				double value = Double.parseDouble(ScannerSingleton.getInstance().nextLine());
+				if (isAgent) {
+					value = agentBehaviour.get(currentItem);
+				} else {
+					System.out.print("Enter bidder " + b.getID() + "'s bid for item number " + currentItem.getID() + ": ");
+					value = Double.parseDouble(ScannerSingleton.getInstance().nextLine());
+				}
 				
 				if (value == 0) {
 					if (b.getItemsBidOn().containsKey(currentItem) && 
@@ -79,6 +94,8 @@ public class Auctioneer {
 						requestedBids.add(b.placeBid(currentItem, 0, Auction.roundNumber));
 						continue;
 					}
+				} else {
+					noBids = false;
 				}
 				
 				if (value < currentItem.getStartingPrice()) {
@@ -105,18 +122,25 @@ public class Auctioneer {
 						continue;
 					}
 				}
-				
 				requestedBids.add(b.placeBid(currentItem, value, Auction.roundNumber));
 			}
 		}
+		return noBids;
 	}
 	
 	protected boolean isBidderXLeadingItemY(int bidderID, Item item) {
-		return scoreboard.get(item).get(scoreboard.get(item).size()-1).getBidder().getID() == bidderID ? true : false;
+		if (scoreboard.get(item).isEmpty()) {
+			return false;
+		}
+		Bid b = scoreboard.get(item).get(scoreboard.get(item).size()-1);
+		return b.getBidder().getID() == bidderID && !b.isTied() ? true : false;
 	}
 	
-	protected Bid getLeadingBid(Item item) {
-		return scoreboard.get(item).get(scoreboard.get(item).size()-1);
+	protected Double getLeadingBid(Item item) {
+		if (scoreboard.get(item).isEmpty()) {
+			return 0.0;
+		}
+		return scoreboard.get(item).get(scoreboard.get(item).size()-1).getValue();
 	}
 	
 	private void processBids() {
