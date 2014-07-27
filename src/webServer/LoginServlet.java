@@ -48,6 +48,7 @@ public class LoginServlet extends DefaultServlet{
 			response.addCookie(nameCookie);
 			response.addCookie(ipCookie);
 		}
+		
 		// Actual logic goes here.
 		PrintWriter out = response.getWriter();
 		out.println(this.auctionEnvironment.context.generateXml());

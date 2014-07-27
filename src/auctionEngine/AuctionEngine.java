@@ -7,7 +7,7 @@ import dataRepresentation.AuctionEnvironment;
 public class AuctionEngine {
 
 	public static void main(String[] args) {
-		
+
 		AuctionEnvironment environment = new AuctionEnvironment();
 		
 		WebServer server = new WebServer(environment);
