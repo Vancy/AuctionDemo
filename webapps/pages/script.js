@@ -184,7 +184,7 @@ function collectData() {
 		var $yprice = $("#price{0}".f($id)).val();
 		var $owner = " ";
 
-		$items = $items + "<item name={0} price={1} owner={2}></item>".f($name, $yprice, $owner);
+		$items = $items + "<item name=\"{0}\" price=\"{1}\" owner=\"{2}\"></item>".f($name, $yprice, $owner);
 	});
 	
 	$bid = "<bid><item_list>" + $items + "</item_list></bid>";

@@ -71,7 +71,7 @@ public class BidServlet extends DefaultServlet{
 		
 		//place a bid to environment, auctioneer will handle this bid
 		placeBid(username, userip, doc);
-		
+
 		while (true) {
 			// all bidders have finished placing their bids
 			if (auctionEnvironment.auctioneer.numberOfRequestedBids()

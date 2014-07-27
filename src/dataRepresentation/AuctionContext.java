@@ -1,9 +1,6 @@
 package dataRepresentation;
 
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
@@ -125,28 +122,6 @@ public class AuctionContext {
 		}
 		return null;
     }  
-	public static void outputXml (Document doc, String fileName){  
-	      TransformerFactory tf = TransformerFactory.newInstance();  
-	      Transformer transformer;
-		try {
-			transformer = tf.newTransformer();
-			DOMSource source = new DOMSource(doc);  
-			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");  
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");//è®¾ç½®æ–‡æ¡£çš„æ�¢è¡Œä¸Žç¼©è¿›  
-			PrintWriter pw = new PrintWriter(new FileOutputStream(fileName));  
-			StreamResult result = new StreamResult(pw);  
-			transformer.transform(source, result);  
-		} catch (TransformerConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}  
-	     System.out.println("ç”Ÿæˆ�XMLæ–‡ä»¶æˆ�åŠŸ!");  
-	}
+
 
 }

@@ -23,7 +23,7 @@ public class BidderList {
 	
 	public Bidder getBidder(String name, String ip) {
 		for (Bidder b: this.list) {
-			if ((b.getName() == name) && (b.getIP() == ip)) {
+			if ((b.getName().equals(name)) && (b.getIP().equals(ip))) {
 				return b;
 			}
 		}
