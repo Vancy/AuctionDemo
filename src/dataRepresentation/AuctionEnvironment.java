@@ -16,4 +16,5 @@ public class AuctionEnvironment {
 		this.context = c;
 		this.bidderList = list;
 	}
+	
 }

@@ -17,7 +17,11 @@ public class BidderList {
 		return this.list;
 	}
 	
-	public Bidder getBidder (String name, String ip) {
+	public int size() {
+		return list.size();
+	}
+	
+	public Bidder getBidder(String name, String ip) {
 		for (Bidder b: this.list) {
 			if ((b.getName() == name) && (b.getIP() == ip)) {
 				return b;

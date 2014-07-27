@@ -8,8 +8,6 @@ public class Bid{
 	private Bidder bidder;
 	private ArrayList<AuctionItem> itemList;
 
-
-	
 	public Bid(Bidder bidder, ArrayList<AuctionItem> list) {
 		this.bidder = bidder;
 		this.itemList = list;

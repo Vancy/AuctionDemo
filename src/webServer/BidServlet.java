@@ -71,6 +71,15 @@ public class BidServlet extends DefaultServlet{
 		
 		//place a bid to environment, auctioneer will handle this bid
 		placeBid(username, userip, doc);
+		
+		while (true) {
+			// all bidders have finished placing their bids
+			if (auctionEnvironment.auctioneer.numberOfRequestedBids()
+					 == auctionEnvironment.bidderList.size()) {
+				break;
+			}
+		}
+		
 		// get next round's context through auctioneer
 		AuctionContext context_updated  = this.auctionEnvironment.auctioneer.nextRound();
 		

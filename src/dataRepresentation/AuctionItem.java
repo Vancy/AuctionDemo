@@ -1,6 +1,6 @@
 package dataRepresentation;
 
-public class AuctionItem {
+public class AuctionItem implements Comparable<AuctionItem> {
 	private int ID;
 	private String name;
 	private double startingPrice;
@@ -30,6 +30,7 @@ public class AuctionItem {
 		return this.startingPrice ;
 	}
 	
+	@Override
 	public int compareTo(AuctionItem i) {
 		if (this.ID == i.ID) {
 			return 0;
@@ -39,6 +40,7 @@ public class AuctionItem {
 			return 1;
 		}
 	}
+	
 	public String getName() {
 		return this.name;
 	}

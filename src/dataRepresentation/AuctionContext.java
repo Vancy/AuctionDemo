@@ -58,6 +58,14 @@ public class AuctionContext {
 		return this.itemList;
 	}
 	
+	public void setItemList(ArrayList<AuctionItem> itemList) {
+		this.itemList = new ArrayList<AuctionItem>(itemList);
+	}
+	
+	public void incrementRound() {
+		round++;
+	}
+	
 	public String generateXml() {  
 	    Document doc = null;  
 	    Element root = null;  
@@ -124,7 +132,7 @@ public class AuctionContext {
 			transformer = tf.newTransformer();
 			DOMSource source = new DOMSource(doc);  
 			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");  
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");//设置文档的换行与缩进  
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");//è®¾ç½®æ–‡æ¡£çš„æ�¢è¡Œä¸Žç¼©è¿›  
 			PrintWriter pw = new PrintWriter(new FileOutputStream(fileName));  
 			StreamResult result = new StreamResult(pw);  
 			transformer.transform(source, result);  
@@ -138,7 +146,7 @@ public class AuctionContext {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
-	     System.out.println("生成XML文件成功!");  
+	     System.out.println("ç”Ÿæˆ�XMLæ–‡ä»¶æˆ�åŠŸ!");  
 	}
 
 }
