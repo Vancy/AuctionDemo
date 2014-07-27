@@ -241,7 +241,7 @@ function submitAuction() {
 	// other ....
 
 	$.ajax({
-		url: 'test.jsp', 
+		url: '/WEB-INF/bid.xml', 
 		processData: false,
 		async: false,
 		contentType: "text/xml",

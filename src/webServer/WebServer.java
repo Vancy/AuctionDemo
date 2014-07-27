@@ -6,17 +6,18 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 
-import dataRepresentation.AuctionContext;
 
-public class WebServer {
+import dataRepresentation.AuctionEnvironment;
+
+public class WebServer extends Thread{
 	private Server server = null;
 	private WebAppContext webappContextHandler = null;
 	private ServletContextHandler servletContextHandler = null;
-	private AuctionContext auctionContext = null;
+	private AuctionEnvironment auctionEnvironment = null;
 	
-	public WebServer(AuctionContext ac) {
+	public WebServer(AuctionEnvironment ae) {
 		server = new Server(8080);
-		auctionContext = ac;
+		auctionEnvironment = ae;
 		webappContextHandler = new WebAppContext();
         webappContextHandler.setResourceBase("webapps/pages");
         webappContextHandler.setDescriptor("webapp/WEB-INF/web.xml");
@@ -31,11 +32,12 @@ public class WebServer {
 	}
 	
 	private void addServlets() {
-		servletContextHandler.addServlet(new ServletHolder(new LoginServlet(auctionContext)),"/login.xml");
-		servletContextHandler.addServlet(new ServletHolder(new BidServlet(auctionContext)),"/bid.xml");
+		servletContextHandler.addServlet(new ServletHolder(new LoginServlet(auctionEnvironment)),"/login.xml");
+		servletContextHandler.addServlet(new ServletHolder(new BidServlet(auctionEnvironment)),"/bid.xml");
 	}
 	
-	public void start() {
+	@Override
+	public void run() {
 		try {
 			server.start();
 		} catch (Exception e) {
@@ -44,7 +46,7 @@ public class WebServer {
 		}
 	}
 	
-	public void stop() throws Exception {
+	public void stopServer() throws Exception {
 		server.stop();
 		server.join();
 		System.err.println("Web Server closed!");

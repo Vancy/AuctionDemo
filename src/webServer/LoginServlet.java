@@ -9,22 +9,23 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.servlet.DefaultServlet;
 
-import dataRepresentation.AuctionContext;
-public class LoginServlet extends DefaultServlet{
+import dataRepresentation.AuctionEnvironment;
+import dataRepresentation.Bidder;
 
+public class LoginServlet extends DefaultServlet{
 
 	private static final long serialVersionUID = 2172189957056566935L;
 	
 	private String logo;
 	
-	private AuctionContext auctionContext = null;
+	private AuctionEnvironment auctionEnvironment = null;
 	
-	public LoginServlet(AuctionContext ac) {
-		auctionContext = ac;
+	public LoginServlet(AuctionEnvironment ae) {
+		this.auctionEnvironment = ae;
 	}
 	
 	public void init(){
-		logo = "Hello GHouan!";
+		logo = "Login Servlet";
 	}
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
@@ -35,6 +36,10 @@ public class LoginServlet extends DefaultServlet{
 		System.out.println("RequesterName:"+username);
 		String userip = request.getParameter("ip");
 		System.out.println("RequesterIP:"+userip);
+		
+		//add user's info to bidder list
+		auctionEnvironment.bidderList.addBidder(new Bidder(username, userip));
+		
 		//send cookie if cookie is null
 		if( !hasCookie(request.getCookies()) ) {
 			Cookie nameCookie = new Cookie("name",username);
@@ -45,10 +50,9 @@ public class LoginServlet extends DefaultServlet{
 		}
 		// Actual logic goes here.
 		PrintWriter out = response.getWriter();
-		out.println(auctionContext.generateXml());
-		System.out.println(auctionContext.generateXml());
-		//out.println("<h1>" + logo + "</h1>");
-		//out.println("<h2>" + "xing" + "</h2>");
+		out.println(this.auctionEnvironment.context.generateXml());
+//		System.out.println(this.auctionEnvironment.context.generateXml());
+
 
 	}
 	

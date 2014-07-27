@@ -19,8 +19,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 
-
-
 public class AuctionContext {
 	private int round;
 	private int duration_Sec;
@@ -36,12 +34,28 @@ public class AuctionContext {
 		this.finalRound = false;
 	}
 	
-	public AuctionContext(int time, ArrayList<AuctionItem> list) {
+	public AuctionContext(int time, float min, ArrayList<AuctionItem> list) {
 		this.round = 1;
 		this.duration_Sec = time;
 		this.itemList = list;
-		this.minIncreament = 0;
+		this.minIncreament = min;
 		this.finalRound = false;
+	}
+	
+	public void setData(int time, float min, ArrayList<AuctionItem> list) {
+		this.round = 1;
+		this.duration_Sec = time;
+		this.itemList = list;
+		this.minIncreament = min;
+		this.finalRound = false;
+	}
+	
+	public void setFinalRound() {
+		this.finalRound = true;
+	}
+	
+	public ArrayList<AuctionItem> getItemList() {
+		return this.itemList;
 	}
 	
 	public String generateXml() {  
@@ -74,7 +88,7 @@ public class AuctionContext {
 	    	AuctionItem item = itemList.get(i);  
 	    	child = doc.createElement("item");  
 	    	child.setAttribute("name", item.getName());  
-	    	child.setAttribute("price", Float.toString(item.getPrice())); 
+	    	child.setAttribute("price", Double.toString(item.getPrice())); 
 	    	child.setAttribute("owner", item.getOwner());  
 	    	root.appendChild(child);  
 	    }  
@@ -126,13 +140,5 @@ public class AuctionContext {
 		}  
 	     System.out.println("生成XML文件成功!");  
 	}
-	public static void main (String args []) { 
-    	String outputPath = "./testAuctionContext.xml";
-    	try {    
-    		//Document doc = generateXml(list);//生成XML文件  
-    		//outputXml(doc, outputPath);//将文件输出到指定的路径  
-    	} catch (Exception e) {  
-    		System.err.println("出现异常");  
-    	}  
-    }  
+
 }
