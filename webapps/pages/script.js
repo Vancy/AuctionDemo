@@ -28,18 +28,6 @@ $(document).ready(function(){
 		submitAuction();
 	});
 
-	// $("#name").focus(function() {
-	// 	if ( $(this).val() === "input your name" ) {
-	// 		$(this).val("");
-	// 	}
-	// });
-
-	// $("#name").focusout(function() {
-	// 	if ( $.trim($("this").val()) === "" ) {
-	// 		$(this).val("input your name");
-	// 	}
-	// });
-
 	$("#name").keypress(function( event ) {
 		if ( event.which == 13 ) {
 			event.preventDefault();
@@ -255,7 +243,7 @@ function submitAuction() {
 		},
 		error: function(response) {
 			//################### ######
-			// unlockScreen();
+			unlockScreen();
 			updateError(response);
 		},
 		complete: function(response) {
