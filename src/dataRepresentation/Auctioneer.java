@@ -23,7 +23,15 @@ public class Auctioneer {
 		return requestedBids.size();
 	}
 
-	public AuctionContext nextRound() {
+	public AuctionContext nextRound(AuctionEnvironment ae) {
+		
+		while (true) {
+			// all bidders have finished placing their bids
+			if (requestedBids.size() == ae.bidderList.size()) {
+				break;
+			}
+		}
+		
 		ArrayList<AuctionItem> itemList = new ArrayList<AuctionItem>();
 		Map<AuctionItem, Double> map = new HashMap<AuctionItem, Double>();
 		
