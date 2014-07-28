@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -220,8 +221,10 @@ public class AuctionConfigPanel extends JPanel {
 		}
 		this.context.setData(time_duration, min_increment, list);
 		//System.out.println(this.context.generateXml());
-		CardLayout contentPaneLayout = (CardLayout)this.parentFrame.getContentPane().getLayout();
-		contentPaneLayout.show(this.parentFrame.getContentPane(), "AuctionPane");
+		JSplitPane sp = (JSplitPane)(this.parentFrame.getContentPane());
+		JPanel auctionContentPanel = (JPanel) sp.getLeftComponent();
+		CardLayout contentPaneLayout = (CardLayout)auctionContentPanel.getLayout();
+		contentPaneLayout.show(auctionContentPanel, "AuctionPane");
 
 	}
 }

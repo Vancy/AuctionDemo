@@ -6,6 +6,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 
 import dataRepresentation.AuctionEnvironment;
 
@@ -41,17 +42,21 @@ public class AuctionMainWindow {
 		frame.setBounds(100, 100, 617, 670);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-
-	    JPanel contentPane = new JPanel();
-	    contentPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-	    contentPane.setLayout(new CardLayout());
+		JSplitPane splitPane = new JSplitPane();
+		
+	    JPanel auctionContentPane = new JPanel();
+	    auctionContentPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+	    auctionContentPane.setLayout(new CardLayout());
 	    this.auctionConfigPane = new AuctionConfigPanel(this.environment.context, this.frame);
 	    this.auctionPane = new AuctionPanel(this.environment);
-	    //contentPane.add(new JPanel(), "blankPane");
-	    contentPane.add(auctionConfigPane, "ConfigPane"); 
-	    contentPane.add(auctionPane, "AuctionPane");
-	    frame.setContentPane(contentPane);
-        //frame.pack();   
+	    auctionContentPane.add(auctionConfigPane, "ConfigPane"); 
+	    auctionContentPane.add(auctionPane, "AuctionPane");
+	    
+		splitPane.setRightComponent(new BidderListPanel(this.environment.bidderList));
+		splitPane.setLeftComponent(auctionContentPane);
+		splitPane.setDividerLocation(0.75);
+		
+	    frame.setContentPane(splitPane); 
         frame.setLocationByPlatform(true);
 
 	        
