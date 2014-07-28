@@ -55,6 +55,7 @@ public class AuctionMainWindow {
 		splitPane.setRightComponent(new BidderListPanel(this.environment.bidderList));
 		splitPane.setLeftComponent(auctionContentPane);
 		splitPane.setDividerLocation(0.75);
+
 		
 	    frame.setContentPane(splitPane); 
         frame.setLocationByPlatform(true);

@@ -105,7 +105,7 @@ public class AuctionConfigPanel extends JPanel {
 		panel_auctionItems.setBounds(51, 222, 415, 229);
 		add(panel_auctionItems);
 		
-		String[] columnNames = {"Name", "Price"};
+		String[] columnNames = {"Item", "Price"};
 		String[][] tableVales = {{"Item1","10.0"},{"Item3","20.0"},{"Item2","30.0"},{"Item4","40.0"}}; 
         tableModel = new DefaultTableModel(tableVales,columnNames);
         panel_auctionItems.setLayout(new GridLayout(0, 1, 0, 0));

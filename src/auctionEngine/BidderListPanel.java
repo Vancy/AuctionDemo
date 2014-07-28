@@ -15,6 +15,9 @@ import javax.swing.table.DefaultTableModel;
 
 import dataRepresentation.Bidder;
 import dataRepresentation.BidderList;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class BidderListPanel extends JPanel {
 
@@ -29,22 +32,37 @@ public class BidderListPanel extends JPanel {
 	public BidderListPanel(BidderList list) {
 		
 		bidderList = list;
-		setLayout(new GridLayout(0, 1, 0, 0));
-		
-		JScrollPane scrollPane = new JScrollPane();
-		add(scrollPane);
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{450, 0};
+		gridBagLayout.rowHeights = new int[]{150, 150, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		setLayout(gridBagLayout);
 		
 		table = new JTable();
 		String[] columnNames = {"ID", "Name", "IP"};
 		String[][] tableVales = {};
 		tableModel = new DefaultTableModel(tableVales,columnNames);
 		
+		JScrollPane scrollPane = new JScrollPane();
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
+		gbc_scrollPane.gridx = 0;
+		gbc_scrollPane.gridy = 0;
+		add(scrollPane, gbc_scrollPane);
+		
 		table = new JTable(tableModel);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); 
 		scrollPane.setViewportView(table);
 		
 		JPanel panel = new JPanel();
-		add(panel);
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.anchor = GridBagConstraints.BASELINE;
+		gbc_panel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panel.gridx = 0;
+		gbc_panel.gridy = 1;
+		add(panel, gbc_panel);
 		JButton btnKickOut = new JButton("Kick Out");
 		panel.add(btnKickOut);
 		
