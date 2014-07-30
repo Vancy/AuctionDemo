@@ -66,14 +66,14 @@ public class Agent extends Bidder {
 	private void assignValuationsAndSunkAwareness() {
 		for (List<AuctionItem> powerSetList : powerSet) {
 			if (powerSetList.size() == 1) {
-				System.out.print("Enter agent " + this.ID + "'s value for item " + powerSetList.get(0).getID() + ": ");
+				System.out.print("Enter agent " + this.getID() + "'s value for item " + powerSetList.get(0).getID() + ": ");
 				int value = Integer.parseInt(ScannerSingleton.getInstance().nextLine());
 				valuations.put(powerSetList, value);
 			} else {
 				valuations.put(powerSetList, 0);
 			}
 		}
-		System.out.print("Enter agent " + this.ID + "'s sunk-awareness constant: ");
+		System.out.print("Enter agent " + this.getID() + "'s sunk-awareness constant: ");
 		int value = Integer.parseInt(ScannerSingleton.getInstance().nextLine());
 		setSunkAwarenessConstant(value);
 	}
@@ -89,13 +89,14 @@ public class Agent extends Bidder {
 		double perceivedPriceTotal = 0;
 		
 		for (AuctionItem item : itemSet) {
-			if (Auction.auctioneer.isBidderXLeadingAuctionItemY(this.ID, item)) {
-				perceivedPriceTotal += sunkAwarenessConstant * Auction.auctioneer.getLeadingBid(item);
+			if (/*is this agent leading the item?*/) {
+				perceivedPriceTotal += sunkAwarenessConstant * /*value of the leading bid for the item*/;
 			} else {
-				perceivedPriceTotal += Auction.auctioneer.getLeadingBid(item) + Auction.minimumIncrement;
+				perceivedPriceTotal += /*value of the leading bid for the item*/ + AuctionContext.minIncreament;
 			}
-		}
+		}	
 		
+		// some debugging statements
 		System.out.print("{");
 		for (AuctionItem i : itemSet) {
 			System.out.print(i.getID() + " ");
@@ -106,6 +107,14 @@ public class Agent extends Bidder {
 		return valuation - perceivedPriceTotal;
 	}
 	
+	/**
+	 * This method specifies the agents behaviour for the first round. This needs
+	 * to be separated from the other rounds because the agent usually responds to
+	 * other bidders' bids and the first round does not have any bids to begin with.
+	 * 
+	 * The behaviour will simply be bidding the agents valuations on all items.
+	 * @return
+	 */
 	protected Map<AuctionItem, Double> getFirstRoundBehavior() {
 		
 		Map<AuctionItem, Double> nextRoundBehaviour = new HashMap<AuctionItem, Double>();
@@ -136,8 +145,10 @@ public class Agent extends Bidder {
 		
 		for (AuctionItem i : items) {
 			if (optimalAuctionItemsToBidOn.contains(i)) {
-				if (!Auction.auctioneer.isBidderXLeadingAuctionItemY(this.ID, i)) {
-					nextRoundBehaviour.put(i, Auction.auctioneer.scoreboard.get(i).get(Auction.auctioneer.scoreboard.get(i).size()-1).getValue() + Auction.minimumIncrement);
+				if (/*is this agent losing the bid for this item?*/) {
+					nextRoundBehaviour.put(i, /*current bid on the item*/ + AuctionContext.minIncreament);
+				} else {
+					// agent is winning the bid for the item - does not need to bid again
 				}
 			} else {
 				nextRoundBehaviour.put(i, 0.0);
