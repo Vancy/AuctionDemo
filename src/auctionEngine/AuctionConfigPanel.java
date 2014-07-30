@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -104,7 +105,7 @@ public class AuctionConfigPanel extends JPanel {
 		panel_auctionItems.setBounds(51, 222, 415, 229);
 		add(panel_auctionItems);
 		
-		String[] columnNames = {"Name", "Price"};
+		String[] columnNames = {"Item", "Price"};
 		String[][] tableVales = {{"Item1","10.0"},{"Item3","20.0"},{"Item2","30.0"},{"Item4","40.0"}}; 
         tableModel = new DefaultTableModel(tableVales,columnNames);
         panel_auctionItems.setLayout(new GridLayout(0, 1, 0, 0));
@@ -220,8 +221,10 @@ public class AuctionConfigPanel extends JPanel {
 		}
 		this.context.setData(time_duration, min_increment, list);
 		//System.out.println(this.context.generateXml());
-		CardLayout contentPaneLayout = (CardLayout)this.parentFrame.getContentPane().getLayout();
-		contentPaneLayout.show(this.parentFrame.getContentPane(), "AuctionPane");
+		JSplitPane sp = (JSplitPane)(this.parentFrame.getContentPane());
+		JPanel auctionContentPanel = (JPanel) sp.getLeftComponent();
+		CardLayout contentPaneLayout = (CardLayout)auctionContentPanel.getLayout();
+		contentPaneLayout.show(auctionContentPanel, "AuctionPane");
 
 	}
 }
