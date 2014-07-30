@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type"
+            content="text/html; charset=ISO-8859-1">
+        <title>Auction System</title>
+
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <script type="text/javascript" src="./script.js"></script>
+        <link rel="stylesheet" href="./style.css" type="text/css" />
+    </head>
+    
+    <body>
+        <div id="content">
+            <div id="login_box">
+                <div class="title">
+                    <p>Auction System</p>
+                </div>
+                <div id="login">
+                    <p id="login_error_tips" class="login_error"></p>
+                    <div>
+                        <input type="text" id="name" placeholder="input your name" autofocus />
+                        <label for="name"><i>Enter your name</i></lable>
+                    </div>
+                    <div id="login_button_div">
+                        <button id="button" class="submit_button" >Enter</button>
+                    </div>
+                </div>
+            </div>
+            <div id="bid">
+                <div class="title">
+                    <p id="round_infomation"></p>
+                
+                </div>
+
+                <div id="data">
+                    <p id="timer"></p>
+                    <table id="bid_table"> 
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Price</th>
+                            <th>Your Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- auction items here -->
+                    </tbody>
+                    </table>
+
+                    <div id="submit_button_div">
+                        <button id="submit_auction" class="submit_button">Bid!</button>
+                    </div>
+                </div>
+            
+                
+            </div> 
+            
+        </div>
+    </body>
+</html>

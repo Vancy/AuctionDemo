@@ -141,6 +141,29 @@ div {
 
 }
 
+
+.disabled_button {
+	display: inline-block;
+	margin-bottom: 0;
+	vertical-align: middle;
+	cursor: pointer;
+	border: 1px solid #ccc;
+	border-bottom-color: #b3b3b3;
+	box-shadow: inset 0 1px 0 rgba(255,255,255,.2),0 1px 2px rgba(0,0,0,.05);
+	line-height: normal;
+	border-radius: 5px;
+	padding: 6px 10px;
+	white-space: nowrap;
+	color: #fff;
+	text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+	padding-left: 16px;
+	padding-right: 16px;
+	background-color: #A7ACB1;
+	background-image: -webkit-linear-gradient(top,#A7ACB1,#A7ACB1);
+	background-repeat: repeat-x;
+	border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+}
+
 #submit_auction {
 	float: right;
 	font-size: 18px;
@@ -255,6 +278,15 @@ tr.zhover {
 }
 
 
+#round_infomation {
+	color: white;
+	font-size: 20px;
+}
+
+#round_infomation i {
+	font-size: 15px;
+}
+
 
 /**/
 #bid {
@@ -288,3 +320,4 @@ tr.zhover {
 .input_price_tips {
 	display: none;
 }
+
