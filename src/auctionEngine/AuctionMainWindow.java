@@ -39,26 +39,27 @@ public class AuctionMainWindow {
 	private void initialize() {
 
 		frame = new JFrame();
-		frame.setBounds(100, 100, 617, 670);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JSplitPane splitPane = new JSplitPane();
 		
 	    JPanel auctionContentPane = new JPanel();
-	    auctionContentPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+	    //auctionContentPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 	    auctionContentPane.setLayout(new CardLayout());
 	    this.auctionConfigPane = new AuctionConfigPanel(this.environment.context, this.frame);
 	    this.auctionPane = new AuctionPanel(this.environment);
 	    auctionContentPane.add(auctionConfigPane, "ConfigPane"); 
 	    auctionContentPane.add(auctionPane, "AuctionPane");
 	    
+	    splitPane.setResizeWeight(0.99);
+        splitPane.setOneTouchExpandable(true);
+        splitPane.setContinuousLayout(true);
 		splitPane.setRightComponent(new BidderListPanel(this.environment.bidderList));
 		splitPane.setLeftComponent(auctionContentPane);
-		splitPane.setDividerLocation(0.75);
+		//splitPane.setDividerLocation(0.1);
 
-		
 	    frame.setContentPane(splitPane); 
-        frame.setLocationByPlatform(true);
+
 
 	        
 		JMenuBar menuBar = new JMenuBar();
@@ -90,6 +91,9 @@ public class AuctionMainWindow {
 		JMenuItem mntmHelp = new JMenuItem("Help");
 		mnAbout.add(mntmHelp);
 		
+
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        frame.setLocationByPlatform(true);
         frame.setVisible(true);
 	}
 	

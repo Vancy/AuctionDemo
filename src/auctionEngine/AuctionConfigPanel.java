@@ -42,6 +42,7 @@ public class AuctionConfigPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = -6898719932567042813L;
 	private DefaultTableModel tableModel;
+	private JComboBox<String>  typeComboBox;
 	private JSpinner spinner_minIncrement;
 	private JSpinner spinner_roundDuration;
 	private String auctionTypes[] = {"SAA", "CCA", "ULA"};
@@ -69,11 +70,11 @@ public class AuctionConfigPanel extends JPanel {
 		lblAuctionType.setFont(new Font("Dialog", Font.BOLD, 17));
 		panel_auctionType.add(lblAuctionType);
 		
-		JComboBox<String> comboBox = new JComboBox<String>();
+		 typeComboBox = new JComboBox<String>();
 		for (int i=0; i<auctionTypes.length; i++) {
-			comboBox.addItem(auctionTypes[i]);
+			typeComboBox.addItem(auctionTypes[i]);
 		}
-		panel_auctionType.add(comboBox);
+		panel_auctionType.add(typeComboBox);
 		
 		JPanel panel_roundDuration = new JPanel();
 		panel_roundDuration.setBounds(51, 90, 415, 40);
@@ -206,21 +207,20 @@ public class AuctionConfigPanel extends JPanel {
 
 	}
 	private void startAuction() {
+		String typeName = this.typeComboBox.getSelectedItem().toString();
+		this.context.setType(typeName);
 		
 		int time_duration = Integer.parseInt(this.spinner_roundDuration.getValue().toString());
 		float min_increment = Float.parseFloat(this.spinner_minIncrement.getValue().toString());
-		System.out.println("round duration:"+ time_duration);
-		System.out.println("min_increment:"+ min_increment);
-		
+	
 		ArrayList<AuctionItem> list = new ArrayList<AuctionItem>();
 		for (int i=0; i<this.table.getRowCount(); i++) {
 			String name = this.table.getValueAt(i, 0).toString();
 			float price = Float.parseFloat(this.table.getValueAt(i, 1).toString());
-			System.out.println("name:"+ name +" price:"+price);
 			list.add(new AuctionItem(name, price));
 		}
 		this.context.setData(time_duration, min_increment, list);
-		//System.out.println(this.context.generateXml());
+		System.out.println(this.context.generateXml());
 		JSplitPane sp = (JSplitPane)(this.parentFrame.getContentPane());
 		JPanel auctionContentPanel = (JPanel) sp.getLeftComponent();
 		CardLayout contentPaneLayout = (CardLayout)auctionContentPanel.getLayout();
