@@ -40,23 +40,7 @@ public class BidServlet extends DefaultServlet{
 
 	}
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		// Get bidder Information
-		String username = null;
-		String userip = null;
-		if( hasCookie(request.getCookies()) ) {
-			for(Cookie c: request.getCookies()){
-			    if("name".equals(c.getName())){
-			        username = c.getValue(); 
-			    }
-			    if("ip".equals(c.getName())){
-			        userip = c.getValue(); 
-			    }
-			}
-		}
-		System.out.println("Bidder submit(name):"+username);
-		System.out.println("Bidder submit(ip):"+userip);
-		
+				
 		// read Post content by request.getReader(). store content into bufferedReader
 		BufferedReader reader = request.getReader();
 		StringBuilder builder = new StringBuilder();
@@ -68,30 +52,17 @@ public class BidServlet extends DefaultServlet{
 		System.out.println("receve bid request:"+xmlContent);
 		Document doc = convertStringToDocument(xmlContent);
 		
-		
+
 		//place a bid to environment, auctioneer will handle this bid
-		placeBid(username, userip, doc);
-		
+		placeBid(doc);
+		System.err.println("dfd");
 		// get next round's context through auctioneer
 		AuctionContext context_updated  = this.auctionEnvironment.auctioneer.nextRound(auctionEnvironment);
-		
+		System.out.println("updated:"+ context_updated.generateXml());
 		//Respond latest AuctionContext
 		PrintWriter out = response.getWriter();
 		out.println(context_updated);
-
-	}
-	
-	private boolean hasCookie(Cookie[] cookies){
-		if (null != cookies) {
-			for(Cookie c: cookies){
-			    if("name".equals(c.getName())){
-			        System.out.println("request has cookie:"+c.getValue());
-			        return true; 
-			    }
-			}
-		} 
-		System.out.println("request doesn't have cookie");
-		return false;
+		System.err.println("Response sent");
 	}
 	
     private static Document convertStringToDocument(String xmlStr) {
@@ -107,12 +78,17 @@ public class BidServlet extends DefaultServlet{
         }
         return null;
     }
-    
-    private boolean placeBid(String name, String ip, Document doc) {
+
+    private boolean placeBid(Document doc) {
+    	NodeList bidderNode = doc.getElementsByTagName("bidder");
+    	Element bidderInfo = (Element) (bidderNode.item(0));
+    	String name = bidderInfo.getAttribute("name");
+    	String ip = bidderInfo.getAttribute("ip");
+    	
     	Bidder bidder = this.auctionEnvironment.bidderList.getBidder(name, ip);
     	if (null == bidder) {
     		try {
-				throw new Exception("Cannot find bidder inside bidderlist");
+				throw new Exception("BidServlet: Cannot find bidder inside bidderlist");
 			} catch (Exception e) {
 				e.printStackTrace();
 				return false;

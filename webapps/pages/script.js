@@ -8,12 +8,12 @@ var BID = {
     isTimeUp: isTimeUp
 }
 
-var SSA = {
-    update: ssaUpdate,  
-    validateInput: ssaValidateInput,
-    validateAllInput: ssaValidateAllInput,
-    setAll2Valid: ssaSetAll2Valid,
-    collectData: ssaCollectData
+var SAA = {
+    update: saaUpdate,
+    validateInput: saaValidateInput,
+    validateAllInput: saaValidateAllInput,
+    setAll2Valid: saaSetAll2Valid,
+    collectData: saaCollectData
 }
 
 var CCA = {
@@ -27,7 +27,7 @@ var CCA = {
 
 
 $(document).ready(function(){
-    SSA = $.extend(true, SSA, BID);
+    SAA = $.extend(true, SAA, BID);
     CCA = $.extend(true, CCA, BID);
 
 	$("#button").click(function(){
@@ -48,7 +48,7 @@ $(document).ready(function(){
         console.log("Name:{0}\nIP:{1}".f(getName(), getIp()));
   	});
 
-	// # 
+	// #
 	$("#submit_auction").click(function() {
         console.log("CLICK", getBid());
 		getBid().submitAuction();
@@ -71,30 +71,34 @@ function switchTo(data) {
     var $context = ($(data)).find("auction_context");
     var $type = $context.children("type").attr("value");
     console.log("Type", $type);
+    // Xing: get $type's string value, if directly compare $type to a string, it always returns unequal..
+    var typeString = $type; //so store the value into typeString variable, which is string type.
 
-    if ( $type == undefined || $type == "SSA" ) {
-        $("#bid_table").data("type", "SSA");
-        $("#bid_table").data("object", SSA);
-        SSA.update(data);
-        
-        
-    } else if ( $type == "CCA" )  {
+    if (  typeString === "SAA" ) {
+        console.log("Yes! this is SAA!");
+        $("#bid_table").data("type", "SAA");
+        $("#bid_table").data("object", SAA);
+        SAA.update(data);
+
+
+    } else if ( typeString === "CCA" )  {
+        console.log("Yes! this is CCA!");
         $("#bid_table").data("type", "CCA");
         $("#bid_table").data("object", CCA);
         CCA.update(data);
 
-        
-    } else {
+
+    } else if ( $type == undefined){
         console.log("ELSE");
     }
 }
 
 
 
-/**  SSA ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-function ssaUpdate(data) {
+/**  SAA ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+function saaUpdate(data) {
 	$("#login_box").hide();
-	console.log("SSAupdate()");
+	console.log("SAAupdate()");
 
 	console.log(data);
 
@@ -104,14 +108,14 @@ function ssaUpdate(data) {
 	var $minIncreament = $context.children("minimum_increament").attr("value");
 	$("#bid_table").data("minIncreament", $minIncreament);
 
-	
+
 
 	console.log("Round {0}  Final? {1}".f($roundNumber, $isFinal));
 
 	$("#round_infomation").html("Round {0}  <b>{1}</b>  <i>Min Increament {2}</i>"
 		.f($roundNumber, $isFinal==="yes" ? "<b class='alert'>Final!</b>" : "", $minIncreament));
-	
-	SSA.setTimer($context.children("duration").attr("value"));
+
+	SAA.setTimer($context.children("duration").attr("value"));
 
 	$("#bid_table").find("tbody").find("tr").remove();
 
@@ -146,12 +150,12 @@ function ssaUpdate(data) {
             console.log("NOT FIN");
             $item = $("<tr></tr>").append($_id, $_name, $_price, $_yprice);
         }
-		
+
 
 		$("#bid_table").find("tbody").append($item);
 
-		
-	});	
+
+	});
 
 
 
@@ -165,7 +169,7 @@ function ssaUpdate(data) {
 
     if ( ! $isFinal ) {
         $(".input_price").change(function() {
-            SSA.validateInput($(this));
+            SAA.validateInput($(this));
         });
 
         $(".input_price").keypress(function( event ) {
@@ -175,20 +179,20 @@ function ssaUpdate(data) {
             }
         });
     }
-    
+
 
 	$("#bid").show();
 }
 
 
 
-function ssaCollectData() {
-    console.log("ssaCollectData");
+function saaCollectData() {
+    console.log("saaCollectData");
     var $bid = "";
     var $items = "";
 
     $("#bid_table").find("tbody").find("tr").each(function(i) {
-        
+
         var $id = $(this).children("th:eq(0)").text();
         var $name = $(this).children("th:eq(1)").text();
         var $yprice = $("#price{0}".f($id)).val();
@@ -196,15 +200,15 @@ function ssaCollectData() {
 
         $items = $items + "<item name=\"{0}\" price=\"{1}\" owner=\"{2}\"></item>".f($name, $yprice, $owner);
     });
-    
-    $bid = "<bid><bidder name='{0}' ip='{1}'><item_list>".f($name, $ip) + $items + "</item_list></bid>";
+
+    $bid = "<bid><bidder name='{0}' ip='{1}' /><item_list>".f($name, $ip) + $items + "</item_list></bid>";
 
     return $bid;
 }
 
 // Validate the user input
-function ssaValidateInput(input) {
-    
+function saaValidateInput(input) {
+
     var $valid = true;
     var $item = input.parents("tr");
 
@@ -228,7 +232,7 @@ function ssaValidateInput(input) {
 
         if ( S2N($yprice) < S2N($price) + $minIncreament ) {
             // input.addClass("invalid_price");
-    
+
             $("#price{0}_tips".f($id)).html("Your are aborting this bid.");
             $("#price{0}_tips".f($id)).show();
             $valid = false;
@@ -243,12 +247,12 @@ function ssaValidateInput(input) {
     
 }
 
-function ssaValidateAllInput() {
+function saaValidateAllInput() {
     console.log("validateAllInput");
     var $valid = true;
     
     $(".input_price").each(function(i) {
-        if ( SSA.validateInput($(this)) === false ) {
+        if ( SAA.validateInput($(this)) === false ) {
             $valid = false;
         }
     });
@@ -257,16 +261,16 @@ function ssaValidateAllInput() {
     return $valid;
 }
 
-function ssaSetAll2Valid() {
+function saaSetAll2Valid() {
     console.log("setAll2Valid");
     
     $(".input_price").each(function(i) {
-        if ( ! SSA.validateInput($(this)) ) {
+        if ( ! SAA.validateInput($(this)) ) {
             $(this).val(0);
         }
     });
 }
-/** END OF SSA --------------------------------------------------------*/
+/** END OF SAA --------------------------------------------------------*/
 
 
 
@@ -275,20 +279,21 @@ function ssaSetAll2Valid() {
 
 function ccaUpdate(data) {
     $("#login_box").hide();
-    console.log("SSAupdate()");
+    console.log("SAAupdate()");
 
     console.log(data);
 
     var $context = ($(data)).find("auction_context");
     var $roundNumber = $context.children("round").attr("value");
-    var $isFinal = $context.children("round").attr("final");    
+    var $isFinal = $context.children("round").attr("final");   
+    var $minIncreament = $context.children("minimum_increament").attr("value"); 
 
     console.log("Round {0}  Final? {1}".f($roundNumber, $isFinal));
 
     $("#round_infomation").html("Round {0}  <b>{1}</b>  <i>Min Increament {2}</i>"
         .f($roundNumber, $isFinal==="yes" ? "<b class='alert'>Final!</b>" : "", $minIncreament));
     
-    SSA.setTimer($context.children("duration").attr("value"));
+    SAA.setTimer($context.children("duration").attr("value"));
 
     $("#bid_table").find("thead").find("tr").remove();
 
@@ -482,7 +487,7 @@ function setTimer(timeToCount) {
 // Post xml to server
 function submitAuction() {
 
-    console.log("SSAsubmitAuction");
+    console.log("SAAsubmitAuction");
 
     if ( ! getBid().validateAllInput() ) {
         if ( getBid().isTimeUp() ) {
@@ -672,7 +677,3 @@ function getType() {
 }
 
 /** END OF PUBLIC --------------------------------------------------------*/
-
-
-
-

@@ -17,6 +17,8 @@ import org.w3c.dom.Element;
 
 
 public class AuctionContext {
+	public static enum AuctionType {SAA, CCA, ULA};
+	private AuctionType type;
 	private int round;
 	private int duration_Sec;
 	private ArrayList<AuctionItem> itemList;
@@ -24,6 +26,7 @@ public class AuctionContext {
 	private boolean finalRound;
 	
 	public AuctionContext() {
+		this.type = AuctionType.SAA;
 		this.round = 1;
 		this.duration_Sec = 60;
 		this.itemList = new ArrayList<AuctionItem>();
@@ -31,7 +34,8 @@ public class AuctionContext {
 		this.finalRound = false;
 	}
 	
-	public AuctionContext(int time, float min, ArrayList<AuctionItem> list) {
+	public AuctionContext(AuctionType type, int time, float min, ArrayList<AuctionItem> list) {
+		this.type = type;
 		this.round = 1;
 		this.duration_Sec = time;
 		this.itemList = list;
@@ -46,7 +50,22 @@ public class AuctionContext {
 		this.minIncreament = min;
 		this.finalRound = false;
 	}
-	
+	public void setType(String typeName) {
+		 if (typeName.equals("SAA")) {
+			 this.type = AuctionType.SAA;
+			 return;
+		 }
+		 if (typeName.equals("CCA")){
+			 this.type = AuctionType.CCA;
+			 return;
+		 }
+		 if (typeName.equals("ULA")) {
+			 this.type = AuctionType.ULA;
+			 return;
+		 }
+		    
+		    
+	}
 	public void setFinalRound() {
 		this.finalRound = true;
 	}
@@ -76,7 +95,27 @@ public class AuctionContext {
 	    } catch (Exception e) {  
 	    	e.printStackTrace();  
 	    	return null;
-	    }   
+	    }
+	   
+	    String typeName = "";
+
+	    switch (this.type){
+	    case SAA:
+	    	typeName = "SAA";
+	    	break;
+	    case CCA:
+	    	typeName = "CCA";
+	    	break;
+	    case ULA:
+	    	typeName = "ULA";
+	    	break;
+		default:
+			break;
+	    }
+	    
+	    child = doc.createElement("type");
+	    child.setAttribute("value", typeName);
+	    root.appendChild(child);
 	    child = doc.createElement("round");
 	    child.setAttribute("value", Integer.toString(this.round));
 	    child.setAttribute("final", this.finalRound?"yes":"no");
