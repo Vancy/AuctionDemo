@@ -508,31 +508,46 @@ function submitAuction() {
 
     // other ....
 
-    $.ajax({
-        accepts: "xml",
-        url: '/WEB-INF/bid.xml', 
-        processData: false,
-        async: false,
-        contentType: "text/xml",
-        dataType: "xml",
-        type: "POST",  
-        data: $xmlData, 
-        success: function(response) {
-            console.log("success");
+    // $.ajax({
+    //     url: '/WEB-INF/bid.xml', 
+    //     // processData: false,
+    //     // async: true,
+    //     // contentType: "text/xml",
+    //     dataType: "xml",
+    //     type: "POST",  
+    //     data: $xmlData, 
+    //     success: function(response) {
+    //         console.log("success");
+    //         getBid().unlockScreen();
+    //         getBid().update(response);
+    //     },
+    //     error: function(xhr, status, error) {
+    //         console.log("FAIL TO GET RESPONESE FROM SERVER");
+    //         console.log(status, xhr.responseText);
+    //         console.log("xhr", xhr);
+    //         console.log("error", error);
+    //         getBid().unlockScreen();
+    //         updateError(xhr);
+    //     },
+    //     complete: function(response, status) {
+    //         console.log("ajax finished", status);
+    //     }
+    // });
+
+    ///  问题在这里！！！！！
+    $.post('/WEB-INF/bid.xml', $xmlData)
+        .done(function(data, status, error) {
+            console.log("OK", status);
+            console.log("data", data);
+            console.log(error);
+
             getBid().unlockScreen();
-            update(response);
-        },
-        error: function(xhr, status, error) {
-            console.log("FAIL TO GET RESPONESE FROM SERVER");
-            console.log(status, xhr.responseText);
-            console.log("xhr", xhr);
-            console.log("error", error);
-            getBid().unlockScreen();
-            updateError(xhr);
-        },
-        complete: function(response, status) {
-            console.log("ajax finished", status);
-        }
+            getBid().update(data);
+        })
+        .fail(function(data, status, error) {
+            console.log("NO", status);
+            console.log(data);
+            console.log(error);
     });
 
 }
@@ -601,11 +616,11 @@ function unlockScreen() {
 
 /** PUBLIC ++++++++++++++++++++++++++++++++++++++++++++++*/
 function updateError() {
-    $("#timer").text("FAIL TO GET RESPONESE FROM SERVER");
-    $("#submit_auction").prop("disabled", true);
+    $("#timer").text("Update error.");
+    // $("#submit_auction").prop("disabled", true);
     
-    $("#submit_auction").removeClass("submit_button");
-    $("#submit_auction").addClass("disabled_button");
+    // $("#submit_auction").removeClass("submit_button");
+    // $("#submit_auction").addClass("disabled_button");
 }
 
 
