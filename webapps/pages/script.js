@@ -1,3 +1,12 @@
+/**
+ *
+ * Date: Wed Jul 30 5:25 PM
+ * Author: youyix
+ * Title: Refactory code. Add CCA.
+ *
+ *
+**/
+
 var BID = {
 
     setTimer: setTimer,
