@@ -1,12 +1,13 @@
 /**
  *
- * Date: Wed Jul 30 5:25 PM
+ * Date: Fri 1st Aug 9:09 PM (+1 Zurich OTC)
  * Author: youyix
- * Title: Refactory code. Add CCA.
+ * Title: Fix bugs and logic. SAA is partly fine.
  *
  *
 **/
 
+// A common BID object 
 var BID = {
 
     setTimer: setTimer,
@@ -17,6 +18,7 @@ var BID = {
     isTimeUp: isTimeUp
 }
 
+// A SAA-BID object, 'subclass' of BID
 var SAA = {
     update: saaUpdate,
     validateInput: saaValidateInput,
@@ -25,6 +27,7 @@ var SAA = {
     collectData: saaCollectData
 }
 
+// A CCA-BID object, 'subclass' of BID
 var CCA = {
     update: ccaUpdate,
     validateInput: ccaValidateInput,
@@ -69,8 +72,6 @@ $(document).ready(function(){
 			$("#button").click();
 		}
 	});
-
-
 });
 
 
@@ -109,7 +110,10 @@ function saaUpdate(data) {
 	$("#login_box").hide();
 	console.log("SAAupdate()");
 
-	console.log(data);
+	console.log('type: ' + $.type(data));
+    if ( $.type(data) === "string" ) {
+        data = $.parseXML(data);
+    }
 
 	var $context = ($(data)).find("auction_context");
 	var $roundNumber = $context.children("round").attr("value");
@@ -117,8 +121,6 @@ function saaUpdate(data) {
     $isFinal = ( $isFinal === "yes" ) ? true : false; 
 	var $minIncreament = $context.children("minimum_increament").attr("value");
 	$("#bid_table").data("minIncreament", $minIncreament);
-
-
 
 	console.log("Round {0}  Final? {1}".f($roundNumber, $isFinal));
 
@@ -136,7 +138,6 @@ function saaUpdate(data) {
 		var $price = $(this).attr("price");
 		var $owner = $(this).attr("owner");
 
-
 		console.log($itemId, $itemName, $price, $owner);
 
 		var $_id = $("<th class='invisible'></th>").text($itemId);
@@ -147,7 +148,7 @@ function saaUpdate(data) {
         var $_owner = $("<th></th>").text($owner);
         // opt 2
 		var $_yprice = $("<th></th>").append($("<input type='text' id='price{0}' class='input_price' value='{1}'></input>"
-			.f($itemId, S2N($minIncreament)+S2N($price))));
+			.f($itemId, 0+S2N($price))));
 		$_yprice.append($("<p id=price{0}_tips class='input_price_tips'></p>".f($itemId)));
 
         var $item;
@@ -179,36 +180,28 @@ function saaUpdate(data) {
         });
     }
 
-	console.log("FInish paint");
+	console.log("Finish paint");
 	$("#bid").show();
 }
-
-
 
 function saaCollectData() {
     console.log("saaCollectData");
     var $bid = "";
     var $items = "";
-
     $("#bid_table").find("tbody").find("tr").each(function(i) {
-
         var $id = $(this).children("th:eq(0)").text();
         var $name = $(this).children("th:eq(1)").text();
         var $yprice = $("#price{0}".f($id)).val();
         var $owner = " ";
-
         $items = $items + "<item name='{0}' price='{1}' owner='{2}'></item>".f($name, $yprice, $owner);
     });
-
     $bid = "<?xml version='1.0' encoding='utf-8'?><bid><bidder name='{0}' ip='{1}' /><item_list>".f($name, $ip) + $items + "</item_list></bid>";
 
-    // return $.parseXML($bid);
     return $bid;
 }
 
 // Validate the user input
 function saaValidateInput(input) {
-
     var $valid = true;
     var $item = input.parents("tr");
 
@@ -216,7 +209,6 @@ function saaValidateInput(input) {
     var $name = $item.children("th:eq(1)").text();
     var $price = $item.children("th:eq(2)").text();
     var $yprice = $("#price{0}".f($id)).val();
-
     var $minIncreament = S2N($("#bid_table").data("minIncreament"));
     console.log("validateInput", $id, $name, $price, $yprice);
 
@@ -225,13 +217,8 @@ function saaValidateInput(input) {
         $("#price{0}_tips".f($id)).show();
         $valid = false;
     } else {
-        // input.removeClass("invalid_input");
-        // input.addClass("invalid_price");
         $("#price{0}_tips".f($id)).hide();
-
         if ( S2N($yprice) < S2N($price) + $minIncreament ) {
-            // input.addClass("invalid_price");
-
             $("#price{0}_tips".f($id)).html("Your are aborting this bid.");
             $("#price{0}_tips".f($id)).show();
             $valid = false;
@@ -240,10 +227,8 @@ function saaValidateInput(input) {
     return $valid;
 
     function hasInvalidCharacters(str) {
-        return str.search(/[^0-9]/) != -1 ;
-
+        return str.search(/[^0-9]/) != -1;
     }
-    
 }
 
 function saaValidateAllInput() {
@@ -264,9 +249,7 @@ function saaSetAll2Valid() {
     console.log("setAll2Valid");
     
     $(".input_price").each(function(i) {
-        if ( ! SAA.validateInput($(this)) ) {
-            $(this).val(0);
-        }
+        $(this).val(0);
     });
 }
 /** END OF SAA --------------------------------------------------------*/
@@ -280,7 +263,10 @@ function ccaUpdate(data) {
     $("#login_box").hide();
     console.log("SAAupdate()");
 
-    console.log(data);
+    console.log('type: ' + $.type(data));
+    if ( $.type(data) === "string" ) {
+        data = $.parseXML(data);
+    }
 
     var $context = ($(data)).find("auction_context");
     var $roundNumber = $context.children("round").attr("value");
@@ -449,9 +435,7 @@ function ccaSetAll2Valid() {
     console.log("ccaSetAll2Valid");
     
     $(".input_price").each(function(i) {
-        if ( ! CCA.validateInput($(this)) ) {
-            $(this).val(0);
-        }
+        $(this).val(0);
     });
 }
 
@@ -474,7 +458,6 @@ function setTimer(timeToCount) {
 		if ( $count == 0 ) {
             clearInterval($timer);
 			getBid().submitAuction();
-
 		}
 	}, 1000);
 }
@@ -534,7 +517,7 @@ function submitAuction() {
     //     }
     // });
 
-    ///  问题在这里！！！！！
+    ///  
     $.post('/WEB-INF/bid.xml', $xmlData)
         .done(function(data, status, error) {
             console.log("OK", status);
@@ -617,10 +600,10 @@ function unlockScreen() {
 /** PUBLIC ++++++++++++++++++++++++++++++++++++++++++++++*/
 function updateError() {
     $("#timer").text("Update error.");
-    // $("#submit_auction").prop("disabled", true);
+    $("#submit_auction").prop("disabled", true);
     
-    // $("#submit_auction").removeClass("submit_button");
-    // $("#submit_auction").addClass("disabled_button");
+    $("#submit_auction").removeClass("submit_button");
+    $("#submit_auction").addClass("disabled_button");
 }
 
 
@@ -674,25 +657,12 @@ function getIp() {
     return $ip;
 }
 
-
 function getBid() {
     return $("#bid_table").data("object");
 }
 
 function getType() {
     return $("#bid_table").data("type");
-}
-
-function escapeXML(string){
-
-    var str = string;
-    str = str.replace(/\&/g,"&amp;");
-    str = str.replace(/\>/g,"&gt;");
-    str = str.replace(/\</g,"&lt;");
-    str = str.replace(/\"/g,"&quot;");
-    str = str.replace(/\'/g,"&apos;");
-
-    return str;
 }
 
 /** END OF PUBLIC --------------------------------------------------------*/
