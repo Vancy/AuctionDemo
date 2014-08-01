@@ -22,7 +22,7 @@ public class AuctionContext {
 	private int round;
 	private int duration_Sec;
 	private ArrayList<AuctionItem> itemList;
-	private float minIncreament;
+	public static float minIncreament;
 	private boolean finalRound;
 	
 	public AuctionContext() {
@@ -133,7 +133,7 @@ public class AuctionContext {
 	    	child = doc.createElement("item");  
 	    	child.setAttribute("name", item.getName());  
 	    	child.setAttribute("price", Double.toString(item.getPrice())); 
-	    	child.setAttribute("owner", item.getOwner());  
+	    	child.setAttribute("owner", item.getOwner()+"");  
 	    	root.appendChild(child);  
 	    }  
 	    /* 
@@ -160,7 +160,5 @@ public class AuctionContext {
 			e.printStackTrace();
 		}
 		return null;
-    }  
-
-
+    }
 }

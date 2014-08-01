@@ -20,9 +20,9 @@ public class Auctioneer {
 		
 		//Xing at 2014.7.31: Process current bid, update auction context;
 		for (AuctionItem bidderItem: bid.getItemList()) {
-			double originalPrice = fetchItemPrice(bidderItem.getName());
+			double originalPrice = fetchItemPrice(bidderItem.getID());
 			if (originalPrice < bidderItem.getPrice()) {
-				putItemPrice(bidderItem.getName(), bidderItem.getPrice());
+				putItemPrice(bid.getBidder().getID(), bidderItem.getID(), bidderItem.getPrice());
 			}
 		}
 		
@@ -43,38 +43,34 @@ public class Auctioneer {
 			}
 		}
 		
-//		ArrayList<AuctionItem> itemList = new ArrayList<AuctionItem>();
-//		Map<AuctionItem, Double> map = new HashMap<AuctionItem, Double>();
-//		
-//		for (Bid b : requestedBids) {
-//			for (AuctionItem i : b.getItemList()) {
-//				map.put(i, i.getPrice());
-//			}
-//		}
-//		
-//		for (AuctionItem i : map.keySet()) {
-//			itemList.add(i);
-//		}
-//		
-//		context.setItemList(itemList);
 		context.incrementRound();
 		requestedBids.clear();
 		return context;
 	}
 	
-	private double fetchItemPrice(String name) {
+	private double fetchItemPrice(int itemID) {
 		for (AuctionItem item: this.context.getItemList()) {
-			if (name.equals(item.getName())) {
+			if (itemID == item.getID()) {
 				return item.getPrice();
 			}
 		}
 		return Double.MAX_VALUE;
 	}
 	
-	private void putItemPrice(String name, double price) {
+	private int fetchItemOwner(int itemID) {
 		for (AuctionItem item: this.context.getItemList()) {
-			if (name.equals(item.getName())) {
+			if (itemID == item.getID()) {
+				return item.getOwner();
+			}
+		}
+		return -1;
+	}
+	
+	private void putItemPrice(int bidderID, int itemID, double price) {
+		for (AuctionItem item: this.context.getItemList()) {
+			if (itemID == item.getID()) {
 				item.setPrice(price);
+				item.setOwner(bidderID);
 			}
 		}
 	}

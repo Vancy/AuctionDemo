@@ -10,24 +10,24 @@ public class Agent extends Bidder {
 	
 	private double sunkAwarenessConstant = 1;
 	
-	List<AuctionItem> items;
+	private int numberOfItems;
 	
-	List<List<AuctionItem>> powerSet;
+	List<List<Integer>> powerSet;
 	
-	Map<List<AuctionItem>, Integer> valuations = new HashMap<List<AuctionItem>, Integer>();
+	Map<List<Integer>, Integer> valuations = new HashMap<List<Integer>, Integer>();
 	
-	public Agent(String name, String ip, List<AuctionItem> items) {
+	public Agent(String name, String ip, int numberOfItems) {
 		super(name, ip);
-		this.items = new ArrayList<AuctionItem>(items);
-		powerSet = getPowerSet(items);
+		this.numberOfItems = numberOfItems;
+		powerSet = getPowerSet(numberOfItems);
 		assignValuationsAndSunkAwareness();
 	}
 	
-	public Agent(String name, String ip, List<AuctionItem> items, double sunkAwarenessConstant) {
+	public Agent(String name, String ip, int numberOfItems, double sunkAwarenessConstant) {
 		super(name, ip);
 		this.setSunkAwarenessConstant(sunkAwarenessConstant);
-		this.items = new ArrayList<AuctionItem>(items);
-		powerSet = getPowerSet(items);
+		this.numberOfItems = numberOfItems;
+		powerSet = getPowerSet(numberOfItems);
 		assignValuationsAndSunkAwareness();
 	}
 
@@ -39,21 +39,21 @@ public class Agent extends Bidder {
 		this.sunkAwarenessConstant = sunkAwarenessConstant;
 	}
 	
-	private List<List<AuctionItem>> getPowerSet(Collection<AuctionItem> list) {
-		List<List<AuctionItem>> ps = new ArrayList<List<AuctionItem>>();
-		ps.add(new ArrayList<AuctionItem>()); // add the empty set
+	private List<List<Integer>> getPowerSet(Integer numberOfItems) {
+		List<List<Integer>> ps = new ArrayList<List<Integer>>();
+		ps.add(new ArrayList<Integer>()); // add the empty set
 
 		// for every item in the original list
-		for (AuctionItem item : list) {
-			List<List<AuctionItem>> newPs = new ArrayList<List<AuctionItem>>();
+		for (int i = 0; i < numberOfItems; i++) {
+			List<List<Integer>> newPs = new ArrayList<List<Integer>>();
 
-			for (List<AuctionItem> subset : ps) {
+			for (List<Integer> subset : ps) {
 				// copy all of the current powerset's subsets
 				newPs.add(subset);
 
 				// plus the subsets appended with the current item
-				List<AuctionItem> newSubset = new ArrayList<AuctionItem>(subset);
-				newSubset.add(item);
+				List<Integer> newSubset = new ArrayList<Integer>(subset);
+				newSubset.add(i);
 				newPs.add(newSubset);
 			}
 
@@ -64,9 +64,10 @@ public class Agent extends Bidder {
 	}
 	
 	private void assignValuationsAndSunkAwareness() {
-		for (List<AuctionItem> powerSetList : powerSet) {
+		for (List<Integer> powerSetList : powerSet) {
 			if (powerSetList.size() == 1) {
-				System.out.print("Enter agent " + this.getID() + "'s value for item " + powerSetList.get(0).getID() + ": ");
+				System.out.print("Enter agent " + this.getID() + "'s value for item " + powerSetList.get(0) + ": ");
+				// can't use the command line to enter valuations, going to have to do it another way
 				int value = Integer.parseInt(ScannerSingleton.getInstance().nextLine());
 				valuations.put(powerSetList, value);
 			} else {
@@ -78,9 +79,9 @@ public class Agent extends Bidder {
 		setSunkAwarenessConstant(value);
 	}
 	
-	private double calculateSurplus(List<AuctionItem> itemSet) {
+	private double calculateSurplus(List<Integer> itemSet) {
 		
-		// ignore the empty set of items geenrated from the power set
+		// ignore the empty set of items generated from the power set
 		if (itemSet.isEmpty()) {
 			return Double.NEGATIVE_INFINITY;
 		}
@@ -88,18 +89,19 @@ public class Agent extends Bidder {
 		double valuation = valuations.get(itemSet);
 		double perceivedPriceTotal = 0;
 		
-		for (AuctionItem item : itemSet) {
-			if (/*is this agent leading the item?*/) {
-				perceivedPriceTotal += sunkAwarenessConstant * /*value of the leading bid for the item*/;
+		for (Integer itemID : itemSet) {
+			if (this.getID().equals(auctioneer.fetchItemOwner(itemID))) {
+				// I need access to an auctioneer object so I can fetch the item price for a given item
+				perceivedPriceTotal += sunkAwarenessConstant * auctioneer.fetchItemPrice(itemID);
 			} else {
-				perceivedPriceTotal += /*value of the leading bid for the item*/ + AuctionContext.minIncreament;
+				perceivedPriceTotal += auctioneer.fetchItemPrice(itemID) + AuctionContext.minIncreament;
 			}
 		}	
 		
 		// some debugging statements
 		System.out.print("{");
-		for (AuctionItem i : itemSet) {
-			System.out.print(i.getID() + " ");
+		for (Integer i : itemSet) {
+			System.out.print(i + " ");
 		}
 		System.out.print("}");
 		System.out.println("Valuation: " + valuation + " perceviedTotal: " + perceivedPriceTotal);
@@ -115,12 +117,12 @@ public class Agent extends Bidder {
 	 * The behaviour will simply be bidding the agents valuations on all items.
 	 * @return
 	 */
-	protected Map<AuctionItem, Double> getFirstRoundBehavior() {
+	protected Map<Integer, Double> getFirstRoundBehavior() {
 		
-		Map<AuctionItem, Double> nextRoundBehaviour = new HashMap<AuctionItem, Double>();
+		Map<Integer, Double> nextRoundBehaviour = new HashMap<Integer, Double>();
 			
-		for (AuctionItem i : items) {
-			List<AuctionItem> vAuctionItem = new ArrayList<AuctionItem>();
+		for (int i = 0; i < numberOfItems; i++) {
+			List<Integer> vAuctionItem = new ArrayList<Integer>();
 			vAuctionItem.add(i);
 			nextRoundBehaviour.put(i, (double)valuations.get(vAuctionItem));
 		}
@@ -128,25 +130,25 @@ public class Agent extends Bidder {
 		return nextRoundBehaviour;
 	}
 	
-	protected Map<AuctionItem, Double> getNextRoundBehaviour() {
+	protected Map<Integer, Double> getNextRoundBehaviour() {
 		
-		Map<AuctionItem, Double> nextRoundBehaviour = new HashMap<AuctionItem, Double>();
+		Map<Integer, Double> nextRoundBehaviour = new HashMap<Integer, Double>();
 		
-		List<AuctionItem> optimalAuctionItemsToBidOn = new ArrayList<AuctionItem>();
+		List<Integer> optimalAuctionItemsToBidOn = new ArrayList<Integer>();
 		double maxSurplus = Double.NEGATIVE_INFINITY;
 		
-		for (List<AuctionItem> set : powerSet) {
+		for (List<Integer> set : powerSet) {
 			double currentSurplus = calculateSurplus(set);
 			if (currentSurplus > maxSurplus) {
-				optimalAuctionItemsToBidOn = new ArrayList<AuctionItem>(set);
+				optimalAuctionItemsToBidOn = new ArrayList<Integer>(set);
 				maxSurplus = currentSurplus;
 			}
 		}
 		
-		for (AuctionItem i : items) {
+		for (int i = 0; i < numberOfItems; i++) {
 			if (optimalAuctionItemsToBidOn.contains(i)) {
-				if (/*is this agent losing the bid for this item?*/) {
-					nextRoundBehaviour.put(i, /*current bid on the item*/ + AuctionContext.minIncreament);
+				if (!this.getID().equals(auctioneer.fetchItemOwner(i))) {
+					nextRoundBehaviour.put(i, auctioneer.fetchItemPrice(i) + AuctionContext.minIncreament);
 				} else {
 					// agent is winning the bid for the item - does not need to bid again
 				}
