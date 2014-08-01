@@ -45,8 +45,7 @@ public class AuctionListPanel extends JPanel {
 		ActionListener listener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				updateAuctionList();
-				
+				updateAuctionList();	
 			}
 		};
 		Timer displayTimer = new Timer(1000, listener);
@@ -55,21 +54,16 @@ public class AuctionListPanel extends JPanel {
 	}
 	
 	private void updateAuctionList() {
+	
 		
-		//Delete all rows before update
-		if (tableModel.getRowCount() > 0) {
-			for (int i=tableModel.getRowCount()-1; i>-1; i--) {
-				tableModel.removeRow(i);
-			}
-		}
-		
+		Vector<String> firstRow = new Vector<String>(); 
+		firstRow.add("0");
 		for (AuctionItem item: this.context.getItemList()) {
-			String id = Integer.toString(item.getID());
-			String name = item.getName();
 			double price = item.getPrice();
-			String[] rowValue = {id,name,Double.toString(price)};
-			tableModel.addRow(rowValue);
+			firstRow.add(String.valueOf(price));
 		}
+		tableModel.addRow(firstRow);
+		tableModel.fireTableDataChanged();
 	}
 	
 	private void initTableModel() {
@@ -77,7 +71,7 @@ public class AuctionListPanel extends JPanel {
 		tableModel.addColumn("ID");
 	
 		
-		System.out.println("size"+this.context.getItemList().size());
+		System.err.println("size"+this.context.getItemList().size());
 		for (AuctionItem item: this.context.getItemList()) {
 			String itemName = item.getName();
 			System.out.println(itemName);

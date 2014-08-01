@@ -52,11 +52,14 @@ public class AuctionConfigPanel extends JPanel {
 	private AuctionContext context;
 	private JFrame parentFrame;
 	private JTable table;
+	
+	private AuctionMainWindow mainWindow;
 
 	/**
 	 * Create the panel.
 	 */
-	public AuctionConfigPanel(AuctionContext context, JFrame parent) {
+	public AuctionConfigPanel(AuctionMainWindow mw, AuctionContext context, JFrame parent) {
+		this.mainWindow = mw;
 		this.context = context;
 		this.parentFrame = parent;
 		setLayout(null);
@@ -225,6 +228,9 @@ public class AuctionConfigPanel extends JPanel {
 		JPanel auctionContentPanel = (JPanel) sp.getLeftComponent();
 		CardLayout contentPaneLayout = (CardLayout)auctionContentPanel.getLayout();
 		contentPaneLayout.show(auctionContentPanel, "AuctionPane");
+		
+		//Update AuctionListPanel
+		this.mainWindow.auctionPane.updateAuctionList();
 
 	}
 }

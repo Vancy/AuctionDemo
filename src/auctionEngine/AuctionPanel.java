@@ -11,15 +11,13 @@ public class AuctionPanel extends JPanel {
 
 private AuctionEnvironment environment;
 	
-	private AuctionListPanel auctionListPanel;
+	public AuctionListPanel auctionListPanel;
 
 	
 	public AuctionPanel(AuctionEnvironment ae) {
 		this.environment = ae;
 		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		this.auctionListPanel = new AuctionListPanel(this.environment.context);
 		
-		add(auctionListPanel);
 		
 		JPanel panel = new JPanel();
 		add(panel);
@@ -35,6 +33,11 @@ private AuctionEnvironment environment;
 		
 		JButton btnNewButton_Stop = new JButton("Stop");
 		panel.add(btnNewButton_Stop);
+	}
+	
+	public void updateAuctionList(){
+		this.auctionListPanel = new AuctionListPanel(this.environment.context);
+		add(auctionListPanel);
 	}
 
 }

@@ -20,7 +20,7 @@ public class AuctionMainWindow {
 	
 	private JPanel contentPane;
 	private AuctionConfigPanel auctionConfigPane;
-	private AuctionPanel auctionPane;
+	protected AuctionPanel auctionPane;
 	
 
 	AuctionEnvironment environment;
@@ -46,7 +46,7 @@ public class AuctionMainWindow {
 	    JPanel auctionContentPane = new JPanel();
 	    //auctionContentPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 	    auctionContentPane.setLayout(new CardLayout());
-	    this.auctionConfigPane = new AuctionConfigPanel(this.environment.context, this.frame);
+	    this.auctionConfigPane = new AuctionConfigPanel(this, this.environment.context, this.frame);
 	    this.auctionPane = new AuctionPanel(this.environment);
 	    auctionContentPane.add(auctionConfigPane, "ConfigPane"); 
 	    auctionContentPane.add(auctionPane, "AuctionPane");
