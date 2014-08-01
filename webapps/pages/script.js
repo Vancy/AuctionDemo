@@ -119,6 +119,7 @@ function saaUpdate(data) {
 	var $roundNumber = $context.children("round").attr("value");
 	var $isFinal = $context.children("round").attr("final");
     $isFinal = ( $isFinal === "yes" ) ? true : false; 
+    // $isFinal = true;
 	var $minIncreament = $context.children("minimum_increament").attr("value");
 	$("#bid_table").data("minIncreament", $minIncreament);
 
@@ -130,6 +131,13 @@ function saaUpdate(data) {
 	SAA.setTimer($context.children("duration").attr("value"));
 
 	$("#bid_table").find("tbody").find("tr").remove();
+    $("#bid_table").find("thead").find("tr").remove();
+
+    if ( ! $isFinal ) {
+        $("#bid_table").find("thead").append("<tr><th>Item</th><th>Price</th><th>Your price</th></tr>");
+    } else {
+        $("#bid_table").find("thead").append("<tr><th>Item</th><th>Price</th><th>Owner</th></tr>");
+    }  
 
 	$context.find("item").each(function(i) {
 		console.log(this);
@@ -137,6 +145,7 @@ function saaUpdate(data) {
 		var $itemName = $(this).attr("name");
 		var $price = $(this).attr("price");
 		var $owner = $(this).attr("owner");
+        // $owner = "123";
 
 		console.log($itemId, $itemName, $price, $owner);
 
