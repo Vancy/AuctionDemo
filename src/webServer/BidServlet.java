@@ -55,13 +55,13 @@ public class BidServlet extends DefaultServlet{
 
 		//place a bid to environment, auctioneer will handle this bid
 		placeBid(doc);
-		System.err.println("dfd");
+		System.err.println("waiting to generate response");
 		// get next round's context through auctioneer
 		AuctionContext context_updated  = this.auctionEnvironment.auctioneer.nextRound(auctionEnvironment);
 		System.out.println("updated:"+ context_updated.generateXml());
 		//Respond latest AuctionContext
 		PrintWriter out = response.getWriter();
-		out.println(context_updated);
+		out.println(context_updated.generateXml());
 		System.err.println("Response sent");
 	}
 	

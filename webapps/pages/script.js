@@ -179,7 +179,7 @@ function saaUpdate(data) {
         });
     }
 
-
+	console.log("FInish paint");
 	$("#bid").show();
 }
 

@@ -53,6 +53,10 @@ public class BidderListPanel extends JPanel {
 		add(scrollPane, gbc_scrollPane);
 		
 		table = new JTable(tableModel);
+		table.setDefaultRenderer(String.class, new NameTableCellRenderer());
+		table.getColumnModel().getColumn(0).setCellRenderer(new NameTableCellRenderer());
+		table.getColumnModel().getColumn(2).setCellRenderer(new NameTableCellRenderer());
+		table.getColumn("Name").setCellRenderer(new NameTableCellRenderer());
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); 
 		scrollPane.setViewportView(table);
 		

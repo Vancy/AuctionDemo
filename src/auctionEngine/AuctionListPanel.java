@@ -3,6 +3,9 @@ package auctionEngine;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -34,10 +37,7 @@ public class AuctionListPanel extends JPanel {
 		add(scrollPane);
 		
 		table = new JTable();
-		String[] columnNames = {"ID", "Item", "Price"};
-		String[][] tableVales = {};
-		tableModel = new DefaultTableModel(tableVales,columnNames);
-		
+		initTableModel(); //initialize table model to fill data
 		table = new JTable(tableModel);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); 
 		scrollPane.setViewportView(table);
@@ -71,5 +71,26 @@ public class AuctionListPanel extends JPanel {
 			tableModel.addRow(rowValue);
 		}
 	}
-
+	
+	private void initTableModel() {
+		tableModel = new DefaultTableModel();
+		tableModel.addColumn("ID");
+	
+		
+		System.out.println("size"+this.context.getItemList().size());
+		for (AuctionItem item: this.context.getItemList()) {
+			String itemName = item.getName();
+			System.out.println(itemName);
+			tableModel.addColumn(itemName);
+		}
+		Vector<String> firstRow = new Vector<String>(); 
+		firstRow.add("0");
+		for (AuctionItem item: this.context.getItemList()) {
+			double price = item.getPrice();
+			firstRow.add(String.valueOf(price));
+		}
+		tableModel.addRow(firstRow);
+		tableModel.fireTableDataChanged();
+	}
+	
 }
