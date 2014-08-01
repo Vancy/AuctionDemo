@@ -5,7 +5,10 @@ public class AuctionItem implements Comparable<AuctionItem> {
 	private String name;
 	private double startingPrice;
 	private double price;
-	private String owner;
+	// ogen, 1st august changed owner from String to int.
+	// the owner should be determined by ID instead of name
+	// because there could exist bidders with same names.
+	private int owner;
 	
 	static int number_of_items = 0;
 	
@@ -19,7 +22,7 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		this.name = n;
 		this.startingPrice = sp;
 		this.price = sp;
-		this.owner = null;
+		this.owner = this.ID;
 	}
 	
 	protected void setStartingPrice(double startingPrice) {
@@ -50,8 +53,11 @@ public class AuctionItem implements Comparable<AuctionItem> {
 	public double getPrice() {
 		return this.price;
 	}
-	public String getOwner() {
+	public int getOwner() {
 		return this.owner;
+	}
+	public void setOwner(int owner) {
+		this.owner = owner;
 	}
 	public int getID() {
 		return this.ID;
