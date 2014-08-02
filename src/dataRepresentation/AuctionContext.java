@@ -22,7 +22,7 @@ public class AuctionContext {
 	private int round;
 	private int duration_Sec;
 	private ArrayList<AuctionItem> itemList;
-	public static float minIncreament;
+	private double minIncreament;
 	private boolean finalRound;
 	
 	public AuctionContext() {
@@ -34,7 +34,7 @@ public class AuctionContext {
 		this.finalRound = false;
 	}
 	
-	public AuctionContext(AuctionType type, int time, float min, ArrayList<AuctionItem> list) {
+	public AuctionContext(AuctionType type, int time, double min, ArrayList<AuctionItem> list) {
 		this.type = type;
 		this.round = 1;
 		this.duration_Sec = time;
@@ -43,13 +43,14 @@ public class AuctionContext {
 		this.finalRound = false;
 	}
 	
-	public void setData(int time, float min, ArrayList<AuctionItem> list) {
+	public void setData(int time, double min, ArrayList<AuctionItem> list) {
 		this.round = 1;
 		this.duration_Sec = time;
 		this.itemList = list;
 		this.minIncreament = min;
 		this.finalRound = false;
 	}
+	
 	public void setType(String typeName) {
 		 if (typeName.equals("SAA")) {
 			 this.type = AuctionType.SAA;
@@ -62,9 +63,11 @@ public class AuctionContext {
 		 if (typeName.equals("ULA")) {
 			 this.type = AuctionType.ULA;
 			 return;
-		 }
-		    
-		    
+		 }  
+	}
+	
+	public void setMinIncrement(double min) {
+		this.minIncreament = min;
 	}
 	public void setFinalRound() {
 		this.finalRound = true;
@@ -124,7 +127,7 @@ public class AuctionContext {
 	    child.setAttribute("value", Integer.toString(this.duration_Sec));
 	    root.appendChild(child);
 	    child = doc.createElement("minimum_increament");
-	    child.setAttribute("value", Float.toString(this.minIncreament));
+	    child.setAttribute("value", Double.toString(this.minIncreament));
 	    root.appendChild(child);
 	    
 	    int len = itemList.size();
@@ -133,7 +136,12 @@ public class AuctionContext {
 	    	child = doc.createElement("item");  
 	    	child.setAttribute("name", item.getName());  
 	    	child.setAttribute("price", Double.toString(item.getPrice())); 
-	    	child.setAttribute("owner", item.getOwner()+"");  
+	    	String ownerName = "";
+	    	// if current Item has Owner and Owner has name, then assgin owner name to Item
+	    	if ( (null != item.getOwner()) && (null != item.getOwner().getName()) ) {
+	    		ownerName = item.getOwner().getName();
+	    	}
+	    	child.setAttribute("owner", ownerName);  
 	    	root.appendChild(child);  
 	    }  
 	    /* 

@@ -49,15 +49,24 @@ public class BidServlet extends DefaultServlet{
 		    builder.append(aux);
 		}
 		String xmlContent = builder.toString();
-		System.out.println("receve bid request:"+xmlContent);
+		System.out.println("receive bid request:\n"+xmlContent);
 		Document doc = convertStringToDocument(xmlContent);
 		
 
 		//place a bid to environment, auctioneer will handle this bid
 		placeBid(doc);
 		System.err.println("waiting to generate response");
+		
+		while ( this.auctionEnvironment.auctioneer.nextRoundNotReady()) {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		// get next round's context through auctioneer
-		AuctionContext context_updated  = this.auctionEnvironment.auctioneer.nextRound(auctionEnvironment);
+		AuctionContext context_updated  =  this.auctionEnvironment.auctioneer.nextRound();
 		System.out.println("updated:"+ context_updated.generateXml());
 		//Respond latest AuctionContext
 		PrintWriter out = response.getWriter();

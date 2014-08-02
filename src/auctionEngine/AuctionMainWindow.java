@@ -46,7 +46,7 @@ public class AuctionMainWindow {
 	    JPanel auctionContentPane = new JPanel();
 	    //auctionContentPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 	    auctionContentPane.setLayout(new CardLayout());
-	    this.auctionConfigPane = new AuctionConfigPanel(this, this.environment.context, this.frame);
+	    this.auctionConfigPane = new AuctionConfigPanel(this, this.environment, this.frame);
 	    this.auctionPane = new AuctionPanel(this.environment);
 	    auctionContentPane.add(auctionConfigPane, "ConfigPane"); 
 	    auctionContentPane.add(auctionPane, "AuctionPane");
@@ -54,7 +54,7 @@ public class AuctionMainWindow {
 	    splitPane.setResizeWeight(0.99);
         splitPane.setOneTouchExpandable(true);
         splitPane.setContinuousLayout(true);
-		splitPane.setRightComponent(new BidderListPanel(this.environment.bidderList));
+		splitPane.setRightComponent(new BidderListPanel(this.environment));
 		splitPane.setLeftComponent(auctionContentPane);
 		//splitPane.setDividerLocation(0.1);
 

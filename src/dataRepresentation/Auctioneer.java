@@ -1,55 +1,89 @@
 package dataRepresentation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
 
 
 public class Auctioneer {
 	
 	ArrayList<Bid> requestedBids;
-	AuctionContext context;
+	AuctionEnvironment environment;
 	
-	public Auctioneer(AuctionContext c) {
-		this.context = c;
+	boolean nextRoundNotReady = true;
+	
+	public Auctioneer(AuctionEnvironment e) {
+		this.environment = e;
 		this.requestedBids = new ArrayList<Bid>();
 	}
 	
 	public void getBid(Bid bid) {
 		requestedBids.add(bid);
 		
-		//Xing at 2014.7.31: Process current bid, update auction context;
-		for (AuctionItem bidderItem: bid.getItemList()) {
-			double originalPrice = fetchItemPrice(bidderItem.getID());
-			if (originalPrice < bidderItem.getPrice()) {
-				putItemPrice(bid.getBidder().getID(), bidderItem.getID(), bidderItem.getPrice());
-			}
+		//Xing change: accumulate bids process 
+		if (requestedBids.size() == this.environment.bidderList.size()) {
+			this.processBids();
 		}
-		
 	}
 	
-	public int numberOfRequestedBids() {
-		return requestedBids.size();
+	public boolean nextRoundNotReady() {
+		return this.nextRoundNotReady;
 	}
+	
+	public void setNextRoundReady() {
+		this.nextRoundNotReady = false;
+	}
+	
+	public AuctionContext nextRound() {
 
-	public AuctionContext nextRound(AuctionEnvironment ae) {
+		//this.environment.context.incrementRound();
 		
-		System.out.println("num Bidderlist:"+ae.bidderList.size());
-		System.out.println("num requestBids:"+this.requestedBids.size());
-		while (true) {
-			// all bidders have finished placing their bids
-			if (requestedBids.size() == ae.bidderList.size()) {
-				break;
-			}
-		}
-		
-		context.incrementRound();
-		requestedBids.clear();
-		return context;
+		return this.environment.context;
 	}
 	
+	private void processBids() {
+		
+		//Xing at 2014.7.31: Process current bids, update auction context;
+		//Xing change at 2014.8.2: Process all bids at onece.
+		
+		System.err.println("request bid num:"+this.requestedBids.size());
+		for (Bid bid: this.requestedBids) {
+			for (AuctionItem bidderItem: bid.getItemList()) {
+				double originalPrice = fetchItemPrice(bidderItem.getName());
+				System.out.println("original price:"+originalPrice+"for bidder"+bid.getBidder().getName());
+				if (originalPrice < bidderItem.getPrice()) {
+					putItemPrice(bid.getBidder(), bidderItem.getName(), bidderItem.getPrice());
+				}
+			}
+		}
+		requestedBids.clear();
+		this.environment.context.incrementRound();
+		this.setNextRoundReady();
+	}
+	
+	//Xing: currently message from client browser can only recognize item by name, so please keep this.
+	private double fetchItemPrice(String name) {
+		for (AuctionItem item: this.environment.context.getItemList()) {
+			if (name.equals(item.getName())) {
+				return item.getPrice();
+			}
+		}
+		return Double.MAX_VALUE;
+	}
+	
+	//Xing: currently message from client browser can only recognize item by name, so please keep this.
+	private void putItemPrice(Bidder bidder, String itemname, double price) {
+		for (AuctionItem item: this.environment.context.getItemList()) {
+			if (itemname.equals(item.getName())) {
+				item.setPrice(price);
+				item.setOwner(bidder);
+			}
+		}
+	}
+	/*
+	 * Keep following two methods, maybe in the furture we can substitute, by using item id, not item name.
+	 */
 	private double fetchItemPrice(int itemID) {
-		for (AuctionItem item: this.context.getItemList()) {
+		for (AuctionItem item: this.environment.context.getItemList()) {
 			if (itemID == item.getID()) {
 				return item.getPrice();
 			}
@@ -57,22 +91,14 @@ public class Auctioneer {
 		return Double.MAX_VALUE;
 	}
 	
-	private int fetchItemOwner(int itemID) {
-		for (AuctionItem item: this.context.getItemList()) {
-			if (itemID == item.getID()) {
-				return item.getOwner();
-			}
-		}
-		return -1;
-	}
-	
-	private void putItemPrice(int bidderID, int itemID, double price) {
-		for (AuctionItem item: this.context.getItemList()) {
+	private void putItemPrice(Bidder bidder, int itemID, double price) {
+		for (AuctionItem item: this.environment.context.getItemList()) {
 			if (itemID == item.getID()) {
 				item.setPrice(price);
-				item.setOwner(bidderID);
+				item.setOwner(bidder);
 			}
 		}
 	}
+	
 
 }

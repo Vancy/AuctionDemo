@@ -1,8 +1,8 @@
 package auctionEngine;
 
-import dataRepresentation.AuctionContext;
-import dataRepresentation.AuctionItem;
 
+import dataRepresentation.AuctionEnvironment;
+import dataRepresentation.AuctionItem;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -11,7 +11,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.ListSelectionModel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
@@ -30,10 +29,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-import javax.swing.ScrollPaneConstants;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
 
 
 public class AuctionConfigPanel extends JPanel {
@@ -49,7 +44,7 @@ public class AuctionConfigPanel extends JPanel {
 	private JTextField textField_name;
 	private JTextField textField_price;
 	
-	private AuctionContext context;
+	private AuctionEnvironment environment;
 	private JFrame parentFrame;
 	private JTable table;
 	
@@ -58,9 +53,9 @@ public class AuctionConfigPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public AuctionConfigPanel(AuctionMainWindow mw, AuctionContext context, JFrame parent) {
+	public AuctionConfigPanel(AuctionMainWindow mw, AuctionEnvironment environment, JFrame parent) {
 		this.mainWindow = mw;
-		this.context = context;
+		this.environment = environment;
 		this.parentFrame = parent;
 		setLayout(null);
 		
@@ -211,7 +206,7 @@ public class AuctionConfigPanel extends JPanel {
 	}
 	private void startAuction() {
 		String typeName = this.typeComboBox.getSelectedItem().toString();
-		this.context.setType(typeName);
+		this.environment.context.setType(typeName);
 		
 		int time_duration = Integer.parseInt(this.spinner_roundDuration.getValue().toString());
 		float min_increment = Float.parseFloat(this.spinner_minIncrement.getValue().toString());
@@ -222,8 +217,8 @@ public class AuctionConfigPanel extends JPanel {
 			float price = Float.parseFloat(this.table.getValueAt(i, 1).toString());
 			list.add(new AuctionItem(name, price));
 		}
-		this.context.setData(time_duration, min_increment, list);
-		System.out.println(this.context.generateXml());
+		this.environment.context.setData(time_duration, min_increment, list);
+		System.out.println(this.environment.context.generateXml());
 		JSplitPane sp = (JSplitPane)(this.parentFrame.getContentPane());
 		JPanel auctionContentPanel = (JPanel) sp.getLeftComponent();
 		CardLayout contentPaneLayout = (CardLayout)auctionContentPanel.getLayout();

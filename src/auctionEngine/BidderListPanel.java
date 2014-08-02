@@ -13,8 +13,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.table.DefaultTableModel;
 
+import dataRepresentation.AuctionEnvironment;
 import dataRepresentation.Bidder;
 import dataRepresentation.BidderList;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -22,6 +24,7 @@ import java.awt.Insets;
 public class BidderListPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private AuctionEnvironment environment;
 	private BidderList bidderList;
 	private JTable table;
 	private DefaultTableModel tableModel;
@@ -29,9 +32,9 @@ public class BidderListPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public BidderListPanel(BidderList list) {
-		
-		bidderList = list;
+	public BidderListPanel(AuctionEnvironment e) {
+		this.environment = e;
+		this.bidderList = e.bidderList;
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{450, 0};
 		gridBagLayout.rowHeights = new int[]{150, 150, 0};
@@ -67,6 +70,15 @@ public class BidderListPanel extends JPanel {
 		gbc_panel.gridx = 0;
 		gbc_panel.gridy = 1;
 		add(panel, gbc_panel);
+		
+		JButton btnStart = new JButton("Start");
+		btnStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				environment.AuctionStarted = true;
+				System.err.println("Click Auction Start"+ environment.AuctionStarted);
+			}
+		});
+		panel.add(btnStart);
 		JButton btnKickOut = new JButton("Kick Out");
 		panel.add(btnKickOut);
 		

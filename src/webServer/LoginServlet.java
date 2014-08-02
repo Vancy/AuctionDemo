@@ -48,7 +48,18 @@ public class LoginServlet extends DefaultServlet{
 			response.addCookie(nameCookie);
 			response.addCookie(ipCookie);
 		}
-		
+		System.err.println("waiting for Auction Start:"+this.auctionEnvironment.AuctionStarted);
+		// Waiting Auctioneer click starting botton
+		while (false == this.auctionEnvironment.AuctionStarted){
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		System.err.println(" Auction Started"+this.auctionEnvironment.AuctionStarted);
 		// Actual logic goes here.
 		PrintWriter out = response.getWriter();
 		out.println(this.auctionEnvironment.context.generateXml());
