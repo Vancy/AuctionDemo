@@ -96,12 +96,7 @@ public class BidderListPanel extends JPanel {
 	
 	private void updateBidderList() {
 		
-		//Delete all rows before update
-		if (tableModel.getRowCount() > 0) {
-		    for (int i=tableModel.getRowCount()-1; i>-1; i--) {
-		    	tableModel.removeRow(i);
-		    }
-		}
+		tableModel.setRowCount(0);
 		
 		//put bidderlist to tablemodel
 		for (Bidder bidder: this.bidderList.getList()) {

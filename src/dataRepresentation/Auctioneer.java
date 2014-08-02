@@ -56,6 +56,9 @@ public class Auctioneer {
 			}
 		}
 		requestedBids.clear();
+		this.environment.context.bidsProcessingFinished = true;
+		
+		while (false == this.environment.context.bidsProcessingFinished); //wait till GUI update table
 		this.environment.context.incrementRound();
 		this.setNextRoundReady();
 	}
@@ -80,7 +83,7 @@ public class Auctioneer {
 		}
 	}
 	/*
-	 * Keep following two methods, maybe in the furture we can substitute, by using item id, not item name.
+	 * Keep following two methods, maybe in the furture we can substitute the former two, by using item id, not item name.
 	 */
 	private double fetchItemPrice(int itemID) {
 		for (AuctionItem item: this.environment.context.getItemList()) {

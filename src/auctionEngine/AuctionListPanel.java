@@ -1,5 +1,6 @@
 package auctionEngine;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,41 +51,50 @@ public class AuctionListPanel extends JPanel {
 		};
 		Timer displayTimer = new Timer(1000, listener);
 		displayTimer.start();
+
 		
 	}
 	
-	private void updateAuctionList() {
+	public void updateAuctionList() {
 	
-		
-		Vector<String> firstRow = new Vector<String>(); 
-		firstRow.add("0");
-		for (AuctionItem item: this.context.getItemList()) {
-			double price = item.getPrice();
-			firstRow.add(String.valueOf(price));
+		if (this.context.bidsProcessingFinished) {
+			Vector<String> firstRow = new Vector<String>(); 
+			firstRow.add(Integer.toString((this.context.getRound()-1)));
+			for (AuctionItem item: this.context.getItemList()) {
+				double price = item.getPrice();
+				firstRow.add(String.valueOf(price));
+			}
+			tableModel.addRow(firstRow);
+			this.context.bidsProcessingFinished = false;
 		}
-		tableModel.addRow(firstRow);
-		tableModel.fireTableDataChanged();
+
 	}
 	
 	private void initTableModel() {
-		tableModel = new DefaultTableModel();
-		tableModel.addColumn("ID");
-	
 		
-		System.err.println("size"+this.context.getItemList().size());
+		tableModel = new DefaultTableModel();
+		tableModel.addColumn("Round");
+	
 		for (AuctionItem item: this.context.getItemList()) {
 			String itemName = item.getName();
-			System.out.println(itemName);
 			tableModel.addColumn(itemName);
 		}
 		Vector<String> firstRow = new Vector<String>(); 
-		firstRow.add("0");
+		firstRow.add("Initial");
 		for (AuctionItem item: this.context.getItemList()) {
 			double price = item.getPrice();
 			firstRow.add(String.valueOf(price));
 		}
 		tableModel.addRow(firstRow);
 		tableModel.fireTableDataChanged();
+		
+		//Add Highest Price Owner for AuctionListTable
+//		table.setDefaultsRenderer(String.class, new PriceOwnerCellRenderer(this.context));
+		System.err.println("current colum"+tableModel.getColumnCount());
+//		table.getColumnModel().getColumn(1).setCellRenderer(new PriceOwnerCellRenderer(this.context));
+//		for (int i=1; i<tableModel.getColumnCount(); i++) {
+//			table.getColumnModel().getColumn(i).setCellRenderer(new PriceOwnerCellRenderer(this.context));
+//		}
 	}
 	
 }

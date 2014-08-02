@@ -17,7 +17,7 @@ public class NameTableCellRenderer extends DefaultTableCellRenderer {
 	@Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
     	 
-		 setText(value.toString());       
+		 setText(value.toString());    
     	 setBackground(BidderList.colorList.get(row));
          return this;
     }

@@ -25,6 +25,13 @@ public class AuctionContext {
 	private double minIncreament;
 	private boolean finalRound;
 	
+	
+	/* bidsProcessingFinished flag, to decide current round data processing is finished
+	 * GUI check this flag, if true, GUI update auction_context to 
+	 * table. Then set back to false
+	 */
+	public boolean bidsProcessingFinished = false;
+	
 	public AuctionContext() {
 		this.type = AuctionType.SAA;
 		this.round = 1;
@@ -81,6 +88,10 @@ public class AuctionContext {
 		this.itemList = new ArrayList<AuctionItem>(itemList);
 	}
 	
+	public int getRound() {
+		return this.round;
+	}
+	
 	public void incrementRound() {
 		round++;
 	}
@@ -134,6 +145,7 @@ public class AuctionContext {
 	    for (int i=0; i<len; i++) {  
 	    	AuctionItem item = itemList.get(i);  
 	    	child = doc.createElement("item");  
+	    	child.setAttribute("id", Integer.toString(item.getID()));
 	    	child.setAttribute("name", item.getName());  
 	    	child.setAttribute("price", Double.toString(item.getPrice())); 
 	    	String ownerName = "";

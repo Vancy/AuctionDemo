@@ -57,6 +57,8 @@ public class BidServlet extends DefaultServlet{
 		placeBid(doc);
 		System.err.println("waiting to generate response");
 		
+		
+		// waiting for Auctioneer process bids, once next round info ready, get context update.
 		while ( this.auctionEnvironment.auctioneer.nextRoundNotReady()) {
 			try {
 				Thread.sleep(500);
