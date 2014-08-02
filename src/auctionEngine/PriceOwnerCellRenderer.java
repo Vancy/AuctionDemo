@@ -1,6 +1,7 @@
 package auctionEngine;
 
 
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTable;
@@ -24,21 +25,28 @@ public class PriceOwnerCellRenderer extends DefaultTableCellRenderer {
 
 	@Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+		
+		setBackground(Color.WHITE); //firstly set back to original color
+		 if (row >0 && col >0) {
 
-//		 if (row >=1 && col >=1) {
-//	    	 int itemID = col - 1;
-//	    	 int ownerID = -1;
-//	    	 
-//	    	 for(AuctionItem item: context.getItemList()) {
-//	    		if (item.getID() == itemID) {
-//	    			ownerID = item.getOwner().getID();
-//	    		}
-//	    	 }
-//	    	 setText(value.toString());    
-//	    	 setBackground(BidderList.colorList.get(ownerID));
-//	    	  
-//		 }
-		 setBackground(BidderList.colorList.get(0));
-         return this;
+	 		System.out.println("COL:"+col+"ROW:"+row);
+	    	 int itemID = col - 1;
+	    	 int ownerID = -1;
+	    	 for(AuctionItem item: context.getItemList()) {
+	    		if (item.getID() == itemID) {
+	    			if (null != item.getOwner()) {
+	    				ownerID = item.getOwner().getID();
+	    			}
+	    			
+	    		}
+	    	 }  
+	    	 System.out.println("owner id:"+ownerID+"in item"+itemID);
+	    	 if (-1 != ownerID){
+	    		 setBackground(BidderList.colorList.get(ownerID));  
+	    	 } 
+		 }
+		
+		 setText(value.toString());   
+		 return this;
     }
 }

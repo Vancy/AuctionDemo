@@ -14,6 +14,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import dataRepresentation.AuctionContext;
 import dataRepresentation.AuctionItem;
@@ -36,10 +37,11 @@ public class AuctionListPanel extends JPanel {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		add(scrollPane);
-		
-		table = new JTable();
+
 		initTableModel(); //initialize table model to fill data
-		table = new JTable(tableModel);
+		
+		table = new JTable(tableModel); //Buid up table based on table model
+		table.setDefaultRenderer(Object.class, new PriceOwnerCellRenderer(this.context));
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); 
 		scrollPane.setViewportView(table);
 		
@@ -72,7 +74,8 @@ public class AuctionListPanel extends JPanel {
 	
 	private void initTableModel() {
 		
-		tableModel = new DefaultTableModel();
+		tableModel  = new DefaultTableModel();
+
 		tableModel.addColumn("Round");
 	
 		for (AuctionItem item: this.context.getItemList()) {
@@ -88,13 +91,6 @@ public class AuctionListPanel extends JPanel {
 		tableModel.addRow(firstRow);
 		tableModel.fireTableDataChanged();
 		
-		//Add Highest Price Owner for AuctionListTable
-//		table.setDefaultsRenderer(String.class, new PriceOwnerCellRenderer(this.context));
-		System.err.println("current colum"+tableModel.getColumnCount());
-//		table.getColumnModel().getColumn(1).setCellRenderer(new PriceOwnerCellRenderer(this.context));
-//		for (int i=1; i<tableModel.getColumnCount(); i++) {
-//			table.getColumnModel().getColumn(i).setCellRenderer(new PriceOwnerCellRenderer(this.context));
-//		}
 	}
 	
 }

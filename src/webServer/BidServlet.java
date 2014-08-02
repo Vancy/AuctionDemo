@@ -112,7 +112,8 @@ public class BidServlet extends DefaultServlet{
     		Element element = (Element) currentNode;
     		String itemName = element.getAttribute("name");
     		double itemPrice = Double.parseDouble(element.getAttribute("price"));
-    		bidderItemList.add(new AuctionItem(itemName, itemPrice));
+    		int id = Integer.parseInt(element.getAttribute("id"));
+    		bidderItemList.add(new AuctionItem(id, itemName, itemPrice));
     	}
     	Bid bid = new Bid(bidder, bidderItemList);
     	bidder.placeBid(this.auctionEnvironment, bid);
