@@ -36,13 +36,19 @@ var CCA = {
     setAll2Valid: ccaSetAll2Valid
 }
 
-
-
-$(document).ready(function(){
+function init() {
     SAA = $.extend(true, SAA, BID);
     CCA = $.extend(true, CCA, BID);
+    $("#bid_table").data("type", "BID");
+    $("#bid_table").data("object", BID);
+}
+
+$(document).ready(function(){
+    
+    init();
 
 	$("#button").click(function(){
+        BID.lockScreen();
 		$name = $("#name").val();
 
 		if ( ! checkUsername($name) ) {
@@ -77,6 +83,7 @@ $(document).ready(function(){
 
 
 function switchTo(data) {
+    BID.unlockScreen();
     console.log("switchTo");
     var $context = ($(data)).find("auction_context");
     var $type = $context.children("type").attr("value");
@@ -101,6 +108,8 @@ function switchTo(data) {
     } else if ( $type == undefined){
         console.log("ELSE");
     }
+
+
 }
 
 
@@ -141,7 +150,7 @@ function saaUpdate(data) {
 
 	$context.find("item").each(function(i) {
 		console.log(this);
-		var $itemId = i;
+		var $itemId = $(this).attr("id");
 		var $itemName = $(this).attr("name");
 		var $price = $(this).attr("price");
 		var $owner = $(this).attr("owner");
@@ -202,7 +211,7 @@ function saaCollectData() {
         var $name = $(this).children("th:eq(1)").text();
         var $yprice = $("#price{0}".f($id)).val();
         var $owner = " ";
-        $items = $items + "<item name='{0}' price='{1}' owner='{2}'></item>".f($name, $yprice, $owner);
+        $items = $items + "<item id='{0}' name='{1}' price='{2}' owner='{3}'></item>".f($id, $name, $yprice, $owner);
     });
     $bid = "<?xml version='1.0' encoding='utf-8'?><bid><bidder name='{0}' ip='{1}' /><item_list>".f($name, $ip) + $items + "</item_list></bid>";
 
@@ -302,7 +311,7 @@ function ccaUpdate(data) {
 
     $context.find("item").each(function(i) {
         console.log(this);
-        var $itemId = i;
+        var $itemId = $(this).attr("id");
         var $itemName = $(this).attr("name");
         var $price = $(this).attr("price");
         var $quantityAmount = $(this).attr("quantity_amount");
@@ -381,10 +390,10 @@ function ccaCollectData() {
         var $name = $(this).children("th:eq(1)").text();
         var $yamount = $("#yamount{0}".f($id)).val();
 
-        $items = $items + "<item name='{0}' price='{1}' quantity_require='{2}'></item>".f($name, $yprice, $owner);
+        $items = $items + "<item id={0} name='{1}' quantity_require='{2}'></item>".f($id, $name, $yamount);
     });
     
-    $bid = "<bid><bidder name='{0}' ip='{1}'><item_list>".f($name, $ip) + $items + "</item_list></bid>";
+    $bid = "<bid><bidder name='{0}' ip='{1}' /><item_list>".f($name, $ip) + $items + "</item_list></bid>";
     return $bid;
 }
 
@@ -422,8 +431,7 @@ function ccaValidateInput(input) {
     function hasInvalidCharacters(str) {
         return str.search(/[^0-9]/) != -1 ;
 
-    }
-    
+    }  
 }
 
 function ccaValidateAllInput() {
@@ -635,7 +643,7 @@ function S2N(str) {
 
 function loginError() {
     $(".login_error").show();
-    // other ....
+    BID.unlockScreen();
 }
 
 function checkUsername(name) {
