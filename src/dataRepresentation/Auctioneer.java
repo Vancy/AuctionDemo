@@ -9,6 +9,8 @@ public class Auctioneer {
 	ArrayList<Bid> requestedBids;
 	AuctionEnvironment environment;
 	
+	ArrayList<AuctionContext> auctionLog = new ArrayList<AuctionContext>();
+	
 	boolean nextRoundNotReady = true;
 	
 	public Auctioneer(AuctionEnvironment e) {
@@ -56,11 +58,22 @@ public class Auctioneer {
 			}
 		}
 		requestedBids.clear();
+		//record current round log 
+		this.recordLog();
 		this.environment.context.bidsProcessingFinished = true;
 		
 		while (false == this.environment.context.bidsProcessingFinished); //wait till GUI update table
 		this.environment.context.incrementRound();
 		this.setNextRoundReady();
+	}
+	
+	private void recordLog() {
+		
+		this.auctionLog.add(new AuctionContext(this.environment.context));
+	}
+	
+	public ArrayList<AuctionContext> getLog() {
+		return this.auctionLog;
 	}
 	
 	private double fetchItemPrice(int itemID) {

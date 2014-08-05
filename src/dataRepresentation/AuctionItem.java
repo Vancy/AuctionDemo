@@ -18,6 +18,16 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		this.startingPrice = 0;
 		this.owner = null;
 	}
+	
+	//copy constructor
+	public AuctionItem(AuctionItem item) {
+		this.ID = item.ID;
+		this.name = item.name;
+		this.startingPrice = item.startingPrice;
+		this.price = item.price;
+		this.owner = new Bidder(item.owner);
+	}
+	
 	public AuctionItem(String n, double sp) {
 		this.ID = ++number_of_items - 1;
 		this.name = n;

@@ -6,6 +6,8 @@ import javax.swing.JSpinner;
 import javax.swing.JButton;
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class AuctionPanel extends JPanel {
 
@@ -29,6 +31,11 @@ private AuctionEnvironment environment;
 		panel.add(spinner_Increment);
 		
 		JButton btnNewButton_endAuction = new JButton("End Auction");
+		btnNewButton_endAuction.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setAuctionEndFlag();
+			}
+		});
 		panel.add(btnNewButton_endAuction);
 		
 		JButton btnNewButton_Stop = new JButton("Stop");
@@ -38,6 +45,10 @@ private AuctionEnvironment environment;
 	public void updateAuctionList(){
 		this.auctionListPanel = new AuctionListPanel(this.environment.context);
 		add(auctionListPanel);
+	}
+	
+	private void setAuctionEndFlag() {
+		this.environment.context.setFinalRound();
 	}
 
 }

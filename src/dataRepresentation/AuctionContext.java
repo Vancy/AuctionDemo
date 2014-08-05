@@ -41,6 +41,21 @@ public class AuctionContext {
 		this.finalRound = false;
 	}
 	
+	//Copy Constructor
+	public AuctionContext(AuctionContext ac) {
+		this.type = ac.type;
+		this.round = ac.round;
+		this.duration_Sec = ac.duration_Sec;
+		this.minIncreament = ac.minIncreament;
+		this.finalRound = ac.finalRound;
+		
+		this.itemList = new ArrayList<AuctionItem>();
+		
+		for (AuctionItem item: ac.itemList) {
+			this.itemList.add(new AuctionItem(item));
+		}
+	}
+	
 	public AuctionContext(AuctionType type, int time, double min, ArrayList<AuctionItem> list) {
 		this.type = type;
 		this.round = 1;
@@ -71,6 +86,11 @@ public class AuctionContext {
 			 this.type = AuctionType.ULA;
 			 return;
 		 }  
+	}
+	
+	
+	public double getMinIncrement() {
+		return this.minIncreament;
 	}
 	
 	public void setMinIncrement(double min) {

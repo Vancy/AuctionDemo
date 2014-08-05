@@ -16,7 +16,6 @@ public class AuctionEngine {
 		AuctionMainWindow window = new AuctionMainWindow(environment);
 		window.frame.setVisible(true);
 
-
 	}
 
 }

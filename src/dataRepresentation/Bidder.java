@@ -18,6 +18,14 @@ public class Bidder {
 		this.name = name;
 	}
 	
+	//copy constructor
+	public Bidder(Bidder bidder) {
+		this.ID = bidder.ID;
+		this.name = bidder.name;
+		this.ipAdress = bidder.ipAdress;
+		this.colorRecognition = bidder.colorRecognition;
+	}
+	
 	public Bidder(String name, String ip) {
 		this.ID = ++BidderNumber - 1;
 		this.name = name;
