@@ -17,22 +17,23 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import dataRepresentation.AuctionContext;
+import dataRepresentation.AuctionEnvironment;
 import dataRepresentation.AuctionItem;
 
 
 public class AuctionListPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private AuctionContext context;
+	private AuctionEnvironment environment;
 	private JTable table;
 	private DefaultTableModel tableModel;
 
 	/**
 	 * Create the panel.
 	 */
-	public AuctionListPanel(AuctionContext c) {
+	public AuctionListPanel(AuctionEnvironment environment) {
 		
-		this.context = c;
+		this.environment = environment;
 		setLayout(new GridLayout(0, 1, 0, 0));
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -41,7 +42,7 @@ public class AuctionListPanel extends JPanel {
 		initTableModel(); //initialize table model to fill data
 		
 		table = new JTable(tableModel); //Buid up table based on table model
-		table.setDefaultRenderer(Object.class, new PriceOwnerCellRenderer(this.context));
+		table.setDefaultRenderer(Object.class, new PriceOwnerCellRenderer(this.environment));
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); 
 		scrollPane.setViewportView(table);
 		
@@ -59,15 +60,15 @@ public class AuctionListPanel extends JPanel {
 	
 	public void updateAuctionList() {
 	
-		if (this.context.bidsProcessingFinished) {
-			Vector<String> firstRow = new Vector<String>(); 
-			firstRow.add(Integer.toString((this.context.getRound()-1)));
-			for (AuctionItem item: this.context.getItemList()) {
+		if (this.environment.context.bidsProcessingFinished) {
+			Vector<String> newRow = new Vector<String>(); 
+			newRow.add(Integer.toString((this.environment.context.getRound()-1)));
+			for (AuctionItem item: this.environment.context.getItemList()) {
 				double price = item.getPrice();
-				firstRow.add(String.valueOf(price));
+				newRow.add(String.valueOf(price));
 			}
-			tableModel.addRow(firstRow);
-			this.context.bidsProcessingFinished = false;
+			tableModel.addRow(newRow);
+			this.environment.context.bidsProcessingFinished = false;
 		}
 
 	}
@@ -78,13 +79,13 @@ public class AuctionListPanel extends JPanel {
 
 		tableModel.addColumn("Round");
 	
-		for (AuctionItem item: this.context.getItemList()) {
+		for (AuctionItem item: this.environment.context.getItemList()) {
 			String itemName = item.getName();
 			tableModel.addColumn(itemName);
 		}
 		Vector<String> firstRow = new Vector<String>(); 
 		firstRow.add("Initial");
-		for (AuctionItem item: this.context.getItemList()) {
+		for (AuctionItem item: this.environment.context.getItemList()) {
 			double price = item.getPrice();
 			firstRow.add(String.valueOf(price));
 		}

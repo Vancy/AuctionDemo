@@ -19,9 +19,11 @@ public class Auctioneer {
 	}
 	
 	public void getBid(Bid bid) {
+		this.nextRoundNotReady = true;
 		requestedBids.add(bid);
 		
 		//Xing change: accumulate bids process 
+		System.err.println("current request:"+requestedBids.size());
 		if (requestedBids.size() == this.environment.bidderList.size()) {
 			this.processBids();
 		}
@@ -65,6 +67,7 @@ public class Auctioneer {
 		while (false == this.environment.context.bidsProcessingFinished); //wait till GUI update table
 		this.environment.context.incrementRound();
 		this.setNextRoundReady();
+		System.err.println("nest round not ready"+this.nextRoundNotReady);
 	}
 	
 	private void recordLog() {

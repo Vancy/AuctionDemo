@@ -3,6 +3,7 @@ package auctionEngine;
 
 import dataRepresentation.AuctionEnvironment;
 import dataRepresentation.AuctionItem;
+
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -28,6 +29,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Vector;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 
 
@@ -36,7 +40,7 @@ public class AuctionConfigPanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -6898719932567042813L;
-	private DefaultTableModel tableModel;
+	private DefaultTableModel tableModel = new DefaultTableModel();
 	private JComboBox<String>  typeComboBox;
 	private JSpinner spinner_minIncrement;
 	private JSpinner spinner_roundDuration;
@@ -68,7 +72,12 @@ public class AuctionConfigPanel extends JPanel {
 		lblAuctionType.setFont(new Font("Dialog", Font.BOLD, 17));
 		panel_auctionType.add(lblAuctionType);
 		
-		 typeComboBox = new JComboBox<String>();
+		typeComboBox = new JComboBox<String>();
+		typeComboBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+		 		initTable(e.getItem().toString());
+		 	}
+		 });
 		for (int i=0; i<auctionTypes.length; i++) {
 			typeComboBox.addItem(auctionTypes[i]);
 		}
@@ -104,9 +113,6 @@ public class AuctionConfigPanel extends JPanel {
 		panel_auctionItems.setBounds(51, 222, 415, 229);
 		add(panel_auctionItems);
 		
-		String[] columnNames = {"Item", "Price"};
-		String[][] tableVales = {{"Item1","10.0"},{"Item3","20.0"},{"Item2","30.0"},{"Item4","40.0"}}; 
-        tableModel = new DefaultTableModel(tableVales,columnNames);
         panel_auctionItems.setLayout(new GridLayout(0, 1, 0, 0));
 		
         JScrollPane scrollPane = new JScrollPane();
@@ -122,9 +128,6 @@ public class AuctionConfigPanel extends JPanel {
 		 });
 		scrollPane.setViewportView(table);
 		
-				
-		
-				
 				
 		JPanel panel_tableOperation = new JPanel();
 		panel_auctionItems.add(panel_tableOperation);
@@ -204,6 +207,50 @@ public class AuctionConfigPanel extends JPanel {
 		panel__quit.add(btnQuit);
 
 	}
+	
+	private void initTable(String auctionType) {
+		System.err.println(auctionType);
+		if (auctionType.equals("SAA")) {
+			tableModel.setColumnCount(0);
+			tableModel.setRowCount(0);
+			tableModel.addColumn("Item");
+			tableModel.addColumn("Price");
+			//put some initial data
+			String[] s1 = {"ItemA", "10.0"};
+			String[] s2 = {"ItemB", "20.0"};
+			String[] s3 = {"ItemC", "30.0"};
+			tableModel.addRow(s1);
+			tableModel.addRow(s2);
+			tableModel.addRow(s3);
+		} else if (auctionType.equals("CCA")) {
+			tableModel.setColumnCount(0);
+			tableModel.setRowCount(0);
+			tableModel.addColumn("Item");
+			tableModel.addColumn("Price");
+			tableModel.addColumn("Quantity");
+			//put some initial data
+			String[] s1 = {"ItemA", "10.0", "5"};
+			String[] s2 = {"ItemB", "20.0", "10"};
+			String[] s3 = {"ItemC", "30.0", "8"};
+			tableModel.addRow(s1);
+			tableModel.addRow(s2);
+			tableModel.addRow(s3);
+		}
+		
+//		
+//		for (AuctionItem item: this.environment.context.getItemList()) {
+//			String itemName = item.getName();
+//			tableModel.addColumn(itemName);
+//		}
+//		Vector<String> firstRow = new Vector<String>(); 
+//		firstRow.add("Initial");
+//		for (AuctionItem item: this.environment.context.getItemList()) {
+//			double price = item.getPrice();
+//			firstRow.add(String.valueOf(price));
+//		}
+//		tableModel.addRow(firstRow);
+//		tableModel.fireTableDataChanged();
+	}
 	private void startAuction() {
 		String typeName = this.typeComboBox.getSelectedItem().toString();
 		this.environment.context.setType(typeName);
@@ -212,10 +259,15 @@ public class AuctionConfigPanel extends JPanel {
 		float min_increment = Float.parseFloat(this.spinner_minIncrement.getValue().toString());
 	
 		ArrayList<AuctionItem> list = new ArrayList<AuctionItem>();
+		System.out.println("Clum NUM:"+tableModel.getColumnCount());
 		for (int i=0; i<this.table.getRowCount(); i++) {
 			String name = this.table.getValueAt(i, 0).toString();
 			float price = Float.parseFloat(this.table.getValueAt(i, 1).toString());
-			list.add(new AuctionItem(name, price));
+			int quantity = 0;
+			if (3 == tableModel.getColumnCount()) {
+				quantity = Integer.parseInt(this.table.getValueAt(i, 2).toString());
+			}
+			list.add(new AuctionItem(name, price, quantity));
 		}
 		this.environment.context.setData(time_duration, min_increment, list);
 		System.out.println(this.environment.context.generateXml());

@@ -14,7 +14,7 @@ public class AuctionPanel extends JPanel {
 private AuctionEnvironment environment;
 	
 	public AuctionListPanel auctionListPanel;
-
+	private JSpinner spinner_Increment;
 	
 	public AuctionPanel(AuctionEnvironment ae) {
 		this.environment = ae;
@@ -27,8 +27,16 @@ private AuctionEnvironment environment;
 		JLabel lblMinimunIncrement = new JLabel("Minimun Increment: ");
 		panel.add(lblMinimunIncrement);
 		
-		JSpinner spinner_Increment = new JSpinner();
+		spinner_Increment = new JSpinner();
 		panel.add(spinner_Increment);
+		
+		JButton btnNewButton_Stop = new JButton("Set");
+		btnNewButton_Stop.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				environment.context.setMinIncrement(Integer.parseInt(spinner_Increment.getValue().toString()));
+			}
+		});
+		panel.add(btnNewButton_Stop);
 		
 		JButton btnNewButton_endAuction = new JButton("End Auction");
 		btnNewButton_endAuction.addActionListener(new ActionListener() {
@@ -37,13 +45,10 @@ private AuctionEnvironment environment;
 			}
 		});
 		panel.add(btnNewButton_endAuction);
-		
-		JButton btnNewButton_Stop = new JButton("Stop");
-		panel.add(btnNewButton_Stop);
 	}
 	
 	public void updateAuctionList(){
-		this.auctionListPanel = new AuctionListPanel(this.environment.context);
+		this.auctionListPanel = new AuctionListPanel(this.environment);
 		add(auctionListPanel);
 	}
 	

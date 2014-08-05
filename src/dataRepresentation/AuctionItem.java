@@ -5,9 +5,10 @@ public class AuctionItem implements Comparable<AuctionItem> {
 	private String name;
 	private double startingPrice;
 	private double price;
-	// ogen, 1st august changed owner from String to int.
-	// the owner should be determined by ID instead of name
-	// because there could exist bidders with same names.
+	
+	//this parameter is used in CCA auction, SAA auction needn't use this value
+	private int quantity;
+
 	private Bidder owner;
 	
 	static int number_of_items = 0;
@@ -16,6 +17,7 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		this.ID = ++number_of_items - 1;
 		this.name = "";
 		this.startingPrice = 0;
+		this.quantity = 0;
 		this.owner = null;
 	}
 	
@@ -25,7 +27,10 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		this.name = item.name;
 		this.startingPrice = item.startingPrice;
 		this.price = item.price;
-		this.owner = new Bidder(item.owner);
+		
+		if (null != item.owner) {
+			this.owner = new Bidder(item.owner);
+		}
 	}
 	
 	public AuctionItem(String n, double sp) {
@@ -41,6 +46,15 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		this.name = n;
 		this.startingPrice = sp;
 		this.price = sp;
+		this.owner = null;
+	}
+	
+	public AuctionItem(String n, double sp, int quantity) {
+		this.ID = ++number_of_items - 1;
+		this.name = n;
+		this.startingPrice = sp;
+		this.price = sp;
+		this.quantity = quantity;
 		this.owner = null;
 	}
 	
@@ -77,6 +91,10 @@ public class AuctionItem implements Comparable<AuctionItem> {
 	}
 	public void setOwner(Bidder owner) {
 		this.owner = owner;
+	}
+	
+	public int getQuantity() {
+		return this.quantity;
 	}
 	public int getID() {
 		return this.ID;

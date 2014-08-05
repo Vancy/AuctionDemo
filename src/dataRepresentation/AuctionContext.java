@@ -167,7 +167,8 @@ public class AuctionContext {
 	    	child = doc.createElement("item");  
 	    	child.setAttribute("id", Integer.toString(item.getID()));
 	    	child.setAttribute("name", item.getName());  
-	    	child.setAttribute("price", Double.toString(item.getPrice())); 
+	    	child.setAttribute("price", Double.toString(item.getPrice()));
+	    	child.setAttribute("quantity", Integer.toString(item.getQuantity()));
 	    	String ownerName = "";
 	    	// if current Item has Owner and Owner has name, then assgin owner name to Item
 	    	if ( (null != item.getOwner()) && (null != item.getOwner().getName()) ) {

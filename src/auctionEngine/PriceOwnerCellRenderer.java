@@ -8,6 +8,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import dataRepresentation.AuctionContext;
+import dataRepresentation.AuctionEnvironment;
 import dataRepresentation.AuctionItem;
 import dataRepresentation.BidderList;
 
@@ -15,10 +16,10 @@ public class PriceOwnerCellRenderer extends DefaultTableCellRenderer {
 	/**
 	 * 
 	 */
-	AuctionContext context;
+	private AuctionEnvironment environment;
 	
-	public PriceOwnerCellRenderer(AuctionContext c) {
-		this.context = c;
+	public PriceOwnerCellRenderer(AuctionEnvironment e) {
+		this.environment = e;
 	}
 	
 	private static final long serialVersionUID = 1999946219503976635L;
@@ -29,23 +30,25 @@ public class PriceOwnerCellRenderer extends DefaultTableCellRenderer {
 		setBackground(Color.WHITE); //firstly set back to original color
 		 if (row >0 && col >0) {
 
-	 		System.out.println("COL:"+col+"ROW:"+row);
-	    	 int itemID = col - 1;
-	    	 int ownerID = -1;
-	    	 for(AuctionItem item: context.getItemList()) {
-	    		if (item.getID() == itemID) {
-	    			if (null != item.getOwner()) {
-	    				ownerID = item.getOwner().getID();
-	    			}
-	    			
+	 		int round = row;
+	    	int itemID = col - 1;
+	    	int ownerID = -1;
+	    	for (AuctionContext context: this.environment.auctioneer.getLog()) {
+	    		if (context.getRound() == row) {
+	    			for(AuctionItem item: context.getItemList()) {
+		    			if (item.getID() == itemID) {
+		    				if (null != item.getOwner()) {
+		    					ownerID = item.getOwner().getID();
+		    				}	
+		 	    		}
+		 	    	 }  
 	    		}
-	    	 }  
-	    	 System.out.println("owner id:"+ownerID+"in item"+itemID);
-	    	 if (-1 != ownerID){
-	    		 setBackground(BidderList.colorList.get(ownerID));  
-	    	 } 
+	    	}
+	    	
+	    	if (-1 != ownerID){
+	    		setBackground(BidderList.colorList.get(ownerID));  
+	    	} 
 		 }
-		
 		 setText(value.toString());   
 		 return this;
     }

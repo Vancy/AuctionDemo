@@ -69,7 +69,7 @@ public class BidServlet extends DefaultServlet{
 		}
 		// get next round's context through auctioneer
 		AuctionContext context_updated  =  this.auctionEnvironment.auctioneer.nextRound();
-		System.out.println("updated:"+ context_updated.generateXml());
+		//System.out.println("updated:"+ context_updated.generateXml());
 		//Respond latest AuctionContext
 		PrintWriter out = response.getWriter();
 		out.println(context_updated.generateXml());
