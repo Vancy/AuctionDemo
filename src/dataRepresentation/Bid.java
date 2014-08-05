@@ -1,14 +1,15 @@
 package dataRepresentation;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Bid{
 	
 	private Bidder bidder;
-	private ArrayList<AuctionItem> itemList;
+	private List<AuctionItem> itemList;
 
-	public Bid(Bidder bidder, ArrayList<AuctionItem> list) {
+	public Bid(Bidder bidder, List<AuctionItem> list) {
 		this.bidder = bidder;
 		this.itemList = list;
 	}
@@ -21,7 +22,7 @@ public class Bid{
 		this.bidder = bidder;
 	}
 	
-	public ArrayList<AuctionItem> getItemList() {
+	public List<AuctionItem> getItemList() {
 		return this.itemList;
 	}
 
