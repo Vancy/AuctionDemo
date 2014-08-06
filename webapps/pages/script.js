@@ -7,15 +7,40 @@
  *
 **/
 
+
+
+/***
+    // stage
+
+    0_READY: ready to login (net yet)
+    1_LOGINING: logining, lockscreen and disable keyboard
+    2_BIDDING: in bid, but not final round
+    3_SUBMITTING: submitting a bid
+    4_FINAL: final round
+*/
+var STATE = {
+    READY: "Ready",
+    LOGINING: "Logining",
+    BIDDING: "Bidding",
+    SUBMITTING: "Submitting",
+    FINAL: "Final",
+    ERROR: "Error"
+}
+
+var state = STATE.READY;
+
 // A common BID object 
 var BID = {
-
+    // changeStateTo: changeStateTo,
     setTimer: setTimer,
     lockScreen: lockScreen,
     unlockScreen: unlockScreen,
     loading: loading,
     submitAuction: submitAuction,
-    isTimeUp: isTimeUp
+    isTimeUp: isTimeUp,
+    storeAllValue: storeAllValue,
+    endAuction: endAuction
+
 }
 
 // A SAA-BID object, 'subclass' of BID
@@ -41,13 +66,21 @@ function init() {
     CCA = $.extend(true, CCA, BID);
     $("#bid_table").data("type", "BID");
     $("#bid_table").data("object", BID);
+    $("#bid_table").data("keyboard_enable", true);
+    
+    changeStateTo(STATE.READY);
 }
 
-$(document).ready(function(){
+$(document).ready(function() {
     
     init();
 
-	$("#button").click(function(){
+	$("#button").click(function() {
+        if ( ! isKBAllowed() ) {
+            console.log("keyboard is NOT enabled.");
+            return;
+        }
+        changeStateTo(STATE.LOGINING);
         BID.lockScreen();
 		$name = $("#name").val();
 
@@ -68,15 +101,24 @@ $(document).ready(function(){
 
 	// #
 	$("#submit_auction").click(function() {
+        if ( ! isKBAllowed() ) {
+            console.log("keyboard is NOT enabled.");
+            return;
+        }
         console.log("CLICK", getBid());
+        // state = STATE.SUBMITTING;
 		getBid().submitAuction();
 	});
 
 	$("#name").keypress(function( event ) {
-		if ( event.which == 13 ) {
-			event.preventDefault();
-			$("#button").click();
-		}
+        // check whether the keyboard is enable now
+        if ( isKBAllowed() ) {
+            if ( event.which == 13 ) {
+                event.preventDefault();
+                $("#button").click();
+            }
+        }
+		
 	});
 });
 
@@ -84,29 +126,30 @@ $(document).ready(function(){
 
 function switchTo(data) {
     BID.unlockScreen();
-    console.log("switchTo");
+    changeStateTo(STATE.BIDDING);
+    console.log("-- FUN: switchTo");
     var $context = ($(data)).find("auction_context");
     var $type = $context.children("type").attr("value");
-    console.log("Type", $type);
+    console.log("    type", $type);
     // Xing: get $type's string value, if directly compare $type to a string, it always returns unequal..
     var typeString = $type; //so store the value into typeString variable, which is string type.
 
     if (  typeString === "SAA" ) {
-        console.log("Yes! this is SAA!");
+        console.log("    Yes! this is SAA!");
         $("#bid_table").data("type", "SAA");
         $("#bid_table").data("object", SAA);
         SAA.update(data);
 
 
     } else if ( typeString === "CCA" )  {
-        console.log("Yes! this is CCA!");
+        console.log("    Yes! this is CCA!");
         $("#bid_table").data("type", "CCA");
         $("#bid_table").data("object", CCA);
         CCA.update(data);
 
 
     } else if ( $type == undefined){
-        console.log("ELSE");
+        console.log("    ELSE");
     }
 
 
@@ -117,9 +160,9 @@ function switchTo(data) {
 /**  SAA ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 function saaUpdate(data) {
 	$("#login_box").hide();
-	console.log("SAAupdate()");
+	console.log("-- FUN: SAAupdate()");
 
-	console.log('type: ' + $.type(data));
+	// console.log('    type: ' + $.type(data));
     if ( $.type(data) === "string" ) {
         data = $.parseXML(data);
     }
@@ -128,17 +171,28 @@ function saaUpdate(data) {
 	var $roundNumber = $context.children("round").attr("value");
 	var $isFinal = $context.children("round").attr("final");
     $isFinal = ( $isFinal === "yes" ) ? true : false; 
+    state = ( $isFinal === "yes" ) ? STATE.FINAL : STATE.BIDDING;
     // $isFinal = true;
 	var $minIncreament = $context.children("minimum_increament").attr("value");
 	$("#bid_table").data("minIncreament", $minIncreament);
 
-	console.log("Round {0}  Final? {1}".f($roundNumber, $isFinal));
+	// console.log("Round {0}  Final? {1}".f($roundNumber, $isFinal));
 
-	$("#round_infomation").html("Round {0}  <b>{1}</b>  <i>Min Increament {2}</i>"
-		.f($roundNumber, $isFinal===true ? "<b class='alert'>Final!</b>" : "", $minIncreament));
+    // No "min_inc" in final round.
+    var $temp_min_inc = "Min Increament {0}".f($minIncreament);
+	$("#round_infomation").html("Round {0}  <b>{1}</b>  <i>{2}</i>"
+		.f($roundNumber, $isFinal===true ? "<b class='alert'>Final</b>" : "", $isFinal===false ? $temp_min_inc : ""));
 
-	SAA.setTimer($context.children("duration").attr("value"));
+    if ( $isFinal ) {
+        changeStateTo(STATE.FINAL);
+    }
 
+    if ( ! $isFinal ) {
+        SAA.setTimer($context.children("duration").attr("value"));
+    } else {
+        $("#timer").text("The final result.");
+    }
+	
 	$("#bid_table").find("tbody").find("tr").remove();
     $("#bid_table").find("thead").find("tr").remove();
 
@@ -149,14 +203,13 @@ function saaUpdate(data) {
     }  
 
 	$context.find("item").each(function(i) {
-		console.log(this);
+		// console.log(this);
 		var $itemId = $(this).attr("id");
 		var $itemName = $(this).attr("name");
 		var $price = $(this).attr("price");
 		var $owner = $(this).attr("owner");
-        // $owner = "123";
 
-		console.log($itemId, $itemName, $price, $owner);
+		// console.log($itemId, $itemName, $price, $owner);
 
 		var $_id = $("<th class='invisible'></th>").text($itemId);
 		var $_name = $("<th></th>").text($itemName);
@@ -165,8 +218,8 @@ function saaUpdate(data) {
         // opt 1
         var $_owner = $("<th></th>").text($owner);
         // opt 2
-		var $_yprice = $("<th></th>").append($("<input type='text' id='price{0}' class='input_price' value='{1}'></input>"
-			.f($itemId, 0+S2N($price))));
+		var $_yprice = $("<th></th>").append($("<input type='text' id='price{0}' class='input_price'></input>"
+			.f($itemId)));
 		$_yprice.append($("<p id=price{0}_tips class='input_price_tips'></p>".f($itemId)));
 
         var $item;
@@ -178,6 +231,8 @@ function saaUpdate(data) {
         }
 		$("#bid_table").find("tbody").append($item);
 	});
+
+    restoreAllValueOfLastRound();
 
 	$('#bid_table tbody tr').hover(function() {
         $(this).addClass('zhover');
@@ -191,9 +246,11 @@ function saaUpdate(data) {
         });
 
         $(".input_price").keypress(function( event ) {
-            if ( event.which == 13 ) {
-                event.preventDefault();
-                $("#submit_auction").click();
+            if ( isKBAllowed() ) {
+                if ( event.which == 13 ) {
+                    event.preventDefault();
+                    $("#submit_auction").click();
+                }
             }
         });
     }
@@ -203,7 +260,7 @@ function saaUpdate(data) {
 }
 
 function saaCollectData() {
-    console.log("saaCollectData");
+    console.log("-- FUN: saaCollectData");
     var $bid = "";
     var $items = "";
     $("#bid_table").find("tbody").find("tr").each(function(i) {
@@ -220,6 +277,7 @@ function saaCollectData() {
 
 // Validate the user input
 function saaValidateInput(input) {
+    console.log("-- FUN: saaValidateInput");
     var $valid = true;
     var $item = input.parents("tr");
 
@@ -228,7 +286,7 @@ function saaValidateInput(input) {
     var $price = $item.children("th:eq(2)").text();
     var $yprice = $("#price{0}".f($id)).val();
     var $minIncreament = S2N($("#bid_table").data("minIncreament"));
-    console.log("validateInput", $id, $name, $price, $yprice);
+    console.log("    validateInput", $id, $name, $price, $yprice);
 
     if ( hasInvalidCharacters($yprice) ) {
         $("#price{0}_tips".f($id)).text("Please enter a positive number.");
@@ -239,7 +297,7 @@ function saaValidateInput(input) {
         if ( S2N($yprice) < S2N($price) + $minIncreament ) {
             $("#price{0}_tips".f($id)).html("Your are aborting this bid.");
             $("#price{0}_tips".f($id)).show();
-            $valid = false;
+            // $valid = false;
         } 
     }
     return $valid;
@@ -250,7 +308,7 @@ function saaValidateInput(input) {
 }
 
 function saaValidateAllInput() {
-    console.log("validateAllInput");
+    console.log("-- FUN: validateAllInput");
     var $valid = true;
     
     $(".input_price").each(function(i) {
@@ -259,12 +317,12 @@ function saaValidateAllInput() {
         }
     });
 
-    console.log("All", $valid, $count);
+    console.log("    All", $valid, $count);
     return $valid;
 }
 
 function saaSetAll2Valid() {
-    console.log("setAll2Valid");
+    console.log("-- FUN: setAll2Valid");
     
     $(".input_price").each(function(i) {
         $(this).val(0);
@@ -316,7 +374,7 @@ function ccaUpdate(data) {
         var $price = $(this).attr("price");
         var $quantityAmount = $(this).attr("quantity_amount");
 
-        console.log($itemId, $itemName, $price, $quantityAmount, $owner);
+        console.log($itemId, $itemName, $price, $quantityAmount);
 
         var $_id = $("<th class='invisible'></th>").text($itemId);
         var $_name = $("<th></th>").text($itemName);
@@ -438,7 +496,7 @@ function ccaValidateAllInput() {
     console.log("ccaValidateAllInput");
     var $valid = true;
     
-    $(".input_price").each(function(i) {
+    $(".input_amount").each(function(i) {
         if ( CCA.validateInput($(this)) === false ) {
             $valid = false;
         }
@@ -451,7 +509,7 @@ function ccaValidateAllInput() {
 function ccaSetAll2Valid() {
     console.log("ccaSetAll2Valid");
     
-    $(".input_price").each(function(i) {
+    $(".input_amount").each(function(i) {
         $(this).val(0);
     });
 }
@@ -466,7 +524,7 @@ function ccaSetAll2Valid() {
 
 /** BID ++++++++++++++++++++++++++++++++++++++++++++++*/
 function setTimer(timeToCount) {
-    console.log("setTimer");
+    // console.log("-- FUN: setTimer");
 	$count = timeToCount;
 	$timer = setInterval(function() {
 		$("#timer").text("Time out after {0} seconds.".f($count));
@@ -481,8 +539,8 @@ function setTimer(timeToCount) {
 
 // Post xml to server
 function submitAuction() {
-
-    console.log("SAAsubmitAuction");
+    console.log("** FUN: SAAsubmitAuction");
+    changeStateTo(STATE.SUBMITTING);
 
     if ( ! getBid().validateAllInput() ) {
         if ( getBid().isTimeUp() ) {
@@ -501,12 +559,10 @@ function submitAuction() {
     
     clearInterval($timer);
 
-    console.log("collected_data", $xmlData);
+    console.log("    * collected_data", $xmlData);
 
-    console.log("Before lockScreen", getType());
+    // console.log("    Before lockScreen", getType());
     getBid().lockScreen();
-
-    // other ....
 
     // $.ajax({
     //     url: '/WEB-INF/bid.xml', 
@@ -535,33 +591,39 @@ function submitAuction() {
     // });
 
     ///  
+    // Store the value(price/amount) of current round, which will be the default value of next round.
+    storeAllValue();
     $.post('/WEB-INF/bid.xml', $xmlData)
         .done(function(data, status, error) {
-            console.log("OK", status);
-            console.log("data", data);
-            console.log(error);
+            console.log("    --> OK", status);
+            // console.log("    data", data);
+            // console.log("    error", error);
 
+            changeStateTo(STATE.BIDDING);
             getBid().unlockScreen();
             getBid().update(data);
         })
         .fail(function(data, status, error) {
-            console.log("NO", status);
-            console.log(data);
-            console.log(error);
+            
+            console.log("    --> NO", status);
+            console.log("    data", data);
+            console.log("    error", error);
+            changeStateTo(STATE.ERROR);
     });
 
+    
 }
 
 
 function isTimeUp(){
-    console.log("count", $count);
+    // console.log("-- FUN:   ");
     return $count <= 0 ? true : false;
 }
 
 
 // ++++
 function lockScreen() {
-    console.log("lock");
+    console.log("%% LOCK SCREEN %%");
     $('body').css('overflow-y', 'hidden');
     $('<div id="overlay"></div>')
         .css('top', 0)
@@ -582,12 +644,11 @@ function lockScreen() {
             // unlockScreen();
         })
         .appendTo('#lock_screen');
-    console.log("End of lockScreen");
 
 }
 
 function loading() {
-    console.log("loading");
+    console.log("    ..loading..");
     var top = (screen.availHeight - $('#lock_screen').height()) / 2;
     var left = ($(window).width() - $('#lock_screen').width()) / 2;
     // console.log($(window).height(), $(window).width());
@@ -610,17 +671,115 @@ function unlockScreen() {
          });     
 }
 
+//Store the value(price/amount) of current round, which will be the default value of next round.
+function storeAllValue() {
+    console.log("-- FUN: storeAllValue");
+    
+    var $type = getType();
+    var $values;
+    if ( $type === "SAA" ) {
+        $values = $(".input_price");
+    } else if ( $type === "CCA" ) {
+        $values = $(".input_amount");
+    } else {
+        console.log("    !BUG");
+    }
+
+    $values.each(function(i) {
+        var $prix = $(this).attr("id");
+        $("#bid_table").data($prix, $(this).val());
+    });
+}
+// inverse funciton 
+function restoreAllValueOfLastRound() {
+    console.log("-- FUN: restoreAllValueOfLastRound");
+    
+    var $type = getType();
+    var $values;
+    if ( $type === "SAA" ) {
+        $values = $(".input_price");
+    } else if ( $type === "CCA" ) {
+        $values = $(".input_amount");
+    } else {
+        console.log("    !BUG");
+    }
+
+    $values.each(function(i) {
+        var $prix = $(this).attr("id");
+        console.log("    prix", $("#bid_table").data($prix));
+        if ( $("#bid_table").data($prix) !== undefined ) {
+            $(this).val($("#bid_table").data($prix));
+        }    
+    });
+}
+
+// Alt: put the 'enabled' statement at the begin and end of .click() function.
+function lockTheKeyboard() {
+    // $(".submit_button").prop("disabled", true);
+    // $(".submit_button").removeClass("submit_button");
+    // $(".submit_button").addClass("disabled_button");
+    console.log("++ lockTheKeyboard ++");
+    $("#bid_table").data("keyboard_enable", false);
+
+   
+}
+
+function unlockKeyboard() {
+    // $(".submit_button").prop("disabled", false);
+    // $(".submit_button").removeClass("disabled_button");
+    // $(".submit_button").addClass("submit_button");
+    console.log("-- unlockKeyboard --");
+    $("#bid_table").data("keyboard_enable", true);
+}
+
+function endAuction() {
+
+}
+
+// Alt: put lockscreen and unlockscreen here
+function changeStateTo(newState) {
+    state = newState;
+    console.log("## State: {0} ##".f(state));
+    
+    // When in state LOGINING or BIDDING, keyboard event should be ignored. 
+    // 
+    if ( state === STATE.LOGINING || state === STATE.SUBMITTING ) {
+        
+        // Disable the button.
+        lockTheKeyboard();
+
+    } else if ( state === STATE.FINAL ) {
+        lockTheKeyboard();
+
+        $("#submit_auction").hide();
+        // $("#submit_auction").prop("disabled", false);
+        // $(".submit_button").removeClass("disabled_button");
+        // // $(".submit_button").addClass("submit_button");
+        // $("#submit_auction").hide();
+
+    } else {
+        unlockKeyboard();
+        
+        // $("#submit_auction").prop("disabled", true);
+        // $("#submit_auction").removeClass("disabled_button");
+        // $("#submit_auction").addClass("submit_button");
+
+    }
+}
+
 /** END OF BID --------------------------------------------------------*/
 
 
 
 /** PUBLIC ++++++++++++++++++++++++++++++++++++++++++++++*/
+
 function updateError() {
     $("#timer").text("Update error.");
     $("#submit_auction").prop("disabled", true);
     
     $("#submit_auction").removeClass("submit_button");
     $("#submit_auction").addClass("disabled_button");
+    changeStateTo(STATE.ERROR);
 }
 
 
@@ -644,6 +803,7 @@ function S2N(str) {
 function loginError() {
     $(".login_error").show();
     BID.unlockScreen();
+    changeStateTo(STATE.ERROR);
 }
 
 function checkUsername(name) {
@@ -682,4 +842,8 @@ function getType() {
     return $("#bid_table").data("type");
 }
 
+// is keyboard event allowed
+function isKBAllowed() {
+    return $("#bid_table").data("keyboard_enable");
+}
 /** END OF PUBLIC --------------------------------------------------------*/
