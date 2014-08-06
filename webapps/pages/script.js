@@ -134,6 +134,8 @@ function switchTo(data) {
     // Xing: get $type's string value, if directly compare $type to a string, it always returns unequal..
     var typeString = $type; //so store the value into typeString variable, which is string type.
 
+    $("#disp_username").text(getName());
+
     if (  typeString === "SAA" ) {
         console.log("    Yes! this is SAA!");
         $("#bid_table").data("type", "SAA");
@@ -150,6 +152,7 @@ function switchTo(data) {
 
     } else if ( $type == undefined){
         console.log("    ELSE");
+        changeStateTo(STATE.ERROR);
     }
 
 
@@ -293,6 +296,11 @@ function saaValidateInput(input) {
         $("#price{0}_tips".f($id)).show();
         $valid = false;
     } else {
+        if ( isEmpty($yprice) ) {
+            $yprice = '0';
+            $("#price{0}".f($id)).val("0")
+        }
+
         $("#price{0}_tips".f($id)).hide();
         if ( S2N($yprice) < S2N($price) + $minIncreament ) {
             $("#price{0}_tips".f($id)).html("Your are aborting this bid.");
@@ -300,10 +308,15 @@ function saaValidateInput(input) {
             // $valid = false;
         } 
     }
+
     return $valid;
 
+    function isEmpty(str) {
+        return $.trim(str) === ''; 
+    }
+
     function hasInvalidCharacters(str) {
-        return str.search(/[^0-9]/) != -1;
+        return str.search(/[^0-9]/) != -1 ;
     }
 }
 
@@ -612,6 +625,7 @@ function submitAuction() {
             console.log("    data", data);
             console.log("    error", error);
             changeStateTo(STATE.ERROR);
+
     });
 
     
@@ -712,7 +726,9 @@ function restoreAllValueOfLastRound() {
         console.log("    prix", $("#bid_table").data($prix));
         if ( $("#bid_table").data($prix) !== undefined ) {
             $(this).val($("#bid_table").data($prix));
-        }    
+        } else {
+            $(this).val('0');
+        } 
     });
 }
 
@@ -760,10 +776,11 @@ function changeStateTo(newState) {
         
     } else if ( state === STATE.ERROR ) {
         getBid().unlockScreen();
+        updateError();
 
     } else {
         getBid().unlockScreen();
-        
+
     }
 }
 
@@ -774,12 +791,11 @@ function changeStateTo(newState) {
 /** PUBLIC ++++++++++++++++++++++++++++++++++++++++++++++*/
 
 function updateError() {
-    $("#timer").text("Update error.");
+    $("#timer").html("<b class='alert'>Update error.</b>");
     $("#submit_auction").prop("disabled", true);
     
     $("#submit_auction").removeClass("submit_button");
     $("#submit_auction").addClass("disabled_button");
-    changeStateTo(STATE.ERROR);
 }
 
 

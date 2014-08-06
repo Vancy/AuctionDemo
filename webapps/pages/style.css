@@ -210,6 +210,15 @@ tr.zhover {
 	margin-right: 18px;
 }
 
+#disp_username {
+	float: left;
+	font-size: 20px;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-weight: normal;
+	color: #4186e7;
+	text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+	padding: 12px 0px 0px 0px;
+}
 
 #data {
 	background-color: #fdfdfd;
