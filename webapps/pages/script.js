@@ -81,7 +81,7 @@ $(document).ready(function() {
             return;
         }
         changeStateTo(STATE.LOGINING);
-        BID.lockScreen();
+        // BID.lockScreen();
 		$name = $("#name").val();
 
 		if ( ! checkUsername($name) ) {
@@ -125,7 +125,7 @@ $(document).ready(function() {
 
 
 function switchTo(data) {
-    BID.unlockScreen();
+    // BID.unlockScreen();
     changeStateTo(STATE.BIDDING);
     console.log("-- FUN: switchTo");
     var $context = ($(data)).find("auction_context");
@@ -540,7 +540,7 @@ function setTimer(timeToCount) {
 // Post xml to server
 function submitAuction() {
     console.log("** FUN: SAAsubmitAuction");
-    changeStateTo(STATE.SUBMITTING);
+    
 
     if ( ! getBid().validateAllInput() ) {
         if ( getBid().isTimeUp() ) {
@@ -549,6 +549,8 @@ function submitAuction() {
             return;
         }
     }
+
+
 
     $(".input_price").next("p").hide();
     $(".input_amount").next("p").hide();
@@ -561,8 +563,9 @@ function submitAuction() {
 
     console.log("    * collected_data", $xmlData);
 
-    // console.log("    Before lockScreen", getType());
-    getBid().lockScreen();
+
+    changeStateTo(STATE.SUBMITTING);
+    // getBid().lockScreen();
 
     // $.ajax({
     //     url: '/WEB-INF/bid.xml', 
@@ -600,7 +603,7 @@ function submitAuction() {
             // console.log("    error", error);
 
             changeStateTo(STATE.BIDDING);
-            getBid().unlockScreen();
+            // getBid().unlockScreen();
             getBid().update(data);
         })
         .fail(function(data, status, error) {
@@ -744,26 +747,23 @@ function changeStateTo(newState) {
     // When in state LOGINING or BIDDING, keyboard event should be ignored. 
     // 
     if ( state === STATE.LOGINING || state === STATE.SUBMITTING ) {
-        
-        // Disable the button.
         lockTheKeyboard();
+        getBid().lockScreen();
 
     } else if ( state === STATE.FINAL ) {
         lockTheKeyboard();
-
         $("#submit_auction").hide();
-        // $("#submit_auction").prop("disabled", false);
-        // $(".submit_button").removeClass("disabled_button");
-        // // $(".submit_button").addClass("submit_button");
-        // $("#submit_auction").hide();
+        
+    } else if ( state === STATE.READY || state === STATE.BIDDING ) {
+        unlockKeyboard();
+        getBid().unlockScreen();
+        
+    } else if ( state === STATE.ERROR ) {
+        getBid().unlockScreen();
 
     } else {
-        unlockKeyboard();
+        getBid().unlockScreen();
         
-        // $("#submit_auction").prop("disabled", true);
-        // $("#submit_auction").removeClass("disabled_button");
-        // $("#submit_auction").addClass("submit_button");
-
     }
 }
 
@@ -802,7 +802,7 @@ function S2N(str) {
 
 function loginError() {
     $(".login_error").show();
-    BID.unlockScreen();
+    // BID.unlockScreen();
     changeStateTo(STATE.ERROR);
 }
 
