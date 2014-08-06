@@ -25,6 +25,17 @@ public class Agent extends Bidder {
 		assignValuationsAndSunkAwareness();
 	}
 	
+	/*
+	 * Xing adds this constructor just for testing
+	 */
+	public Agent(String name, List<AuctionItem> items, double sunkAwarenessConstant) {
+		super(name, "Agent");
+		this.memory = new ArrayList<Bid>();
+		this.setSunkAwarenessConstant(sunkAwarenessConstant);
+		//powerSet = getPowerSet(items);
+//		assignValuationsAndSunkAwareness();
+	}
+	
 	public Agent(String name, String ip, List<AuctionItem> items, double sunkAwarenessConstant) {
 		super(name, ip);
 		this.memory = new ArrayList<Bid>();

@@ -37,8 +37,9 @@ public class AuctionMainWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-
+		
 		frame = new JFrame();
+		frame.setTitle("Auction Simulation System");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JSplitPane splitPane = new JSplitPane();
