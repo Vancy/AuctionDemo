@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -105,7 +106,7 @@ public class BidServlet extends DefaultServlet{
 				return false;
 			}
     	}
-    	ArrayList<AuctionItem> bidderItemList = new ArrayList<AuctionItem>();
+    	List<AuctionItem> bidderItemList = new ArrayList<AuctionItem>();
     	NodeList itemList = doc.getElementsByTagName("item");
     	for (int i=0; i<itemList.getLength(); i++) {
     		Node currentNode = itemList.item(i);
