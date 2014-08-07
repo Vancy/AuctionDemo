@@ -142,20 +142,16 @@ function switchTo(data) {
         $("#bid_table").data("object", SAA);
         SAA.update(data);
 
-
     } else if ( typeString === "CCA" )  {
         console.log("    Yes! this is CCA!");
         $("#bid_table").data("type", "CCA");
         $("#bid_table").data("object", CCA);
         CCA.update(data);
 
-
     } else if ( $type == undefined){
         console.log("    ELSE");
         changeStateTo(STATE.ERROR);
     }
-
-
 }
 
 
@@ -174,8 +170,8 @@ function saaUpdate(data) {
 	var $roundNumber = $context.children("round").attr("value");
 	var $isFinal = $context.children("round").attr("final");
     $isFinal = ( $isFinal === "yes" ) ? true : false; 
-    state = ( $isFinal === "yes" ) ? STATE.FINAL : STATE.BIDDING;
-    // $isFinal = true;
+    changeStateTo( $isFinal ? STATE.FINAL : STATE.BIDDING);
+
 	var $minIncreament = $context.children("minimum_increament").attr("value");
 	$("#bid_table").data("minIncreament", $minIncreament);
 
@@ -185,10 +181,6 @@ function saaUpdate(data) {
     var $temp_min_inc = "Min Increament {0}".f($minIncreament);
 	$("#round_infomation").html("Round {0}  <b>{1}</b>  <i>{2}</i>"
 		.f($roundNumber, $isFinal===true ? "<b class='alert'>Final</b>" : "", $isFinal===false ? $temp_min_inc : ""));
-
-    if ( $isFinal ) {
-        changeStateTo(STATE.FINAL);
-    }
 
     if ( ! $isFinal ) {
         SAA.setTimer($context.children("duration").attr("value"));
@@ -247,7 +239,6 @@ function saaUpdate(data) {
         $(".input_price").change(function() {
             SAA.validateInput($(this));
         });
-
         $(".input_price").keypress(function( event ) {
             if ( isKBAllowed() ) {
                 if ( event.which == 13 ) {
@@ -257,7 +248,6 @@ function saaUpdate(data) {
             }
         });
     }
-
 	console.log("Finish paint");
 	$("#bid").show();
 }
@@ -350,7 +340,7 @@ function saaSetAll2Valid() {
 
 function ccaUpdate(data) {
     $("#login_box").hide();
-    console.log("SAAupdate()");
+    console.log("-- FUN: ccaUpdate()");
 
     console.log('type: ' + $.type(data));
     if ( $.type(data) === "string" ) {
@@ -361,15 +351,20 @@ function ccaUpdate(data) {
     var $roundNumber = $context.children("round").attr("value");
     var $isFinal = $context.children("round").attr("final");  
     $isFinal = ( $isFinal === "yes" ) ? true : false; 
-    var $minIncreament = $context.children("minimum_increament").attr("value"); 
 
+    changeStateTo( $isFinal ? STATE.FINAL : STATE.BIDDING );
     console.log("Round {0}  Final? {1}".f($roundNumber, $isFinal));
 
-    $("#round_infomation").html("Round {0}  <b>{1}</b>  <i>Min Increament {2}</i>"
-        .f($roundNumber, $isFinal ? "<b class='alert'>Final!</b>" : "", $minIncreament));
+    $("#round_infomation").html("Round {0}  <b>{1}</b>"
+        .f($roundNumber, $isFinal ? "<b class='alert'>Final</b>" : ""));
     
-    SAA.setTimer($context.children("duration").attr("value"));
+    if ( ! $isFinal ) {
+        SAA.setTimer($context.children("duration").attr("value"));
+    } else {
+        $("#timer").text("The final result.");
+    }
 
+    $("#bid_table").find("tbody").find("tr").remove();
     $("#bid_table").find("thead").find("tr").remove();
 
     if ( $isFinal ) {
@@ -378,14 +373,12 @@ function ccaUpdate(data) {
         $("#bid_table").find("thead").append("<tr><th>Item</th><th>Price</th><th>Amout</th><th>Your amout</th><th>Your price</th></tr>");
     }  
 
-    $("#bid_table").find("tbody").find("tr").remove();
-
     $context.find("item").each(function(i) {
-        console.log(this);
+        // console.log(this);
         var $itemId = $(this).attr("id");
         var $itemName = $(this).attr("name");
         var $price = $(this).attr("price");
-        var $quantityAmount = $(this).attr("quantity_amount");
+        var $quantityAmount = $(this).attr("quantity");
 
         console.log($itemId, $itemName, $price, $quantityAmount);
 
@@ -393,19 +386,17 @@ function ccaUpdate(data) {
         var $_name = $("<th></th>").text($itemName);
         var $_price = $("<th></th>").text($price);
         var $_amount = $("<th></th>").text($quantityAmount);
-        var $_yprice = $("<th id='cca_price{0}'></th>".f($id)).text("");
+        var $_yprice = $("<th id='cca_price{0}'></th>".f($itemId)).text("");
 
-        // opt 1
-        
+        // opt 1      
         var $str = "";
         $(this).find("owner").each(function(i) {
-            str = str + "<p>" + $(this).attr("name") + "(" + $(this).attr("quantity") + ")" + "</p>";
+            $str = $str + "<p>" + $(this).attr("name") + "(" + $(this).attr("quantity") + ")" + "</p>";
         });
-        var $_owners = $("<th></th>").html(str);
+        var $_owners = $("<th></th>").html($str);
         // opt 2
-        var $_yamount = $("<th></th>").append($("<input type='text' id='amount{0}' class='input_amount' value='0'></input>").f($itemId));
+        var $_yamount = $("<th></th>").append($("<input type='text' id='amount{0}' class='input_amount' value='0'></input>".f($itemId)));
         $_yamount.append($("<p id=amount{0}_tips class='input_amount_tips'></p>".f($itemId)));
-
 
         var $item;
         if ( $isFinal ) {
@@ -414,44 +405,51 @@ function ccaUpdate(data) {
             $item = $("<tr></tr>").append($_id, $_name, $_price, $_amount, $_yamount, $_yprice);
         }
         
-
-        $("#bid_table").find("tbody").append($item);
-    
+        $("#bid_table").find("tbody").append($item);  
     }); 
 
-    $('#bid_table tbody tr').hover(function() {
+    restoreAllValueOfLastRound();
 
+    $('#bid_table tbody tr').hover(function() {
         $(this).addClass('zhover');
     }, function() {
-
         $(this).removeClass('zhover');
-    });
+    });  
 
     if ( ! $isFinal ) {
         $(".input_amount").change(function() {
             if ( CCA.validateInput($(this)) ) {
+                console.log("@@@@ changed");
                 var $item = $(this).parents("tr");
                 var $id = $item.children("th:eq(0)").text();
-                var $yamount = $("#yamount{0}".f($id)).val();
+                var $amount = $item.children("th:eq(3)").text();
+                var $yamount = $("#amount{0}".f($id)).val();
                 var $price = $item.children("th:eq(2)").text();
-                $("cca_price{0}".f($id)).val(S2N($yamount) * S2N($price));
+                var $yprice = S2N($yamount) * S2N($price);
+
+                console.log("---- ", $id, $price, $amount, $yamount,  $yprice);
+                if ( S2N($yamount) <= S2N($amount) ) {
+                    $("#cca_price{0}".f($id)).text($yprice);
+                    
+                }  
             }
         });
 
         $(".input_amount").keypress(function( event ) {
-            if ( event.which == 13 ) {
-                event.preventDefault();
-                $("#submit_auction").click();
+            if ( isKBAllowed() ) {
+                if ( event.which == 13 ) {
+                    event.preventDefault();
+                    $("#submit_auction").click();
+                }
             }
         });
     }
-    
-
+    console.log("Finish paint");
     $("#bid").show();
 }
 
 function ccaCollectData() {
-    console.log("ccaCollectData");
+    console.log("-- FUN: ccaCollectData");
     var $bid = "";
     var $items = "";
 
@@ -459,17 +457,16 @@ function ccaCollectData() {
         
         var $id = $(this).children("th:eq(0)").text();
         var $name = $(this).children("th:eq(1)").text();
-        var $yamount = $("#yamount{0}".f($id)).val();
+        var $yamount = $("#amount{0}".f($id)).val();
 
-        $items = $items + "<item id={0} name='{1}' quantity_require='{2}'></item>".f($id, $name, $yamount);
+        $items = $items + "<item id='{0}' name='{1}' quantity_require='{2}' />".f($id, $name, $yamount);
     });
     
-    $bid = "<bid><bidder name='{0}' ip='{1}' /><item_list>".f($name, $ip) + $items + "</item_list></bid>";
+    $bid = "<bid><bidder name='{0}' ip='{1}' /><item_list>".f( $name, $ip) + $items + "</item_list></bid>";
     return $bid;
 }
 
-function ccaValidateInput(input) {
-    
+function ccaValidateInput(input) {    
     var $valid = true;
     var $item = input.parents("tr");
 
@@ -477,31 +474,38 @@ function ccaValidateInput(input) {
     var $name = $item.children("th:eq(1)").text();
     var $price = $item.children("th:eq(2)").text();
     var $amount = $item.children("th:eq(3)").text();
-    var $yamount = $("#yamount{0}".f($id)).val();
+    var $yamount = $("#amount{0}".f($id)).val();
 
     console.log("validateInput", $id, $name, $price, $yamount);
 
     if ( hasInvalidCharacters($yamount) ) {
-
         $("#amount{0}_tips".f($id)).text("Please enter a positive integer number.");
         $("#amount{0}_tips".f($id)).show();
         $valid = false;
-    } else {
-  
+
+    } else {  
         $("#amount{0}_tips".f($id)).hide();
+
+        if ( isEmpty($yamount) ) {
+            $("#amount{0}".f($id)).val('0');
+        }
 
         if ( S2N($yamount) > S2N($amount) ) {
 
             $("#amount{0}_tips".f($id)).html("You cannot have more than {0}.".f($amount));
             $("#amount{0}_tips".f($id)).show();
-            $valid = false;
+            // $valid = false;
         } 
     }
     return $valid;
 
-    function hasInvalidCharacters(str) {
-        return str.search(/[^0-9]/) != -1 ;
+    function isEmpty(str) {
+        return $.trim(str) === ''; 
+    }
 
+    function hasInvalidCharacters(str) {
+        console.log("    type", $.type(str));
+        return str.search(/[^0-9]/) != -1 ;
     }  
 }
 
@@ -578,6 +582,7 @@ function submitAuction() {
 
 
     changeStateTo(STATE.SUBMITTING);
+    storeAllValue();
     // getBid().lockScreen();
 
     // $.ajax({
@@ -608,7 +613,8 @@ function submitAuction() {
 
     ///  
     // Store the value(price/amount) of current round, which will be the default value of next round.
-    storeAllValue();
+    
+
     $.post('/WEB-INF/bid.xml', $xmlData)
         .done(function(data, status, error) {
             console.log("    --> OK", status);
