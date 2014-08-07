@@ -206,14 +206,14 @@ function saaUpdate(data) {
 
 		// console.log($itemId, $itemName, $price, $owner);
 
-		var $_id = $("<th class='invisible'></th>").text($itemId);
-		var $_name = $("<th></th>").text($itemName);
-		var $_price = $("<th></th>").text($price);
+		var $_id = $("<td class='invisible'></td>").text($itemId);
+		var $_name = $("<td></td>").text($itemName);
+		var $_price = $("<td></td>").text($price);
 
         // opt 1
-        var $_owner = $("<th></th>").text($owner);
+        var $_owner = $("<td></td>").text($owner);
         // opt 2
-		var $_yprice = $("<th></th>").append($("<input type='text' id='price{0}' class='input_price'></input>"
+		var $_yprice = $("<td></td>").append($("<input type='text' id='price{0}' class='input_price'></input>"
 			.f($itemId)));
 		$_yprice.append($("<p id=price{0}_tips class='input_price_tips'></p>".f($itemId)));
 
@@ -228,6 +228,8 @@ function saaUpdate(data) {
 	});
 
     restoreAllValueOfLastRound();
+
+    $('#bid_table tbody tr:even').addClass('table_row_even');
 
 	$('#bid_table tbody tr').hover(function() {
         $(this).addClass('zhover');
@@ -257,8 +259,8 @@ function saaCollectData() {
     var $bid = "";
     var $items = "";
     $("#bid_table").find("tbody").find("tr").each(function(i) {
-        var $id = $(this).children("th:eq(0)").text();
-        var $name = $(this).children("th:eq(1)").text();
+        var $id = $(this).children("td:eq(0)").text();
+        var $name = $(this).children("td:eq(1)").text();
         var $yprice = $("#price{0}".f($id)).val();
         var $owner = " ";
         $items = $items + "<item id='{0}' name='{1}' price='{2}' owner='{3}'></item>".f($id, $name, $yprice, $owner);
@@ -274,9 +276,9 @@ function saaValidateInput(input) {
     var $valid = true;
     var $item = input.parents("tr");
 
-    var $id = $item.children("th:eq(0)").text();
-    var $name = $item.children("th:eq(1)").text();
-    var $price = $item.children("th:eq(2)").text();
+    var $id = $item.children("td:eq(0)").text();
+    var $name = $item.children("td:eq(1)").text();
+    var $price = $item.children("td:eq(2)").text();
     var $yprice = $("#price{0}".f($id)).val();
     var $minIncreament = S2N($("#bid_table").data("minIncreament"));
     console.log("    validateInput", $id, $name, $price, $yprice);
@@ -382,20 +384,20 @@ function ccaUpdate(data) {
 
         console.log($itemId, $itemName, $price, $quantityAmount);
 
-        var $_id = $("<th class='invisible'></th>").text($itemId);
-        var $_name = $("<th></th>").text($itemName);
-        var $_price = $("<th></th>").text($price);
-        var $_amount = $("<th></th>").text($quantityAmount);
-        var $_yprice = $("<th id='cca_price{0}'></th>".f($itemId)).text("");
+        var $_id = $("<td class='invisible'></td>").text($itemId);
+        var $_name = $("<td></td>").text($itemName);
+        var $_price = $("<td></td>").text($price);
+        var $_amount = $("<td></td>").text($quantityAmount);
+        var $_yprice = $("<td id='cca_price{0}'></td>".f($itemId)).text("");
 
         // opt 1      
         var $str = "";
         $(this).find("owner").each(function(i) {
             $str = $str + "<p>" + $(this).attr("name") + "(" + $(this).attr("quantity") + ")" + "</p>";
         });
-        var $_owners = $("<th></th>").html($str);
+        var $_owners = $("<td></td>").html($str);
         // opt 2
-        var $_yamount = $("<th></th>").append($("<input type='text' id='amount{0}' class='input_amount' value='0'></input>".f($itemId)));
+        var $_yamount = $("<td></td>").append($("<input type='text' id='amount{0}' class='input_amount' value='0'></input>".f($itemId)));
         $_yamount.append($("<p id=amount{0}_tips class='input_amount_tips'></p>".f($itemId)));
 
         var $item;
@@ -421,10 +423,10 @@ function ccaUpdate(data) {
             if ( CCA.validateInput($(this)) ) {
                 console.log("@@@@ changed");
                 var $item = $(this).parents("tr");
-                var $id = $item.children("th:eq(0)").text();
-                var $amount = $item.children("th:eq(3)").text();
+                var $id = $item.children("td:eq(0)").text();
+                var $amount = $item.children("td:eq(3)").text();
                 var $yamount = $("#amount{0}".f($id)).val();
-                var $price = $item.children("th:eq(2)").text();
+                var $price = $item.children("td:eq(2)").text();
                 var $yprice = S2N($yamount) * S2N($price);
 
                 console.log("---- ", $id, $price, $amount, $yamount,  $yprice);
@@ -455,14 +457,14 @@ function ccaCollectData() {
 
     $("#bid_table").find("tbody").find("tr").each(function(i) {
         
-        var $id = $(this).children("th:eq(0)").text();
-        var $name = $(this).children("th:eq(1)").text();
+        var $id = $(this).children("td:eq(0)").text();
+        var $name = $(this).children("td:eq(1)").text();
         var $yamount = $("#amount{0}".f($id)).val();
 
         $items = $items + "<item id='{0}' name='{1}' quantity_require='{2}' />".f($id, $name, $yamount);
     });
     
-    $bid = "<bid><bidder name='{0}' ip='{1}' /><item_list>".f( $name, $ip) + $items + "</item_list></bid>";
+    $bid = "<?xml version='1.0' encoding='utf-8'?><bid><bidder name='{0}' ip='{1}' /><item_list>".f( $name, $ip) + $items + "</item_list></bid>";
     return $bid;
 }
 
@@ -470,10 +472,10 @@ function ccaValidateInput(input) {
     var $valid = true;
     var $item = input.parents("tr");
 
-    var $id = $item.children("th:eq(0)").text();
-    var $name = $item.children("th:eq(1)").text();
-    var $price = $item.children("th:eq(2)").text();
-    var $amount = $item.children("th:eq(3)").text();
+    var $id = $item.children("td:eq(0)").text();
+    var $name = $item.children("td:eq(1)").text();
+    var $price = $item.children("td:eq(2)").text();
+    var $amount = $item.children("td:eq(3)").text();
     var $yamount = $("#amount{0}".f($id)).val();
 
     console.log("validateInput", $id, $name, $price, $yamount);
