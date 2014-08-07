@@ -45,6 +45,7 @@ public class BidderListPanel extends JPanel {
 		setLayout(gridBagLayout);
 		
 		table = new JTable();
+		table.setEnabled(false);
 		String[] columnNames = {"ID", "Name", "IP"};
 		String[][] tableVales = {};
 		tableModel = new DefaultTableModel(tableVales,columnNames);
@@ -84,7 +85,7 @@ public class BidderListPanel extends JPanel {
 		JButton btnAddAgent = new JButton("Add agent");
 		btnAddAgent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				agentAddingDialog = new AgentAddingDialog();
+				agentAddingDialog = new AgentAddingDialog(environment);
 				agentAddingDialog.setVisible(true);
 			}
 		});
