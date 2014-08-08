@@ -154,7 +154,7 @@ public class AgentAddingDialog extends JDialog {
 		System.err.println("auction Type:" + strategey);
 		System.err.println("sunk awareness parameter:" + s_a);
 		
-		Agent newAgent = new Agent(agentName, null, s_a);
+		Agent newAgent = new Agent(agentName, "not valid", null,  null, s_a);
 		
 		this.environment.bidderList.addBidder(newAgent);
 		return null;
