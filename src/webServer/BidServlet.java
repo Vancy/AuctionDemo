@@ -56,15 +56,14 @@ public class BidServlet extends DefaultServlet{
 
 		//place a bid to environment, auctioneer will handle this bid
 		placeBid(doc);
-		System.err.println("waiting to generate response");
+		System.err.println("**********waiting to generate response*********");
 		
 		
 		// waiting for Auctioneer process bids, once next round info ready, get context update.
-		while ( this.auctionEnvironment.auctioneer.nextRoundNotReady()) {
+		while ( this.auctionEnvironment.auctioneer.nextRoundNotReady ) {
 			try {
-				Thread.sleep(500);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -74,7 +73,7 @@ public class BidServlet extends DefaultServlet{
 		//Respond latest AuctionContext
 		PrintWriter out = response.getWriter();
 		out.println(context_updated.generateXml());
-		System.err.println("Response sent");
+		System.err.println("******Response sent*******");
 	}
 	
     private static Document convertStringToDocument(String xmlStr) {

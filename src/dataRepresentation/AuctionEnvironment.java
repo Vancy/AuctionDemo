@@ -4,7 +4,7 @@ public class AuctionEnvironment {
 	
 	
 	public boolean AuctionStarted = false;
-	public AuctionContext context;
+	public volatile AuctionContext context;
 	public BidderList bidderList;
 	public Auctioneer auctioneer;
 	

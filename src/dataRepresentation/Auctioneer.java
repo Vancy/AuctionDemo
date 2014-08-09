@@ -1,17 +1,27 @@
 package dataRepresentation;
 
 import java.util.ArrayList;
+import java.util.Timer;
 
 
-
-public class Auctioneer {
+public class Auctioneer extends Thread{
+	
+	/*
+	 * Auctioneer is start by GUI Bidder list Start Button
+	 * The process of each round:
+	 * 1> Generate all agents' bids, by invoking agent's auctionResponse(), store in request list
+	 * 2> Wait until round duration time up.
+	 * 3> Collect next round variable from GUI if any
+	 * 4> update information for next round
+	 * 5> set flag, bidServlet checks this flag, send response.
+	 */
 	
 	ArrayList<Bid> requestedBids;
 	AuctionEnvironment environment;
-	
 	ArrayList<AuctionContext> auctionLog = new ArrayList<AuctionContext>();
+	Timer roundTimer = new Timer();
 	
-	boolean nextRoundNotReady = true;
+	public volatile boolean nextRoundNotReady = true;
 	
 	public Auctioneer(AuctionEnvironment e) {
 		this.environment = e;
@@ -19,27 +29,73 @@ public class Auctioneer {
 	}
 	
 	public void getBid(Bid bid) {
-		this.nextRoundNotReady = true;
-		requestedBids.add(bid);
+		synchronized(this.requestedBids) {
+			this.requestedBids.add(bid);
+			System.err.println("get a request current size:"+requestedBids.size()+"bidder list size:"+this.environment.bidderList.getList().size());
+		}
 		
-		//Xing change: accumulate bids process 
-		System.err.println("current request:"+requestedBids.size());
-		if (requestedBids.size() == this.environment.bidderList.size()) {
-			this.processBids();
+	}
+	
+	@Override
+	public void run() {
+		while (true) {
+			/**************deliberate delay**************/
+			try {
+				Thread.currentThread();
+				Thread.sleep(5);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			/**************deliberate delay**************/
+			
+			//this.nextRoundNotReady = true;
+//			System.err.println("collecting Agents' bids");
+			//Collect Agent's bid
+			for (Bidder bidder: this.environment.bidderList.getList()) {
+				if (bidder instanceof Agent) {
+					requestedBids.add(((Agent)bidder).auctionResponse(this.environment.context));
+				}
+			}
+			
+			while(this.environment.context.roundTimeElapse > 0) {
+				// Wait until current round time up, or all bidder send their bid
+				try {
+					Thread.currentThread();
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				synchronized(this.requestedBids) {
+					if (this.requestedBids.size() == this.environment.bidderList.getList().size()) {
+						break;
+					}
+				}
+			}
+			
+			System.err.println("Processing Bids...");
+			processBids();
+			System.err.println("next round starting...");
+			updateNextRoundContext();
+			/**************deliberate delay**************/
+			try {
+				Thread.currentThread();
+				Thread.sleep(5);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			/**************deliberate delay**************/
 		}
 	}
 	
-	public boolean nextRoundNotReady() {
-		return this.nextRoundNotReady;
-	}
 	
 	public void setNextRoundReady() {
 		this.nextRoundNotReady = false;
 	}
 	
 	public AuctionContext nextRound() {
-
-		//this.environment.context.incrementRound();
 		
 		return this.environment.context;
 	}
@@ -47,29 +103,34 @@ public class Auctioneer {
 	private void processBids() {
 		
 		//Xing at 2014.7.31: Process current bids, update auction context;
-		//Xing change at 2014.8.2: Process all bids at onece.
+		//Xing change at 2014.8.2: Process all bids at once.
 		
 		System.err.println("request bid num:"+this.requestedBids.size());
 		for (Bid bid: this.requestedBids) {
 			for (AuctionItem bidderItem: bid.getItemList()) {
 				double originalPrice = fetchItemPrice(bidderItem.getID());
-				System.out.println("original price:"+originalPrice+"for bidder"+bid.getBidder().getName());
+//				System.out.println("original price:"+originalPrice+"for bidder"+bid.getBidder().getName());
 				if (originalPrice < bidderItem.getPrice()) {
 					putItemPrice(bid.getBidder(), bidderItem.getID(), bidderItem.getPrice());
 				}
 			}
 		}
-		requestedBids.clear();
+		synchronized(this.requestedBids) {
+			requestedBids.clear();
+		}
 		//record current round log 
 		this.recordLog();
+
+	}
+	
+	private void updateNextRoundContext() {
 		this.environment.context.bidsProcessingFinished = true;
 		
 		while (false == this.environment.context.bidsProcessingFinished); //wait till GUI update table
 		this.environment.context.incrementRound();
+		this.environment.context.roundTimeElapse = this.environment.context.getDurationTime();
 		this.setNextRoundReady();
-		System.err.println("nest round not ready"+this.nextRoundNotReady);
 	}
-	
 	private void recordLog() {
 		
 		this.auctionLog.add(new AuctionContext(this.environment.context));

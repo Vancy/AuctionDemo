@@ -30,6 +30,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class AgentAddingDialog extends JDialog {
 
@@ -154,9 +155,14 @@ public class AgentAddingDialog extends JDialog {
 		System.err.println("auction Type:" + strategey);
 		System.err.println("sunk awareness parameter:" + s_a);
 		
-		Agent newAgent = new Agent(agentName, "not valid", null,  null, s_a);
+		ArrayList<Integer> preference = new ArrayList<Integer>();
+		preference.add(10);
+		preference.add(20);
+		preference.add(30);
 		
-		this.environment.bidderList.addBidder(newAgent);
+		//Agent newAgent = new Agent(agentName, strategey, environment.context.getItemList(), preference, s_a);
+		
+		//this.environment.bidderList.addBidder(newAgent);
 		return null;
 	}
 

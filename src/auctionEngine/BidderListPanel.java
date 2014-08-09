@@ -29,13 +29,15 @@ public class BidderListPanel extends JPanel {
 	private JTable table;
 	private DefaultTableModel tableModel;
 	
+	private AuctionPanel auctionPanel;
 	private AgentAddingDialog agentAddingDialog;
 
 	/**
 	 * Create the panel.
 	 */
-	public BidderListPanel(AuctionEnvironment e) {
+	public BidderListPanel(AuctionEnvironment e, AuctionPanel ap) {
 		this.environment = e;
+		this.auctionPanel = ap;
 		this.bidderList = e.bidderList;
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{450, 0};
@@ -75,7 +77,9 @@ public class BidderListPanel extends JPanel {
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				environment.AuctionStarted = true;
-				System.err.println("Click Auction Start"+ environment.AuctionStarted);
+				environment.auctioneer.start();
+				auctionPanel.startAuction();
+				System.err.println("Click Auction Start:"+ environment.AuctionStarted);
 			}
 		});
 		panel.add(btnStart);

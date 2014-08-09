@@ -259,7 +259,7 @@ public class AuctionConfigPanel extends JPanel {
 		float min_increment = Float.parseFloat(this.spinner_minIncrement.getValue().toString());
 	
 		ArrayList<AuctionItem> list = new ArrayList<AuctionItem>();
-		System.out.println("Clum NUM:"+tableModel.getColumnCount());
+
 		for (int i=0; i<this.table.getRowCount(); i++) {
 			String name = this.table.getValueAt(i, 0).toString();
 			float price = Float.parseFloat(this.table.getValueAt(i, 1).toString());
@@ -277,7 +277,7 @@ public class AuctionConfigPanel extends JPanel {
 		contentPaneLayout.show(auctionContentPanel, "AuctionPane");
 		
 		//Update AuctionListPanel
-		this.mainWindow.auctionPane.updateAuctionList();
+		this.mainWindow.auctionPane.initAuctionList();
 
 	}
 }

@@ -21,7 +21,7 @@ public class AuctionMainWindow {
 	private JPanel contentPane;
 	private AuctionConfigPanel auctionConfigPane;
 	protected AuctionPanel auctionPane;
-	
+	protected BidderListPanel bidderListPanel;
 
 	AuctionEnvironment environment;
 	
@@ -52,10 +52,13 @@ public class AuctionMainWindow {
 	    auctionContentPane.add(auctionConfigPane, "ConfigPane"); 
 	    auctionContentPane.add(auctionPane, "AuctionPane");
 	    
+	    
+	    this.bidderListPanel = new BidderListPanel(this.environment, this.auctionPane);
+	    
 	    splitPane.setResizeWeight(0.99);
         splitPane.setOneTouchExpandable(true);
         splitPane.setContinuousLayout(true);
-		splitPane.setRightComponent(new BidderListPanel(this.environment));
+		splitPane.setRightComponent(this.bidderListPanel);
 		splitPane.setLeftComponent(auctionContentPane);
 		//splitPane.setDividerLocation(0.1);
 

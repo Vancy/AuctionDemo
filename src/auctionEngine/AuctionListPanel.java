@@ -46,19 +46,9 @@ public class AuctionListPanel extends JPanel {
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); 
 		scrollPane.setViewportView(table);
 		
-		ActionListener listener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				updateAuctionList();	
-			}
-		};
-		Timer displayTimer = new Timer(1000, listener);
-		displayTimer.start();
-
-		
 	}
 	
-	public void updateAuctionList() {
+	protected void updateAuctionList() {
 	
 		if (this.environment.context.bidsProcessingFinished) {
 			Vector<String> newRow = new Vector<String>(); 
@@ -68,7 +58,6 @@ public class AuctionListPanel extends JPanel {
 				newRow.add(String.valueOf(price));
 			}
 			tableModel.addRow(newRow);
-			this.environment.context.bidsProcessingFinished = false;
 		}
 
 	}

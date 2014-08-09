@@ -30,6 +30,7 @@ public class AuctionContext {
 	 * GUI check this flag, if true, GUI update auction_context to 
 	 * table. Then set back to false
 	 */
+	public int roundTimeElapse = 0;
 	public boolean bidsProcessingFinished = false;
 	
 	public AuctionContext() {
@@ -99,7 +100,12 @@ public class AuctionContext {
 	public void setFinalRound() {
 		this.finalRound = true;
 	}
-	
+	public void setDurationTime(int t) {
+		this.duration_Sec = t;
+	}
+	public int getDurationTime() {
+		return this.duration_Sec;
+	}
 	public ArrayList<AuctionItem> getItemList() {
 		return this.itemList;
 	}
