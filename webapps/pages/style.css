@@ -289,6 +289,10 @@ tr.zhover {
     color: #ffffff;
 }
 
+.th_wide {
+	width: 70px;
+}
+
 .table_row_even {
 	color: #000000;
     background-color: #EAF2D3;

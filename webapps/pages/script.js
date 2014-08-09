@@ -174,7 +174,8 @@ function saaUpdate(data) {
 	var $minIncreament = $context.children("minimum_increament").attr("value");
 	$("#bid_table").data("minIncreament", $minIncreament);
 
-	// console.log("Round {0}  Final? {1}".f($roundNumber, $isFinal));
+
+	console.log("\n\n$$$$ Round {0}  Final? {1} $$$$\n".f($roundNumber, $isFinal));
 
     // No "min_inc" in final round.
     var $temp_min_inc = "Min Increament {0}".f($minIncreament);
@@ -371,7 +372,7 @@ function ccaUpdate(data) {
     if ( $isFinal ) {
         $("#bid_table").find("thead").append("<tr><th>Item</th><th>Price</th><th>Amout</th><th>Owner(s)</th></tr>");
     } else {
-        $("#bid_table").find("thead").append("<tr><th>Item</th><th>Price</th><th>Amout</th><th>Your amout</th><th>Your price</th></tr>");
+        $("#bid_table").find("thead").append("<tr><th>Item</th><th>Price</th><th>Amout</th><th>Your amout</th><th class='th_wide'>Your price</th></tr>");
     }  
 
     $context.find("item").each(function(i) {
@@ -784,6 +785,7 @@ function changeStateTo(newState) {
     } else if ( state === STATE.ERROR ) {
         getBid().unlockScreen();
         updateError();
+        alert("Server error. Please quit.");
 
     } else {
         getBid().unlockScreen();
