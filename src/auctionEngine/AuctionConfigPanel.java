@@ -105,7 +105,7 @@ public class AuctionConfigPanel extends JPanel {
 		lblMinimumIncrement.setFont(new Font("Dialog", Font.BOLD, 17));
 		panel_minimumInrement.add(lblMinimumIncrement);
 		
-		sm = new SpinnerNumberModel(0, 0, Double.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
+		sm = new SpinnerNumberModel(1, 0, Double.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
 		spinner_minIncrement = new JSpinner(sm);
 		panel_minimumInrement.add(spinner_minIncrement);
 		

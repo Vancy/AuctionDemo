@@ -125,6 +125,15 @@ public class AuctionContext {
 		round++;
 	}
 	
+	public AuctionItem searchItem(int id) {
+		for (AuctionItem item: this.itemList) {
+			if (id ==  item.getID()) {
+				return item;
+			}
+		}
+		return null;
+	}
+	
 	public String generateXml() {  
 	    Document doc = null;  
 	    Element root = null;  

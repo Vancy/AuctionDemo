@@ -25,12 +25,15 @@ import org.xml.sax.SAXException;
 
 import dataRepresentation.Agent;
 import dataRepresentation.AuctionEnvironment;
+import dataRepresentation.AuctionItem;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class AgentAddingDialog extends JDialog {
 
@@ -155,15 +158,34 @@ public class AgentAddingDialog extends JDialog {
 		System.err.println("auction Type:" + strategey);
 		System.err.println("sunk awareness parameter:" + s_a);
 		
-		ArrayList<Integer> preference = new ArrayList<Integer>();
-		preference.add(10);
-		preference.add(20);
-		preference.add(30);
+		HashMap<List<AuctionItem>, Double> preference = new HashMap<List<AuctionItem>, Double>();
 		
-		//Agent newAgent = new Agent(agentName, strategey, environment.context.getItemList(), preference, s_a);
 		
-		//this.environment.bidderList.addBidder(newAgent);
-		return null;
+		NodeList packageList = preferenceElement.getElementsByTagName("package");
+		Element packageElement = null;
+
+		for (int i=0; i<packageList.getLength(); i++) {
+			double packageValuation = 0;
+			ArrayList<AuctionItem> itemList = new ArrayList<AuctionItem>();
+			
+			packageElement = (Element) packageList.item(i);
+			packageValuation = Double.parseDouble(packageElement.getAttribute("valuation"));
+			
+			NodeList itemNodeList = packageElement.getElementsByTagName("item");
+			Element itemElement = null;
+			for (int j=0; j<itemNodeList.getLength(); j++) {
+				itemElement = (Element) itemNodeList.item(j);
+				int itemID = Integer.parseInt(itemElement.getAttribute("id"));
+				itemList.add(new AuctionItem(this.environment.context.searchItem(itemID)));
+			}
+			
+			preference.put(itemList, packageValuation);
+		}
+		
+		Agent newAgent = new Agent(agentName, strategey, environment.context.getItemList(), preference, s_a);
+		this.environment.bidderList.addBidder(newAgent);
+		
+		return newAgent;
 	}
 
 }

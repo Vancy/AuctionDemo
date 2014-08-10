@@ -55,7 +55,12 @@ public class Auctioneer extends Thread{
 			//Collect Agent's bid
 			for (Bidder bidder: this.environment.bidderList.getList()) {
 				if (bidder instanceof Agent) {
-					requestedBids.add(((Agent)bidder).auctionResponse(this.environment.context));
+					Bid agentBid = ((Agent)bidder).auctionResponse(this.environment.context);
+					requestedBids.add(agentBid);
+					System.err.println("Agent:"+bidder.getName()+" place a bid:");
+					for (AuctionItem item: agentBid.getItemList()) {
+						System.out.println("His price:"+item.getPrice()+"for item:"+item.getName());
+					}
 				}
 			}
 			
@@ -109,10 +114,10 @@ public class Auctioneer extends Thread{
 		//Xing at 2014.7.31: Process current bids, update auction context;
 		//Xing change at 2014.8.2: Process all bids at once.
 		
-		System.err.println("request bid num:"+this.requestedBids.size());
 		for (Bid bid: this.requestedBids) {
 			for (AuctionItem bidderItem: bid.getItemList()) {
 				double originalPrice = fetchItemPrice(bidderItem.getID());
+				System.out.println("original price:"+originalPrice+"bidder"+bid.getBidder().getName()+"price:"+bidderItem.getPrice());
 				if (originalPrice < bidderItem.getPrice()) {
 					putItemPrice(bid.getBidder(), bidderItem.getID(), bidderItem.getPrice());
 				}

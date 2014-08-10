@@ -45,6 +45,8 @@ public class Agent extends Bidder {
         Map<AuctionItem, Double> behaviour = getNextRoundBehaviour(ac);
         
         for (AuctionItem i : behaviour.keySet()) {
+        	//Xing add this line at 2014.8.11, put bid price into AuctionItem
+        	i.setPrice(behaviour.get(i)); //xing added
             bidderItemList.add(new AuctionItem(i));
         }
         
@@ -117,7 +119,7 @@ public class Agent extends Bidder {
         // some debugging statements
         System.out.print("{");
         for (AuctionItem i : itemSet) {
-            System.out.print(i.getID() + " ");
+            System.out.print(i.getID());
         }
         System.out.print("}");
         System.out.println("Valuation: " + valuation + " perceviedTotal: " + perceivedPriceTotal + " surplus: " + (valuation - perceivedPriceTotal));
@@ -175,21 +177,21 @@ public class Agent extends Bidder {
             }
         }
         finalSetToBidOn = optimalSetsToBidOn.get(indexOfLargestSet);
-        
-        for (AuctionItem item : items) {
+
+        for (AuctionItem item : ac.getItemList()) {
             if (finalSetToBidOn.contains(item)) {
                 if (this.getID() != item.getOwner().getID()) {
                     // losing bid on desired item. Outbid it.
-                    nextRoundBehaviour.put(item, item.getPrice() + ac.getMinIncrement());
+                    nextRoundBehaviour.put(new AuctionItem(item), item.getPrice() + ac.getMinIncrement());
                 } else {
                     // agent is winning the bid for the item - does not need to bid again
-                    nextRoundBehaviour.put(item, 0.0);
+                    nextRoundBehaviour.put(new AuctionItem(item), 0.0);
                 }
             } else {
-                nextRoundBehaviour.put(item, 0.0);
+                nextRoundBehaviour.put(new AuctionItem(item), 0.0);
             }
         }
-        
+
         return nextRoundBehaviour;
     }
     

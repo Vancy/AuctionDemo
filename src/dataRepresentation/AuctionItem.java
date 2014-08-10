@@ -77,6 +77,22 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		}
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+            return true;
+        }
+		
+		if (o instanceof AuctionItem) {
+			AuctionItem anotherItem = (AuctionItem)o;
+			if (this.ID == anotherItem.ID) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+	
 	public String getName() {
 		return this.name;
 	}
@@ -87,7 +103,11 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		return this.price;
 	}
 	public Bidder getOwner() {
-		return this.owner;
+		if (null == this.owner) {
+			return new Bidder();
+		} else {
+			return this.owner;
+		}
 	}
 	public void setOwner(Bidder owner) {
 		this.owner = owner;

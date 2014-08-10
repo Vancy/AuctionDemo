@@ -14,8 +14,10 @@ public class Bidder {
 	private String ipAdress = "127.0.0.1";
 	private Color colorRecognition;
 	
-	public Bidder(String name) {
-		this.name = name;
+	public Bidder() {
+		this.name = "Unknown";
+		this.ID = -1;
+		this.ipAdress = "Invalid";
 	}
 	
 	//copy constructor
