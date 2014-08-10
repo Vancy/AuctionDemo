@@ -31,6 +31,8 @@ public class BidderListPanel extends JPanel {
 	
 	private AuctionPanel auctionPanel;
 	private AgentAddingDialog agentAddingDialog;
+	
+	public JButton btnStart;
 
 	/**
 	 * Create the panel.
@@ -73,13 +75,15 @@ public class BidderListPanel extends JPanel {
 		gbc_panel.gridy = 1;
 		add(panel, gbc_panel);
 		
-		JButton btnStart = new JButton("Start");
+		btnStart = new JButton("Start");
+		btnStart.setEnabled(false);
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				environment.AuctionStarted = true;
 				environment.auctioneer.start();
 				auctionPanel.startAuction();
 				System.err.println("Click Auction Start:"+ environment.AuctionStarted);
+				btnStart.setEnabled(false);
 			}
 		});
 		panel.add(btnStart);

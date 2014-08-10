@@ -100,6 +100,9 @@ public class AuctionContext {
 	public void setFinalRound() {
 		this.finalRound = true;
 	}
+	public boolean isFinalRound() {
+		return this.finalRound;
+	}
 	public void setDurationTime(int t) {
 		this.duration_Sec = t;
 	}

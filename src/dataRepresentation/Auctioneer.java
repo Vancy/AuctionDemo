@@ -31,26 +31,27 @@ public class Auctioneer extends Thread{
 	public void getBid(Bid bid) {
 		synchronized(this.requestedBids) {
 			this.requestedBids.add(bid);
-			System.err.println("get a request current size:"+requestedBids.size()+"bidder list size:"+this.environment.bidderList.getList().size());
+			System.err.println("get a request current size:"+requestedBids.size()+",bidder list size:"+this.environment.bidderList.getList().size());
 		}
 		
+	}
+	
+	public boolean removeBid(Bid bid) {
+		synchronized(this.requestedBids) {
+			this.requestedBids.remove(bid);
+			System.out.println("current request list size after remove one:"+requestedBids.size());
+			return true;
+		}
 	}
 	
 	@Override
 	public void run() {
 		while (true) {
 			/**************deliberate delay**************/
-			try {
-				Thread.currentThread();
-				Thread.sleep(5);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			System.err.println("******Round " + this.environment.context.getRound() + " Start*****Min increment " + this.environment.context.getMinIncrement() + "*****");
+			deliberateDelay(1);
 			/**************deliberate delay**************/
 			
-			//this.nextRoundNotReady = true;
-//			System.err.println("collecting Agents' bids");
 			//Collect Agent's bid
 			for (Bidder bidder: this.environment.bidderList.getList()) {
 				if (bidder instanceof Agent) {
@@ -62,9 +63,8 @@ public class Auctioneer extends Thread{
 				// Wait until current round time up, or all bidder send their bid
 				try {
 					Thread.currentThread();
-					Thread.sleep(2000);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
@@ -75,24 +75,28 @@ public class Auctioneer extends Thread{
 				}
 			}
 			
-			System.err.println("Processing Bids...");
+			// Wait two more seconds, to wait all defaults bids
+			deliberateDelay(2);
+			
+			System.out.println("Processing Bids...");
 			processBids();
-			System.err.println("next round starting...");
+			System.out.println("next round starting...");
 			updateNextRoundContext();
-			/**************deliberate delay**************/
-			try {
-				Thread.currentThread();
-				Thread.sleep(5);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			/***************Next Round Will Start**********************/
+			if (this.environment.context.isFinalRound()) {
+				System.err.println("Auction End");
+				break; // break from while loop, terminate auctioneer
 			}
-			/**************deliberate delay**************/
 		}
 	}
 	
 	
-	public void setNextRoundReady() {
+	private void setNextRoundReady() {
 		this.nextRoundNotReady = false;
+	}
+	
+	private void setNextRoundNotReady() {
+		this.nextRoundNotReady = true;
 	}
 	
 	public AuctionContext nextRound() {
@@ -109,7 +113,6 @@ public class Auctioneer extends Thread{
 		for (Bid bid: this.requestedBids) {
 			for (AuctionItem bidderItem: bid.getItemList()) {
 				double originalPrice = fetchItemPrice(bidderItem.getID());
-//				System.out.println("original price:"+originalPrice+"for bidder"+bid.getBidder().getName());
 				if (originalPrice < bidderItem.getPrice()) {
 					putItemPrice(bid.getBidder(), bidderItem.getID(), bidderItem.getPrice());
 				}
@@ -124,12 +127,29 @@ public class Auctioneer extends Thread{
 	}
 	
 	private void updateNextRoundContext() {
-		this.environment.context.bidsProcessingFinished = true;
 		
-		while (false == this.environment.context.bidsProcessingFinished); //wait till GUI update table
+		
+		/*
+		 * reset parameter via GUI, e.g. minimun_increment
+		 */
+		this.environment.context.bidsProcessingFinished = true; //set flag true: GUI can update info
+		while (false == this.environment.context.bidsProcessingFinished); //wait till GUI finish update
+		
 		this.environment.context.incrementRound();
 		this.environment.context.roundTimeElapse = this.environment.context.getDurationTime();
+		
+		//set flag true, bidservlet can send response
 		this.setNextRoundReady();
+		
+		//make sure every one receive their responses
+		while (this.requestedBids.size() > 0) {
+			deliberateDelay(0.5);
+			//waiting to confirm every html response sent
+		}
+		
+		//set flag false, next round bidservlet wait till ready.
+		this.requestedBids.clear();
+		this.setNextRoundNotReady();
 	}
 	private void recordLog() {
 		
@@ -158,5 +178,13 @@ public class Auctioneer extends Thread{
 		}
 	}
 	
+	private void deliberateDelay(double sec) {
+		try {
+			Thread.currentThread();
+			Thread.sleep((int)(sec * 1000));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 
 }

@@ -55,25 +55,21 @@ public class BidServlet extends DefaultServlet{
 		
 
 		//place a bid to environment, auctioneer will handle this bid
-		placeBid(doc);
-		System.err.println("**********waiting to generate response*********");
+		Bid myBid = placeBid(doc);
+		System.err.println(myBid.getBidder().getName()+"**********waiting response*********");
 		
 		
 		// waiting for Auctioneer process bids, once next round info ready, get context update.
-		while ( this.auctionEnvironment.auctioneer.nextRoundNotReady ) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+		while ( this.auctionEnvironment.auctioneer.nextRoundNotReady ) {}
 		// get next round's context through auctioneer
 		AuctionContext context_updated  =  this.auctionEnvironment.auctioneer.nextRound();
 		//System.out.println("updated:"+ context_updated.generateXml());
 		//Respond latest AuctionContext
 		PrintWriter out = response.getWriter();
 		out.println(context_updated.generateXml());
-		System.err.println("******Response sent*******");
+		System.err.println(myBid.getBidder().getName()+"***********Response sent************");
+		//infrom auctioneer get the repsonse sucessfully 
+		ConfirmResponseSent(myBid);
 	}
 	
     private static Document convertStringToDocument(String xmlStr) {
@@ -90,7 +86,7 @@ public class BidServlet extends DefaultServlet{
         return null;
     }
 
-    private boolean placeBid(Document doc) {
+    private Bid placeBid(Document doc) {
     	NodeList bidderNode = doc.getElementsByTagName("bidder");
     	Element bidderInfo = (Element) (bidderNode.item(0));
     	String name = bidderInfo.getAttribute("name");
@@ -102,7 +98,7 @@ public class BidServlet extends DefaultServlet{
 				throw new Exception("BidServlet: Cannot find bidder inside bidderlist");
 			} catch (Exception e) {
 				e.printStackTrace();
-				return false;
+				return null;
 			}
     	}
     	List<AuctionItem> bidderItemList = new ArrayList<AuctionItem>();
@@ -117,7 +113,15 @@ public class BidServlet extends DefaultServlet{
     	}
     	Bid bid = new Bid(bidder, bidderItemList);
     	bidder.placeBid(this.auctionEnvironment, bid);
-    	return true;
+    	return bid;
+    }
+    
+    private boolean ConfirmResponseSent(Bid bid) {
+    	if (this.auctionEnvironment.auctioneer.removeBid(bid)) {
+    		return true;
+    	}else {
+    		throw new RuntimeException("ERROR: Invalid Bid removing");
+    	}
     }
 	public void destroy() {
 		// do nothing.

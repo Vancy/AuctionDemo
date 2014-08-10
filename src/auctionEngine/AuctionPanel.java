@@ -96,7 +96,6 @@ public class AuctionPanel extends JPanel {
 	private void updateAuctionList() {
 		if (this.environment.context.bidsProcessingFinished) {
 			auctionListPanel.updateAuctionList();
-			environment.context.setMinIncrement(Double.parseDouble(this.spinner_Increment.getValue().toString()));
 			//Set flag, indicate GUI update end.
 			environment.context.bidsProcessingFinished = false;
 		}
@@ -105,6 +104,9 @@ public class AuctionPanel extends JPanel {
 	protected void initAuctionList(){
 		this.auctionListPanel = new AuctionListPanel(this.environment);
 		this.panel_ForList.add(auctionListPanel);
+		
+		//Set minimun increment to spinner
+		this.spinner_Increment.setValue(environment.context.getMinIncrement());
 	}
 	
 	private void updateAuctionInfo() {
@@ -115,7 +117,7 @@ public class AuctionPanel extends JPanel {
 			this.environment.context.roundTimeElapse--;
 		}
 		this.lblTimer.setText("Remain:"+Integer.toString(this.environment.context.roundTimeElapse));
-		this.lblRound.setText("Round:"+Integer.toBinaryString(this.environment.context.getRound()));
+		this.lblRound.setText("Round:"+Integer.toString(this.environment.context.getRound()));
 	}
 	private void setAuctionEndFlag() {
 		this.environment.context.setFinalRound();

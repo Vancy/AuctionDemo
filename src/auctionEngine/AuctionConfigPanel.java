@@ -278,6 +278,9 @@ public class AuctionConfigPanel extends JPanel {
 		
 		//Update AuctionListPanel
 		this.mainWindow.auctionPane.initAuctionList();
-
+		
+		//enable Bidderlist auction start button 
+		BidderListPanel bidderListPanel = (BidderListPanel) sp.getRightComponent();
+		bidderListPanel.btnStart.setEnabled(true);
 	}
 }
