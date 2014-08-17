@@ -113,7 +113,21 @@ public class Auctioneer extends Thread{
 		
 		//Xing at 2014.7.31: Process current bids, update auction context;
 		//Xing change at 2014.8.2: Process all bids at once.
+		if  (this.environment.context.getType() == AuctionContext.AuctionType.SAA) {
+			processSAABids();
+		} else if (this.environment.context.getType() == AuctionContext.AuctionType.CCA) {
+			processCCABids();
+		}
 		
+		synchronized(this.requestedBids) {
+			requestedBids.clear();
+		}
+		//record current round log 
+		this.recordLog();
+
+	}
+	
+	private void processSAABids() {
 		for (Bid bid: this.requestedBids) {
 			for (AuctionItem bidderItem: bid.getItemList()) {
 				double originalPrice = fetchItemPrice(bidderItem.getID());
@@ -123,14 +137,11 @@ public class Auctioneer extends Thread{
 				}
 			}
 		}
-		synchronized(this.requestedBids) {
-			requestedBids.clear();
-		}
-		//record current round log 
-		this.recordLog();
-
 	}
 	
+	private void processCCABids() {
+		
+	}
 	private void updateNextRoundContext() {
 		
 		

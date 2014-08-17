@@ -1,0 +1,16 @@
+<agent  name="ogen" ip="invalid">
+
+    <preference>
+      <package valuation="50"> <item id="0" name="ItemA"/> </package>
+      <package valuation="90"> <item id="1" name="ItemB"/> </package>
+      <package valuation="100"> <item id="0" name="ItemA"/> <item id="1" name="ItemB"/></package>
+        <!-- preference contains several combinations of auctionItems. If combination is not defined, we set 0 as default -->
+    </preference>
+
+    <strategy strategyType="Sunk-Awareness" auctionType="SAA">
+        <parameter name="Sunk-Awareness constant(k)" value="0.5"/>
+        <!-- parameter may contain several other parameters if needed-->
+    </strategy>
+
+</agent>
+

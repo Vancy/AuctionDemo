@@ -49,6 +49,17 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		this.owner = null;
 	}
 	
+	/*
+	 * this constructor is used by bidders who attend CCA auction.
+	 * require indicate how many items bidder wants
+	 */
+	public AuctionItem(int id, String n, int require) {
+		this.ID = id;
+		this.name = n;
+		this.quantity = require;
+		this.owner = null;
+	}
+	
 	public AuctionItem(String n, double sp, int quantity) {
 		this.ID = ++number_of_items - 1;
 		this.name = n;

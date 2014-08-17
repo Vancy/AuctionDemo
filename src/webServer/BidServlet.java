@@ -101,16 +101,33 @@ public class BidServlet extends DefaultServlet{
 				return null;
 			}
     	}
+    	
     	List<AuctionItem> bidderItemList = new ArrayList<AuctionItem>();
     	NodeList itemList = doc.getElementsByTagName("item");
-    	for (int i=0; i<itemList.getLength(); i++) {
-    		Node currentNode = itemList.item(i);
-    		Element element = (Element) currentNode;
-    		String itemName = element.getAttribute("name");
-    		double itemPrice = Double.parseDouble(element.getAttribute("price"));
-    		int id = Integer.parseInt(element.getAttribute("id"));
-    		bidderItemList.add(new AuctionItem(id, itemName, itemPrice));
+    	/*
+    	 * Check current auction type, SAA or CCA.
+    	 */
+    	if  (this.auctionEnvironment.context.getType() == AuctionContext.AuctionType.SAA) {
+        	for (int i=0; i<itemList.getLength(); i++) {
+        		Node currentNode = itemList.item(i);
+        		Element element = (Element) currentNode;
+        		String itemName = element.getAttribute("name");
+        		double itemPrice = Double.parseDouble(element.getAttribute("price"));
+        		int id = Integer.parseInt(element.getAttribute("id"));
+        		bidderItemList.add(new AuctionItem(id, itemName, itemPrice));
+        	}
+    	} else  if (this.auctionEnvironment.context.getType() == AuctionContext.AuctionType.CCA) {
+        	for (int i=0; i<itemList.getLength(); i++) {
+        		Node currentNode = itemList.item(i);
+        		Element element = (Element) currentNode;
+        		String itemName = element.getAttribute("name");
+        		int itemRequire = Integer.parseInt(element.getAttribute("quantity_require"));
+        		int id = Integer.parseInt(element.getAttribute("id"));
+        		bidderItemList.add(new AuctionItem(id, itemName, itemRequire));
+        	}
     	}
+
+
     	Bid bid = new Bid(bidder, bidderItemList);
     	bidder.placeBid(this.auctionEnvironment, bid);
     	return bid;

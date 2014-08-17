@@ -89,6 +89,9 @@ public class AuctionContext {
 		 }  
 	}
 	
+	public AuctionType getType() {
+		return this.type;
+	}
 	
 	public double getMinIncrement() {
 		return this.minIncreament;
