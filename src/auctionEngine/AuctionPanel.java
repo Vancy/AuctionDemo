@@ -12,6 +12,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
+import javax.swing.BoxLayout;
 
 public class AuctionPanel extends JPanel {
 
@@ -31,16 +32,19 @@ public class AuctionPanel extends JPanel {
 	
 	public AuctionPanel(AuctionEnvironment ae) {
 		this.environment = ae;
-		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		setLayout(null);
 		
 		JPanel panel_All = new JPanel();
+		panel_All.setBounds(31, 5, 571, 564);
 		add(panel_All);
-		panel_All.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panel_All.setLayout(null);
 		
 		panel_ForList = new JPanel();
+		panel_ForList.setBounds(0, 0, 571, 505);
 		panel_All.add(panel_ForList);
 		
 		JPanel panel_Display = new JPanel();
+		panel_Display.setBounds(0, 503, 571, 25);
 		panel_All.add(panel_Display);
 		panel_Display.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
@@ -55,6 +59,7 @@ public class AuctionPanel extends JPanel {
 		//setLayout(null);
 				
 		JPanel panel = new JPanel();
+		panel.setBounds(0, 529, 571, 35);
 		panel_All.add(panel);
 		
 		JLabel lblMinimunIncrement = new JLabel("Minimun Increment: ");
