@@ -41,9 +41,7 @@ public class Agent extends Bidder {
     }
     
     public Bid auctionResponse(AuctionContext ac) {
-        
-        items = new ArrayList<AuctionItem>(ac.getItemList());
-        
+             
         List<AuctionItem> bidderItemList = new ArrayList<AuctionItem>();
         Map<AuctionItem, Double> behaviour = getNextRoundBehaviour(ac);
         

@@ -226,34 +226,45 @@ public class AuctionConfigPanel extends JPanel {
 			tableModel.setColumnCount(0);
 			tableModel.setRowCount(0);
 			tableModel.addColumn("Item");
-			tableModel.addColumn("Price");
 			tableModel.addColumn("Quantity");
 			//put some initial data
-			String[] s1 = {"ItemA", "10.0", "5"};
-			String[] s2 = {"ItemB", "20.0", "10"};
-			String[] s3 = {"ItemC", "30.0", "8"};
+			String[] s1 = {"ItemA", "5"};
+			String[] s2 = {"ItemB", "10"};
+			String[] s3 = {"ItemC", "8"};
 			tableModel.addRow(s1);
 			tableModel.addRow(s2);
 			tableModel.addRow(s3);
 		}
 		
-//		
-//		for (AuctionItem item: this.environment.context.getItemList()) {
-//			String itemName = item.getName();
-//			tableModel.addColumn(itemName);
-//		}
-//		Vector<String> firstRow = new Vector<String>(); 
-//		firstRow.add("Initial");
-//		for (AuctionItem item: this.environment.context.getItemList()) {
-//			double price = item.getPrice();
-//			firstRow.add(String.valueOf(price));
-//		}
-//		tableModel.addRow(firstRow);
-//		tableModel.fireTableDataChanged();
 	}
+	
 	private void startAuction() {
-		String typeName = this.typeComboBox.getSelectedItem().toString();
-		this.environment.context.setType(typeName);
+		String auctionType = this.typeComboBox.getSelectedItem().toString();
+		
+		if (auctionType.equals("SAA")) {
+			startSaaAuction();
+		} else if (auctionType.equals("CCA")) {
+			startCcaAuction();
+		}else if (auctionType.equals("ULA")) {
+			startUlaAuction();
+		}
+		
+		/*************inform GUI to update**********************/
+		JSplitPane sp = (JSplitPane)(this.parentFrame.getContentPane());
+		JPanel auctionContentPanel = (JPanel) sp.getLeftComponent();
+		CardLayout contentPaneLayout = (CardLayout)auctionContentPanel.getLayout();
+		contentPaneLayout.show(auctionContentPanel, "AuctionPane");
+		//Update AuctionListPanel
+		this.mainWindow.auctionPane.initAuctionList();
+		
+		//enable Bidderlist auction start button 
+		BidderListPanel bidderListPanel = (BidderListPanel) sp.getRightComponent();
+		bidderListPanel.btnStart.setEnabled(true);
+	}
+	
+	private void startSaaAuction() {
+
+		this.environment.context.setType("SAA");
 		
 		int time_duration = Integer.parseInt(this.spinner_roundDuration.getValue().toString());
 		float min_increment = Float.parseFloat(this.spinner_minIncrement.getValue().toString());
@@ -263,24 +274,34 @@ public class AuctionConfigPanel extends JPanel {
 		for (int i=0; i<this.table.getRowCount(); i++) {
 			String name = this.table.getValueAt(i, 0).toString();
 			float price = Float.parseFloat(this.table.getValueAt(i, 1).toString());
-			int quantity = 0;
-			if (3 == tableModel.getColumnCount()) {
-				quantity = Integer.parseInt(this.table.getValueAt(i, 2).toString());
-			}
-			list.add(new AuctionItem(name, price, quantity));
+
+			list.add(new AuctionItem(name, price, 0/*invalid for SAA*/));
 		}
 		this.environment.context.setData(time_duration, min_increment, list);
 		System.out.println(this.environment.context.generateXml());
-		JSplitPane sp = (JSplitPane)(this.parentFrame.getContentPane());
-		JPanel auctionContentPanel = (JPanel) sp.getLeftComponent();
-		CardLayout contentPaneLayout = (CardLayout)auctionContentPanel.getLayout();
-		contentPaneLayout.show(auctionContentPanel, "AuctionPane");
+
+	}
+	
+	private void startCcaAuction() {
+
+		this.environment.context.setType("CCA");
 		
-		//Update AuctionListPanel
-		this.mainWindow.auctionPane.initAuctionList();
+		int time_duration = Integer.parseInt(this.spinner_roundDuration.getValue().toString());
+	
+		ArrayList<AuctionItem> list = new ArrayList<AuctionItem>();
+
+		for (int i=0; i<this.table.getRowCount(); i++) {
+			String name = this.table.getValueAt(i, 0).toString();
+			int quantity = Integer.parseInt(this.table.getValueAt(i, 1).toString());
 		
-		//enable Bidderlist auction start button 
-		BidderListPanel bidderListPanel = (BidderListPanel) sp.getRightComponent();
-		bidderListPanel.btnStart.setEnabled(true);
+			list.add(new AuctionItem(name, 0/*always from 0 for CCA*/, quantity));
+		}
+		this.environment.context.setData(time_duration, 0, list);
+		System.out.println(this.environment.context.generateXml());
+
+	}
+	
+	private void startUlaAuction() {
+		//todo: ULA auction preparation
 	}
 }
