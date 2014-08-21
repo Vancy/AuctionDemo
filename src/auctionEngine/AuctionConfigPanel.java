@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.awt.BorderLayout;
 
 
 
@@ -42,12 +43,15 @@ public class AuctionConfigPanel extends JPanel {
 	private static final long serialVersionUID = -6898719932567042813L;
 	private DefaultTableModel tableModel = new DefaultTableModel();
 	private JComboBox<String>  typeComboBox;
+	private JPanel panel_auctionParemeters;
 	private JSpinner spinner_minIncrement;
 	private JSpinner spinner_roundDuration;
 	private String auctionTypes[] = {"SAA", "CCA", "ULA"};
 	private JTextField textField_name;
 	private JTextField textField_price;
-	
+	private JLabel lblRoundDurationsec;
+	private JLabel lblMinimumIncrement;
+	private JPanel panel_minimumInrement;
 	private AuctionEnvironment environment;
 	private JFrame parentFrame;
 	private JTable table;
@@ -73,40 +77,42 @@ public class AuctionConfigPanel extends JPanel {
 		panel_auctionType.add(lblAuctionType);
 		
 		typeComboBox = new JComboBox<String>();
-		typeComboBox.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-		 		initTable(e.getItem().toString());
-		 	}
-		 });
+
 		for (int i=0; i<auctionTypes.length; i++) {
 			typeComboBox.addItem(auctionTypes[i]);
 		}
 		panel_auctionType.add(typeComboBox);
 		
+		SpinnerModel sm_roundDuration = new SpinnerNumberModel(60, 0, Integer.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
+		
+		SpinnerModel sm_minIncrement = new SpinnerNumberModel(1, 0, Double.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
+		
+		panel_auctionParemeters = new JPanel();
+		panel_auctionParemeters.setBounds(51, 82, 415, 139);
+		add(panel_auctionParemeters);
+		panel_auctionParemeters.setLayout(new GridLayout(0, 1, 0, 0));
+		
 		JPanel panel_roundDuration = new JPanel();
-		panel_roundDuration.setBounds(51, 90, 415, 40);
-		add(panel_roundDuration);
+		panel_auctionParemeters.add(panel_roundDuration);
 		panel_roundDuration.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		JLabel lblRoundDurationsec = new JLabel("Round Duration (sec):");
+		lblRoundDurationsec = new JLabel("Round Duration (sec):");
 		lblRoundDurationsec.setFont(new Font("Dialog", Font.BOLD, 17));
 		panel_roundDuration.add(lblRoundDurationsec);
-		
-		SpinnerModel sm = new SpinnerNumberModel(60, 0, Integer.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
-		spinner_roundDuration = new JSpinner(sm); 
+		spinner_roundDuration = new JSpinner(sm_roundDuration); 
 		panel_roundDuration.add(spinner_roundDuration);
 		
-		JPanel panel_minimumInrement = new JPanel();
-		panel_minimumInrement.setBounds(51, 157, 415, 40);
-		add(panel_minimumInrement);
+		JLabel label = new JLabel("");
+		panel_auctionParemeters.add(label);
+		
+		panel_minimumInrement = new JPanel();
+		panel_auctionParemeters.add(panel_minimumInrement);
 		panel_minimumInrement.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JLabel lblMinimumIncrement = new JLabel("Minimum Increment:");
+		lblMinimumIncrement = new JLabel("Minimum Increment:");
 		lblMinimumIncrement.setFont(new Font("Dialog", Font.BOLD, 17));
 		panel_minimumInrement.add(lblMinimumIncrement);
-		
-		sm = new SpinnerNumberModel(1, 0, Double.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
-		spinner_minIncrement = new JSpinner(sm);
+		spinner_minIncrement = new JSpinner(sm_minIncrement);
 		panel_minimumInrement.add(spinner_minIncrement);
 		
 		JPanel panel_auctionItems = new JPanel();
@@ -155,7 +161,7 @@ public class AuctionConfigPanel extends JPanel {
 				
 				JButton btnAdd = new JButton("Add");
 				btnAdd.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
+					public void actionPerformed(ActionEvent e){
                 String[] rowValues = {textField_name.getText(),textField_price.getText()};
                 tableModel.addRow(rowValues);  
                 int rowCount = table.getRowCount() + 1;   
@@ -190,9 +196,9 @@ public class AuctionConfigPanel extends JPanel {
         });
 		panel_2.add(btnAlter);
 		
-		JPanel panel__quit = new JPanel();
-		panel__quit.setBounds(51, 463, 415, 40);
-		add(panel__quit);
+		JPanel panel_quit = new JPanel();
+		panel_quit.setBounds(51, 463, 415, 40);
+		add(panel_quit);
 		
 		JButton btnConfirm = new JButton("Confirm");
 		btnConfirm.addActionListener(new ActionListener(){
@@ -201,13 +207,40 @@ public class AuctionConfigPanel extends JPanel {
                 
             }
         });
-		panel__quit.add(btnConfirm);
+		panel_quit.add(btnConfirm);
 		
 		JButton btnQuit = new JButton("Quit");
-		panel__quit.add(btnQuit);
-
+		panel_quit.add(btnQuit);
+		
+		/*
+		 * This listener must put at the end of Constuctor, after
+		 * all widgets initilized
+		 */
+		typeComboBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				/*
+				 * When detecting comboBox label changes,
+				 * repaint the AuctionItemTable,
+				 * Modify Parameter Panel
+				 */
+				changeParameterPanel(e.getItem().toString());
+		 		initTable(e.getItem().toString());
+		 	}
+		 });
+		initTable("SAA");
 	}
 	
+	private void changeParameterPanel(String auctionType) {
+		if (auctionType.equals("SAA")) {
+			this.lblRoundDurationsec.setText("Round Duration:(s)");
+			this.spinner_roundDuration.setValue(60);
+			this.panel_minimumInrement.setVisible(true);
+		} else if (auctionType.equals("CCA")) {
+			this.lblRoundDurationsec.setText("Round Tick:(ms)");
+			this.spinner_roundDuration.setValue(2000);
+			this.panel_minimumInrement.setVisible(false);
+		}
+	}
 	private void initTable(String auctionType) {
 		System.err.println(auctionType);
 		if (auctionType.equals("SAA")) {
@@ -240,7 +273,7 @@ public class AuctionConfigPanel extends JPanel {
 	
 	private void startAuction() {
 		String auctionType = this.typeComboBox.getSelectedItem().toString();
-		
+
 		if (auctionType.equals("SAA")) {
 			startSaaAuction();
 		} else if (auctionType.equals("CCA")) {
@@ -268,7 +301,7 @@ public class AuctionConfigPanel extends JPanel {
 		
 		int time_duration = Integer.parseInt(this.spinner_roundDuration.getValue().toString());
 		float min_increment = Float.parseFloat(this.spinner_minIncrement.getValue().toString());
-	
+
 		ArrayList<AuctionItem> list = new ArrayList<AuctionItem>();
 
 		for (int i=0; i<this.table.getRowCount(); i++) {
