@@ -49,7 +49,38 @@ public class AuctionListPanel extends JPanel {
 	}
 	
 	protected void updateAuctionList() {
+		switch (this.environment.context.getType()) {
+		case SAA:
+			updateSaaAuctionList();
+			break;
+		case CCA:
+			updateCcaAuctionList();
+			break;
+		case ULA:
+			updateUlaAuctionList();
+			break;
+		default:
+			break;
+		}
+	}
 	
+	private void initTableModel() {
+		switch (this.environment.context.getType()) {
+		case SAA:
+			initSaaTableModel();
+			break;
+		case CCA:
+			initCcaTableModel();
+			break;
+		case ULA:
+			initUlaTableModel();
+			break;
+		default:
+			break;
+		}
+	}
+	
+	private void updateSaaAuctionList() {	
 		if (this.environment.context.bidsProcessingFinished) {
 			Vector<String> newRow = new Vector<String>(); 
 			newRow.add(Integer.toString((this.environment.context.getRound()-1)));
@@ -59,11 +90,24 @@ public class AuctionListPanel extends JPanel {
 			}
 			tableModel.addRow(newRow);
 		}
-
 	}
 	
-	private void initTableModel() {
-		
+	private void updateCcaAuctionList() {
+		if (this.environment.context.bidsProcessingFinished) {
+			Vector<String> newRow = new Vector<String>(); 
+			newRow.add(Double.toString(this.environment.context.getPriceTick()));
+			for (AuctionItem item: this.environment.context.getItemList()) {
+				int require = item.getRequiredQuantity();
+				newRow.add(String.valueOf(require));
+			}
+			tableModel.addRow(newRow);
+		}
+	}
+	
+	private void updateUlaAuctionList() {	
+	}
+	
+	private void initSaaTableModel() {
 		tableModel  = new DefaultTableModel();
 
 		tableModel.addColumn("Round");
@@ -80,6 +124,22 @@ public class AuctionListPanel extends JPanel {
 		}
 		tableModel.addRow(firstRow);
 		tableModel.fireTableDataChanged();
+	}
+	
+	private void initCcaTableModel() {
+		tableModel  = new DefaultTableModel();
+
+		tableModel.addColumn("Price");
+	
+		for (AuctionItem item: this.environment.context.getItemList()) {
+			String itemName = item.getName();
+			String quantity = "(" + item.getQuantity() + ")";
+			tableModel.addColumn(itemName+quantity);
+		}
+		tableModel.fireTableDataChanged();
+	}
+	
+	private void initUlaTableModel() {
 		
 	}
 	

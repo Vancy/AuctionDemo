@@ -234,11 +234,11 @@ public class AuctionConfigPanel extends JPanel {
 		if (auctionType.equals("SAA")) {
 			this.lblRoundDurationsec.setText("Round Duration:(s)");
 			this.spinner_roundDuration.setValue(60);
-			this.panel_minimumInrement.setVisible(true);
+
 		} else if (auctionType.equals("CCA")) {
 			this.lblRoundDurationsec.setText("Round Tick:(ms)");
 			this.spinner_roundDuration.setValue(2000);
-			this.panel_minimumInrement.setVisible(false);
+
 		}
 	}
 	private void initTable(String auctionType) {
@@ -320,7 +320,9 @@ public class AuctionConfigPanel extends JPanel {
 		this.environment.context.setType("CCA");
 		
 		int time_duration = Integer.parseInt(this.spinner_roundDuration.getValue().toString());
-	
+		time_duration = time_duration / 1000;
+		float min_increment = Float.parseFloat(this.spinner_minIncrement.getValue().toString());
+		
 		ArrayList<AuctionItem> list = new ArrayList<AuctionItem>();
 
 		for (int i=0; i<this.table.getRowCount(); i++) {
@@ -329,7 +331,7 @@ public class AuctionConfigPanel extends JPanel {
 		
 			list.add(new AuctionItem(name, 0/*always from 0 for CCA*/, quantity));
 		}
-		this.environment.context.setData(time_duration, 0, list);
+		this.environment.context.setData(time_duration, min_increment, list);
 		System.out.println(this.environment.context.generateXml());
 
 	}

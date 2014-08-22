@@ -6,8 +6,9 @@ public class AuctionItem implements Comparable<AuctionItem> {
 	private double startingPrice;
 	private double price;
 	
-	//this parameter is used in CCA auction, SAA auction needn't use this value
-	private int quantity;
+	//this two parameters are used in CCA auction, SAA auction needn't use this values
+	final private int quantity;
+	private int quantity_required;
 
 	private Bidder owner;
 	
@@ -18,6 +19,7 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		this.name = "";
 		this.startingPrice = 0;
 		this.quantity = 0;
+		this.quantity_required = 0;
 		this.owner = null;
 	}
 	
@@ -31,6 +33,9 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		if (null != item.owner) {
 			this.owner = new Bidder(item.owner);
 		}
+		
+		this.quantity = item.quantity;
+		this.quantity_required = item.quantity_required;
 	}
 	
 	public AuctionItem(String n, double sp) {
@@ -39,6 +44,9 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		this.startingPrice = sp;
 		this.price = sp;
 		this.owner = null;
+		
+		this.quantity = 0;
+		this.quantity_required = 0;
 	}
 	
 	public AuctionItem(int id, String n, double sp) {
@@ -47,6 +55,9 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		this.startingPrice = sp;
 		this.price = sp;
 		this.owner = null;
+		
+		this.quantity = 0;
+		this.quantity_required = 0;
 	}
 	
 	/*
@@ -56,7 +67,9 @@ public class AuctionItem implements Comparable<AuctionItem> {
 	public AuctionItem(int id, String n, int require) {
 		this.ID = id;
 		this.name = n;
-		this.quantity = require;
+		// This is invalid for bidders
+		this.quantity = 0;
+		this.quantity_required = require;
 		this.owner = null;
 	}
 	
@@ -74,7 +87,7 @@ public class AuctionItem implements Comparable<AuctionItem> {
 	}
 	
 	protected double getStartingPrice() {
-		return this.startingPrice ;
+		return this.startingPrice;
 	}
 	
 	@Override
@@ -126,6 +139,14 @@ public class AuctionItem implements Comparable<AuctionItem> {
 	
 	public int getQuantity() {
 		return this.quantity;
+	}
+	
+	public int getRequiredQuantity() {
+		return this.quantity_required;
+	}
+	
+	public void setRequiredQuantity(int quantity) {
+		this.quantity_required = quantity;
 	}
 	public int getID() {
 		return this.ID;

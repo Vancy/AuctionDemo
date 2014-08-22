@@ -1,6 +1,7 @@
 package dataRepresentation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Timer;
 
 
@@ -131,7 +132,7 @@ public class Auctioneer extends Thread{
 		for (Bid bid: this.requestedBids) {
 			for (AuctionItem bidderItem: bid.getItemList()) {
 				double originalPrice = fetchItemPrice(bidderItem.getID());
-				System.out.println("original price:"+originalPrice+"bidder"+bid.getBidder().getName()+"price:"+bidderItem.getPrice());
+//				System.out.println("original price:"+originalPrice+"bidder"+bid.getBidder().getName()+"price:"+bidderItem.getPrice());
 				if (originalPrice < bidderItem.getPrice()) {
 					putItemPrice(bid.getBidder(), bidderItem.getID(), bidderItem.getPrice());
 				}
@@ -140,6 +141,20 @@ public class Auctioneer extends Thread{
 	}
 	
 	private void processCCABids() {
+		int itemNumber = this.environment.context.getItemList().size();
+		int[] thisRoundRequirment = new int[itemNumber];
+		for (int i=0; i<itemNumber; i++) {
+			thisRoundRequirment[i] = 0;
+		}
+		for (Bid bid: this.requestedBids) {
+			for (AuctionItem bidderItem: bid.getItemList()) {
+				thisRoundRequirment[bidderItem.getID()] += bidderItem.getRequiredQuantity();
+				System.out.println("Bidder"+ bid.getBidder().getName()+ " wants itemID:" + bidderItem.getID() + " require " + bidderItem.getRequiredQuantity());
+			}
+		}
+		for (AuctionItem item: this.environment.context.getItemList()) {
+			item.setRequiredQuantity(thisRoundRequirment[item.getID()]);
+		}
 		
 	}
 	private void updateNextRoundContext() {
@@ -153,6 +168,12 @@ public class Auctioneer extends Thread{
 		
 		this.environment.context.incrementRound();
 		this.environment.context.roundTimeElapse = this.environment.context.getDurationTime();
+		
+		//set priceTick for CCA Auction
+		double priceTick = this.environment.context.getPriceTick() + this.environment.context.getMinIncrement();
+		System.out.println("DDDincrement:"+ this.environment.context.getMinIncrement());
+		System.out.println("DPPPD:PRICETICK:"+ priceTick);
+		this.environment.context.setPriceTick(priceTick);
 		
 		//set flag true, bidservlet can send response
 		this.setNextRoundReady();
@@ -190,6 +211,14 @@ public class Auctioneer extends Thread{
 			if (itemID == item.getID()) {
 				item.setPrice(price);
 				item.setOwner(bidder);
+			}
+		}
+	}
+	
+	private void setItemRequired(int itemID, int required) {
+		for (AuctionItem item: this.environment.context.getItemList()) {
+			if (itemID == item.getID()) {
+				item.setRequiredQuantity(required);
 			}
 		}
 	}

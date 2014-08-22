@@ -23,6 +23,8 @@ public class AuctionContext {
 	private int duration_Sec;
 	private ArrayList<AuctionItem> itemList;
 	private double minIncreament;
+	//priceTick is used in CCA auction, keep track of current price for all items
+	private double priceTick = 0;
 	private boolean finalRound;
 	
 	
@@ -126,6 +128,14 @@ public class AuctionContext {
 	
 	public void incrementRound() {
 		round++;
+	}
+	
+	public double getPriceTick() {
+		return this.priceTick;
+	}
+	
+	public void setPriceTick(double price) {
+		this.priceTick = price;
 	}
 	
 	public AuctionItem searchItem(int id) {

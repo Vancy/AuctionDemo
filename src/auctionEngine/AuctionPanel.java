@@ -48,7 +48,7 @@ public class AuctionPanel extends JPanel {
 		panel_All.add(panel_Display);
 		panel_Display.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		lblAuctionType = new JLabel("SAA auction");
+		lblAuctionType = new JLabel("Auction");
 		panel_Display.add(lblAuctionType);
 		
 		lblRound = new JLabel("Round:");
@@ -115,6 +115,7 @@ public class AuctionPanel extends JPanel {
 	}
 	
 	private void updateAuctionInfo() {
+		this.lblAuctionType.setText(this.environment.context.getType() + " auction");
 		/*if current time remain is bigger than 0, minus it and display
 		 * Else, direcly display 0, until Auctioneer class refresh it
 		 */
