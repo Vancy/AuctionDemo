@@ -125,7 +125,7 @@ public class Agent extends Bidder {
 		List<List<AuctionItem>> optimalSetsToBidOn = new ArrayList<List<AuctionItem>>();
 		List<AuctionItem> finalSetToBidOn;
 
-		double maxSurplus = Double.NEGATIVE_INFINITY;
+		double maxSurplus = 0;
 		double currentSurplus;
 
 		// calculate surpluses for all combinations of items.
@@ -155,25 +155,36 @@ public class Agent extends Bidder {
 				indexOfLargestSet = i;
 			}
 		}
-		finalSetToBidOn = optimalSetsToBidOn.get(indexOfLargestSet);
 
-		for (AuctionItem item : ac.getItemList()) {
-			if (finalSetToBidOn.contains(item)) {
-				if (this.getID() != item.getOwner().getID()) {
-					// losing bid on desired item. Outbid it.
-					nextRoundBehaviour.put(new AuctionItem(item),
-							item.getPrice() + ac.getMinIncrement());
-				} else {
-					// agent is winning the bid for the item - does not need to
-					// bid again
-					nextRoundBehaviour.put(new AuctionItem(item), 0.0);
-				}
-			} else {
+		if (optimalSetsToBidOn.isEmpty()) {
+			for (AuctionItem item : ac.getItemList()) {
 				nextRoundBehaviour.put(new AuctionItem(item), 0.0);
 			}
-		}
+			return nextRoundBehaviour;
+		} else {
 
-		return nextRoundBehaviour;
+			finalSetToBidOn = optimalSetsToBidOn.get(indexOfLargestSet);
+
+			for (AuctionItem item : ac.getItemList()) {
+				if (finalSetToBidOn.contains(item)) {
+					if (this.getID() != item.getOwner().getID()) {
+						// losing bid on desired item. Outbid it.
+						nextRoundBehaviour.put(new AuctionItem(item),
+								item.getPrice() + ac.getMinIncrement());
+					} else {
+						// agent is winning the bid for the item - does not need
+						// to
+						// bid again
+						nextRoundBehaviour.put(new AuctionItem(item), 0.0);
+					}
+				} else {
+					nextRoundBehaviour.put(new AuctionItem(item), 0.0);
+				}
+			}
+
+			return nextRoundBehaviour;
+
+		}
 	}
 
 }
