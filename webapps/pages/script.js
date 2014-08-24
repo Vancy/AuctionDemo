@@ -1,6 +1,6 @@
 /**
  *
- * Date: 7th Aug  (+1 Zurich OTC)
+ * Date: 24th Aug  (+1 Zurich OTC)
  * Author: youyix
  *
  *
@@ -179,7 +179,7 @@ function saaUpdate(data) {
 
     // No "min_inc" in final round.
     var $temp_min_inc = "Min Increament {0}".f($minIncreament);
-	$("#round_infomation").html("Round {0}  <b>{1}</b>  <i>{2}</i>"
+	$("#round_infomation").html("SAA Round {0}  <b>{1}</b>  <i>{2}</i>"
 		.f($roundNumber, $isFinal===true ? "<b class='alert'>Final</b>" : "", $isFinal===false ? $temp_min_inc : ""));
 
     if ( ! $isFinal ) {
@@ -349,6 +349,8 @@ function ccaUpdate(data) {
         data = $.parseXML(data);
     }
 
+    console.log("    @Responsed Data\n    \n", data);
+
     var $context = ($(data)).find("auction_context");
     var $roundNumber = $context.children("round").attr("value");
     var $isFinal = $context.children("round").attr("final");  
@@ -357,7 +359,7 @@ function ccaUpdate(data) {
     changeStateTo( $isFinal ? STATE.FINAL : STATE.BIDDING );
     console.log("Round {0}  Final? {1}".f($roundNumber, $isFinal));
 
-    $("#round_infomation").html("Round {0}  <b>{1}</b>"
+    $("#round_infomation").html("CCA Round {0}  <b>{1}</b>"
         .f($roundNumber, $isFinal ? "<b class='alert'>Final</b>" : ""));
     
     if ( ! $isFinal ) {
@@ -369,11 +371,7 @@ function ccaUpdate(data) {
     $("#bid_table").find("tbody").find("tr").remove();
     $("#bid_table").find("thead").find("tr").remove();
 
-    if ( $isFinal ) {
-        $("#bid_table").find("thead").append("<tr><th>Item</th><th>Price</th><th>Amout</th><th>Owner(s)</th></tr>");
-    } else {
-        $("#bid_table").find("thead").append("<tr><th>Item</th><th>Price</th><th>Amout</th><th>Your amout</th><th class='th_wide'>Your price</th></tr>");
-    }  
+    $("#bid_table").find("thead").append("<tr><th>Item</th><th>Price</th><th>Amout</th><th>Your amount</th><th class='th_wide'>Your price</th></tr>");
 
     $context.find("item").each(function(i) {
         // console.log(this);
@@ -381,32 +379,34 @@ function ccaUpdate(data) {
         var $itemName = $(this).attr("name");
         var $price = $(this).attr("price");
         var $quantityAmount = $(this).attr("quantity");
+        var $isThisItemFinal = $(this).attr("final");
 
-        console.log($itemId, $itemName, $price, $quantityAmount);
+        console.log($itemId, $itemName, $price, $quantityAmount, $isThisItemFinal);
 
         var $_id = $("<td class='invisible'></td>").text($itemId);
         var $_name = $("<td></td>").text($itemName);
         var $_price = $("<td></td>").text($price);
         var $_amount = $("<td></td>").text($quantityAmount);
+        var $_yamount;
         var $_yprice = $("<td id='cca_price{0}'></td>".f($itemId)).text("");
 
-        // opt 1      
-        var $str = "";
-        $(this).find("owner").each(function(i) {
-            $str = $str + "<p>" + $(this).attr("name") + "(" + $(this).attr("quantity") + ")" + "</p>";
-        });
-        var $_owners = $("<td></td>").html($str);
-        // opt 2
-        var $_yamount = $("<td></td>").append($("<input type='text' id='amount{0}' class='input_amount' value='0'></input>".f($itemId)));
-        $_yamount.append($("<p id=amount{0}_tips class='input_amount_tips'></p>".f($itemId)));
-
-        var $item;
-        if ( $isFinal ) {
-            $item = $("<tr></tr>").append($_id, $_name, $_price, $_amount, $_owners);
+        // opt 1     
+        if ( $isThisItemFinal ) {
+            var $str = "0";
+            $(this).find("owner").each(function(i) {
+                if ( $(this).attr("name") === getName() ) {
+                    str = $(this).attr("quantity");     
+                }
+            });
+            $_yamount = $("<td></td>").html($str);
+            $_yprice = $("<td></td>").html( S2N($str) * S2N($price) );
+            
         } else {
-            $item = $("<tr></tr>").append($_id, $_name, $_price, $_amount, $_yamount, $_yprice);
+            $_yamount = $("<td></td>").append($("<input type='text' id='amount{0}' class='input_amount' value='0'></input>".f($itemId)));
+            $_yamount.append($("<p id=amount{0}_tips class='input_amount_tips'></p>".f($itemId)));
+            
         }
-        
+        var $item = $("<tr></tr>").append($_id, $_name, $_price, $_amount, $_yamount, $_yprice);
         $("#bid_table").find("tbody").append($item);  
     }); 
 
