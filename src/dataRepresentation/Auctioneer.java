@@ -67,12 +67,7 @@ public class Auctioneer extends Thread{
 			
 			while(this.environment.context.roundTimeElapse > 0) {
 				// Wait until current round time up, or all bidder send their bid
-				try {
-					Thread.currentThread();
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				deliberateDelay(1);
 				
 				synchronized(this.requestedBids) {
 					if (this.requestedBids.size() == this.environment.bidderList.getList().size()) {
@@ -82,7 +77,7 @@ public class Auctioneer extends Thread{
 			}
 			
 			// Wait two more seconds, to wait all defaults bids
-			deliberateDelay(2);
+			deliberateDelay(1);
 			
 			System.out.println("Processing Bids...");
 			processBids();
@@ -141,11 +136,14 @@ public class Auctioneer extends Thread{
 	}
 	
 	private void processCCABids() {
+		
+		//creat a temporary array to story the total number all bidders require each round
 		int itemNumber = this.environment.context.getItemList().size();
 		int[] thisRoundRequirment = new int[itemNumber];
 		for (int i=0; i<itemNumber; i++) {
 			thisRoundRequirment[i] = 0;
 		}
+		//collect requirment of each item
 		for (Bid bid: this.requestedBids) {
 			for (AuctionItem bidderItem: bid.getItemList()) {
 				thisRoundRequirment[bidderItem.getID()] += bidderItem.getRequiredQuantity();
@@ -154,6 +152,9 @@ public class Auctioneer extends Thread{
 		}
 		for (AuctionItem item: this.environment.context.getItemList()) {
 			item.setRequiredQuantity(thisRoundRequirment[item.getID()]);
+//			if (item.getRequiredQuantity() <= item.getQuantity()) {
+//				item.biddingFinised = true; //set this item is finish bidding
+//			}
 		}
 		
 	}
@@ -171,8 +172,6 @@ public class Auctioneer extends Thread{
 		
 		//set priceTick for CCA Auction
 		double priceTick = this.environment.context.getPriceTick() + this.environment.context.getMinIncrement();
-		System.out.println("DDDincrement:"+ this.environment.context.getMinIncrement());
-		System.out.println("DPPPD:PRICETICK:"+ priceTick);
 		this.environment.context.setPriceTick(priceTick);
 		
 		//set flag true, bidservlet can send response

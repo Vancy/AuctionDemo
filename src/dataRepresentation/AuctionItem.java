@@ -6,9 +6,10 @@ public class AuctionItem implements Comparable<AuctionItem> {
 	private double startingPrice;
 	private double price;
 	
-	//this two parameters are used in CCA auction, SAA auction needn't use this values
+	//this three parameters are used in CCA auction, SAA auction needn't use this values
 	final private int quantity;
 	private int quantity_required;
+	public boolean biddingFinised = false;
 
 	private Bidder owner;
 	
@@ -144,7 +145,7 @@ public class AuctionItem implements Comparable<AuctionItem> {
 	public int getRequiredQuantity() {
 		return this.quantity_required;
 	}
-	
+		
 	public void setRequiredQuantity(int quantity) {
 		this.quantity_required = quantity;
 	}

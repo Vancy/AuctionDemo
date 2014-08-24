@@ -98,7 +98,12 @@ public class AuctionListPanel extends JPanel {
 			newRow.add(Double.toString(this.environment.context.getPriceTick()));
 			for (AuctionItem item: this.environment.context.getItemList()) {
 				int require = item.getRequiredQuantity();
-				newRow.add(String.valueOf(require));
+//				if (item.biddingFinised) {
+//					newRow.add("Finish"); //if finished, won't print the number
+//				} else {
+					newRow.add(String.valueOf(require));
+//				}
+				
 			}
 			tableModel.addRow(newRow);
 		}
