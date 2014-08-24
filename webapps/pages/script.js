@@ -1,7 +1,6 @@
 /**
  *
  * Date: 24th Aug  (+1 Zurich OTC)
- * Author: youyix
  *
  *
 **/
@@ -9,13 +8,14 @@
 
 
 /***
-    // stage
+    // All states.
 
-    0_READY: ready to login (net yet)
+    0_READY: ready to login (not yet)
     1_LOGINING: logining, lockscreen and disable keyboard
     2_BIDDING: in bid, but not final round
     3_SUBMITTING: submitting a bid
     4_FINAL: final round
+    *_ERROR: login_error and server_error
 */
 var STATE = {
     READY: "Ready",
@@ -585,36 +585,6 @@ function submitAuction() {
 
     changeStateTo(STATE.SUBMITTING);
     storeAllValue();
-    // getBid().lockScreen();
-
-    // $.ajax({
-    //     url: '/WEB-INF/bid.xml', 
-    //     // processData: false,
-    //     // async: true,
-    //     // contentType: "text/xml",
-    //     dataType: "xml",
-    //     type: "POST",  
-    //     data: $xmlData, 
-    //     success: function(response) {
-    //         console.log("success");
-    //         getBid().unlockScreen();
-    //         getBid().update(response);
-    //     },
-    //     error: function(xhr, status, error) {
-    //         console.log("FAIL TO GET RESPONESE FROM SERVER");
-    //         console.log(status, xhr.responseText);
-    //         console.log("xhr", xhr);
-    //         console.log("error", error);
-    //         getBid().unlockScreen();
-    //         updateError(xhr);
-    //     },
-    //     complete: function(response, status) {
-    //         console.log("ajax finished", status);
-    //     }
-    // });
-
-    ///  
-    // Store the value(price/amount) of current round, which will be the default value of next round.
     
 
     $.post('/WEB-INF/bid.xml', $xmlData)
