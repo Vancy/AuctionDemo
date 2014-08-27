@@ -237,7 +237,7 @@ public class AuctionConfigPanel extends JPanel {
 
 		} else if (auctionType.equals("CCA")) {
 			this.lblRoundDurationsec.setText("Round Tick:(ms)");
-			this.spinner_roundDuration.setValue(2000);
+			this.spinner_roundDuration.setValue(10000);
 
 		}
 	}
