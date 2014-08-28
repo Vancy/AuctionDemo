@@ -3,6 +3,8 @@ package dataRepresentation;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -12,6 +14,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -206,6 +209,19 @@ public class AuctionContext {
 	    		ownerName = item.getOwner().getName();
 	    	}
 	    	child.setAttribute("owner", ownerName);  
+	    	
+	    	//this attribute is used for CCA Auction
+	    	child.setAttribute("final", item.biddingFinised?"yes":"no");
+	    	//this owner group is used for CCA Auction
+	    	HashMap<String, Integer> owners = item.getOwners();
+	    	if (item.biddingFinised) {
+	    		for (String owner: owners.keySet()) {
+	    			Element ownerNode = doc.createElement("owner");
+	    			ownerNode.setAttribute("name", owner);
+	    			ownerNode.setAttribute("quantity", Integer.toString(owners.get(owner)));
+	    			child.appendChild(ownerNode);
+	    		}
+	    	}
 	    	root.appendChild(child);  
 	    }  
 	    /* 

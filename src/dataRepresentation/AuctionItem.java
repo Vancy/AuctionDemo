@@ -165,4 +165,8 @@ public class AuctionItem implements Comparable<AuctionItem> {
 	public void placeOwner(String name, int quantity) {
 		this.owners.put(name, quantity);
 	}
+	//for CCA auction to use
+	public HashMap<String, Integer> getOwners() {
+		return this.owners;
+	}
 }

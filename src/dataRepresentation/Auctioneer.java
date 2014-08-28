@@ -166,7 +166,7 @@ public class Auctioneer extends Thread{
 		}
 		for (AuctionItem item: this.environment.context.getItemList()) {
 			item.setRequiredQuantity(thisRoundRequirment[item.getID()]);
-			if (item.getRequiredQuantity() >= item.getQuantity()) {
+			if (item.getRequiredQuantity() <= item.getQuantity()) {
 				//set this item is finish bidding
 				item.biddingFinised = true; 
 			}
