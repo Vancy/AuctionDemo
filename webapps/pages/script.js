@@ -60,6 +60,8 @@ var CCA = {
     setAll2Valid: ccaSetAll2Valid
 }
 
+var NOINPUT = 99999;
+
 function init() {
     SAA = $.extend(true, SAA, BID);
     CCA = $.extend(true, CCA, BID);
@@ -461,6 +463,10 @@ function ccaCollectData() {
         var $id = $(this).children("td:eq(0)").text();
         var $name = $(this).children("td:eq(1)").text();
         var $yamount = $("#amount{0}".f($id)).val();
+        if ( S2N($yamount) <= 0 ) {
+            $yamount = NOINPUT;
+        }
+
 
         $items = $items + "<item id='{0}' name='{1}' quantity_require='{2}' />".f($id, $name, $yamount);
     });
@@ -490,9 +496,10 @@ function ccaValidateInput(input) {
         $("#amount{0}_tips".f($id)).hide();
 
         if ( isEmpty($yamount) ) {
-            $("#amount{0}".f($id)).val('0');
-        }
+            $("#amount{0}".f($id)).val(NOINPUT);
+        } 
 
+        
         if ( S2N($yamount) > S2N($amount) ) {
 
             $("#amount{0}_tips".f($id)).html("You cannot have more than {0}.".f($amount));
@@ -695,6 +702,7 @@ function restoreAllValueOfLastRound() {
     if ( $type === "SAA" ) {
         $values = $(".input_price");
     } else if ( $type === "CCA" ) {
+        
         $values = $(".input_amount");
     } else {
         console.log("    !BUG");
