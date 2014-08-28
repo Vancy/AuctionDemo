@@ -23,7 +23,6 @@ public class WebServer extends Thread{
 		server = new Server(threadPool);
 		ServerConnector connector = new ServerConnector(server);
 		connector.setPort(port);
-		System.out.println("Server Access QueueSize:" +connector.getAcceptQueueSize());
 		server.setConnectors(new Connector[] {connector});
 		
 		auctionEnvironment = ae;
