@@ -380,8 +380,9 @@ function ccaUpdate(data) {
         var $price = $(this).attr("price");
         var $quantityAmount = $(this).attr("quantity");
         var $isThisItemFinal = $(this).attr("final");
+        $isThisItemFinal = ( $isThisItemFinal === "yes" ) ? true : false;
 
-        console.log($itemId, $itemName, $price, $quantityAmount, $isThisItemFinal);
+        console.log("ITEM", $itemId, $itemName, $price, $quantityAmount, $isThisItemFinal);
 
         var $_id = $("<td class='invisible'></td>").text($itemId);
         var $_name = $("<td></td>").text($itemName);
