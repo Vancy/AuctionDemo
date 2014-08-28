@@ -4,11 +4,14 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -42,6 +45,7 @@ public class AuctionListPanel extends JPanel {
 		initTableModel(); //initialize table model to fill data
 		
 		table = new JTable(tableModel); //Buid up table based on table model
+		table.setEnabled(false);
 		table.setDefaultRenderer(Object.class, new PriceOwnerCellRenderer(this.environment));
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); 
 		scrollPane.setViewportView(table);
@@ -52,9 +56,13 @@ public class AuctionListPanel extends JPanel {
 		switch (this.environment.context.getType()) {
 		case SAA:
 			updateSaaAuctionList();
+			//keep table scroll down to the last row
+			table.changeSelection(table.getRowCount() - 1, 0, false, false);
 			break;
 		case CCA:
 			updateCcaAuctionList();
+			//keep table scroll down to the last row
+			table.changeSelection(table.getRowCount() - 1, 0, false, false);
 			break;
 		case ULA:
 			updateUlaAuctionList();
