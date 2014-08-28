@@ -1,12 +1,3 @@
-/**
- *
- * Date: 24th Aug  (+1 Zurich OTC)
- *
- *
-**/
-
-
-
 /***
     // All states.
 
@@ -38,7 +29,7 @@ var BID = {
     submitAuction: submitAuction,
     isTimeUp: isTimeUp,
     storeAllValue: storeAllValue,
-    endAuction: endAuction
+    endAuction: endAuction,
 
 }
 
@@ -46,6 +37,7 @@ var BID = {
 var SAA = {
     update: saaUpdate,
     validateInput: saaValidateInput,
+    inputting: saaInputting,
     validateAllInput: saaValidateAllInput,
     setAll2Valid: saaSetAll2Valid,
     collectData: saaCollectData
@@ -55,6 +47,7 @@ var SAA = {
 var CCA = {
     update: ccaUpdate,
     validateInput: ccaValidateInput,
+    inputting: ccaInputting,
     collectData: ccaCollectData,
     validateAllInput: ccaValidateAllInput,
     setAll2Valid: ccaSetAll2Valid
@@ -241,19 +234,32 @@ function saaUpdate(data) {
 
     if ( ! $isFinal ) {
         $(".input_price").change(function() {
-            SAA.validateInput($(this));
+
+            console.log("    **** changed");
+            if ( isEmpty( $(this).val() ) ) {
+                $($(this)).val("0");
+            }
+            SAA.inputting(event, this);   
         });
-        $(".input_price").keypress(function( event ) {
+        $(".input_price").keyup(function( event ) {
+            console.log("    **** keypressing  which", event.which, isKBAllowed());
             if ( isKBAllowed() ) {
                 if ( event.which == 13 ) {
                     event.preventDefault();
                     $("#submit_auction").click();
+                } else if ( event.which != 9 ) {  // avoid checking tab 
+                    SAA.inputting(event, this);
                 }
             }
         });
     }
 	console.log("Finish paint");
 	$("#bid").show();
+}
+
+function saaInputting(event, that) {
+    SAA.validateInput($(that));
+    console.log("    @@@@ to:", $(that).val());
 }
 
 function saaCollectData() {
@@ -292,7 +298,6 @@ function saaValidateInput(input) {
     } else {
         if ( isEmpty($yprice) ) {
             $yprice = '0';
-            $("#price{0}".f($id)).val("0")
         }
 
         $("#price{0}_tips".f($id)).hide();
@@ -304,10 +309,6 @@ function saaValidateInput(input) {
     }
 
     return $valid;
-
-    function isEmpty(str) {
-        return $.trim(str) === ''; 
-    }
 
     function hasInvalidCharacters(str) {
         return str.search(/[^0-9]/) != -1 ;
@@ -332,7 +333,9 @@ function saaSetAll2Valid() {
     console.log("-- FUN: setAll2Valid");
     
     $(".input_price").each(function(i) {
-        $(this).val(0);
+        if ( SAA.validateInput($(this)) === false ) {
+            $(this).val(0);
+        }
     });
 }
 /** END OF SAA --------------------------------------------------------*/
@@ -398,9 +401,11 @@ function ccaUpdate(data) {
             var $str = "0";
             $(this).find("owner").each(function(i) {
                 if ( $(this).attr("name") === getName() ) {
-                    str = $(this).attr("quantity");     
+                    $str = $(this).attr("quantity"); 
+                    return;  
                 }
             });
+
             $_yamount = $("<td></td>").html($str);
             $_yprice = $("<td></td>").html( S2N($str) * S2N($price) );
             
@@ -422,35 +427,51 @@ function ccaUpdate(data) {
     });  
 
     if ( ! $isFinal ) {
-        $(".input_amount").change(function() {
-            if ( CCA.validateInput($(this)) ) {
-                console.log("@@@@ changed");
-                var $item = $(this).parents("tr");
-                var $id = $item.children("td:eq(0)").text();
-                var $amount = $item.children("td:eq(3)").text();
-                var $yamount = $("#amount{0}".f($id)).val();
-                var $price = $item.children("td:eq(2)").text();
-                var $yprice = S2N($yamount) * S2N($price);
-
-                console.log("---- ", $id, $price, $amount, $yamount,  $yprice);
-                if ( S2N($yamount) <= S2N($amount) ) {
-                    $("#cca_price{0}".f($id)).text($yprice);
-                    
-                }  
-            }
+        $(".input_amount").change(function(event) {
+                console.log("    **** changed");
+                if ( isEmpty( $(this).val() ) ) {
+                    $($(this)).val("0");
+                }
+                CCA.inputting(event, this);          
         });
 
-        $(".input_amount").keypress(function( event ) {
+        $(".input_amount").keyup(function(event) {
+            console.log("    **** keypressing  which", event.which, isKBAllowed());
             if ( isKBAllowed() ) {
                 if ( event.which == 13 ) {
                     event.preventDefault();
                     $("#submit_auction").click();
+                } else if ( event.which != 9 ) { // avoid checking tab 
+
+                    CCA.inputting(event, this);
                 }
             }
         });
     }
     console.log("Finish paint");
     $("#bid").show();
+}
+
+function ccaInputting(event, that) {
+
+    // console.log("    THIS TIME:", $(that).val(), $(that).val().length);
+    if ( CCA.validateInput($(that)) ) {
+        
+        var $item = $(that).parents("tr");
+        var $id = $item.children("td:eq(0)").text();
+        var $amount = $item.children("td:eq(3)").text();
+        // var $yamount = $("#amount{0}".f($id)).val();
+        var $yamount = $(that).val();
+        var $price = $item.children("td:eq(2)").text();
+        var $yprice = S2N($yamount) * S2N($price);
+
+        //console.log("---- ", $id, $price, $amount, $yamount,  $yprice);
+        console.log("    **** amount changed to:", $yamount);
+        if ( S2N($yamount) <= S2N($amount) ) {
+            $("#cca_price{0}".f($id)).text($yprice);
+            
+        } 
+    }
 }
 
 function ccaCollectData() {
@@ -466,7 +487,6 @@ function ccaCollectData() {
         if ( S2N($yamount) <= 0 ) {
             $yamount = NOINPUT;
         }
-
 
         $items = $items + "<item id='{0}' name='{1}' quantity_require='{2}' />".f($id, $name, $yamount);
     });
@@ -485,7 +505,7 @@ function ccaValidateInput(input) {
     var $amount = $item.children("td:eq(3)").text();
     var $yamount = $("#amount{0}".f($id)).val();
 
-    console.log("validateInput", $id, $name, $price, $yamount);
+    console.log("-- FUN: validateInput\n    ", $id, $name, $price, $yamount);
 
     if ( hasInvalidCharacters($yamount) ) {
         $("#amount{0}_tips".f($id)).text("Please enter a positive integer number.");
@@ -493,28 +513,23 @@ function ccaValidateInput(input) {
         $valid = false;
 
     } else {  
-        $("#amount{0}_tips".f($id)).hide();
+        $("#amount{0}_tips".f($id)).hide();   
 
         if ( isEmpty($yamount) ) {
-            $("#amount{0}".f($id)).val(NOINPUT);
-        } 
+            $yamount = "0";
+        }
 
-        
         if ( S2N($yamount) > S2N($amount) ) {
 
-            $("#amount{0}_tips".f($id)).html("You cannot have more than {0}.".f($amount));
+            $("#amount{0}_tips".f($id)).html("Please enter a number smaller than {0}".f($amount));
             $("#amount{0}_tips".f($id)).show();
-            // $valid = false;
         } 
     }
     return $valid;
 
-    function isEmpty(str) {
-        return $.trim(str) === ''; 
-    }
+    
 
     function hasInvalidCharacters(str) {
-        console.log("    type", $.type(str));
         return str.search(/[^0-9]/) != -1 ;
     }  
 }
@@ -537,7 +552,9 @@ function ccaSetAll2Valid() {
     console.log("ccaSetAll2Valid");
     
     $(".input_amount").each(function(i) {
-        $(this).val(0);
+        if ( CCA.validateInput($(this)) === false ) {
+            $(this).val(0);
+        }     
     });
 }
 
@@ -565,16 +582,18 @@ function setTimer(timeToCount) {
 }
 
 // Post xml to server
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 function submitAuction() {
     console.log("** FUN: SAAsubmitAuction");
     
 
     if ( ! getBid().validateAllInput() ) {
-        if ( getBid().isTimeUp() ) {
-            getBid().setAll2Valid();        
-        } else {
-            return;
-        }
+        // if ( getBid().isTimeUp() ) {
+                    
+        // } else {
+        //     return;
+        // }
+        getBid().setAll2Valid();
     }
 
 
@@ -836,6 +855,10 @@ function getIp() {
         }
     });
     return $ip;
+}
+
+function isEmpty(str) {
+    return $.trim(str) === ''; 
 }
 
 function getBid() {
