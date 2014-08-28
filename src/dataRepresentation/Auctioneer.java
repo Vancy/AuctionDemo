@@ -49,10 +49,8 @@ public class Auctioneer extends Thread{
 	@Override
 	public void run() {
 		while (true) {
-			/**************deliberate delay**************/
+			/**************Next Round Start**************/
 			System.err.println("******Round " + this.environment.context.getRound() + " Start*****Min increment " + this.environment.context.getMinIncrement() + "*****");
-			deliberateDelay(1);
-			/**************deliberate delay**************/
 			
 			//Collect Agent's bid
 			for (Bidder bidder: this.environment.bidderList.getList()) {
@@ -68,7 +66,7 @@ public class Auctioneer extends Thread{
 			
 			while(this.environment.context.roundTimeElapse > 0) {
 				// Wait until current round time up, or all bidder send their bid
-				deliberateDelay(1);
+				deliberateDelay(0.2);
 				
 				synchronized(this.requestedBids) {
 					if (this.requestedBids.size() == this.environment.bidderList.getList().size()) {
@@ -77,7 +75,7 @@ public class Auctioneer extends Thread{
 				}
 			}
 			
-			// Wait two more seconds, to wait all defaults bids
+			// Wait one more seconds, to wait all defaults bids
 			deliberateDelay(1);
 			
 			System.out.println("Processing Bids...");
@@ -186,7 +184,8 @@ public class Auctioneer extends Thread{
 		this.environment.context.roundTimeElapse = this.environment.context.getDurationTime();
 		
 		//some update for CCA Auction
-		updateNextRoundPriceForCCA();
+		if (this.environment.context.getType() == AuctionContext.AuctionType.CCA) 
+			updateNextRoundPriceForCCA();
 		
 		//set flag true, bidservlet can send response
 		this.setNextRoundReady();

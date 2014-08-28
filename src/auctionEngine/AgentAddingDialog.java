@@ -137,55 +137,56 @@ public class AgentAddingDialog extends JDialog {
 		return doc;
 	}
 	
-	private Agent createAgent(Document doc) {
+	private void createAgent(Document doc) {
     	NodeList bidderNode = doc.getElementsByTagName("agent");
-    	Element agentElement = (Element) (bidderNode.item(0));
-    	
-		String agentName = agentElement.getAttribute("name");
-		
-		NodeList preferenceNode = agentElement.getElementsByTagName("preference");
-		Element preferenceElement = (Element) (preferenceNode.item(0));
-		
-		NodeList strategyNode = agentElement.getElementsByTagName("strategy");
-		Element strategyElement = (Element) strategyNode.item(0);
-		String strategey = strategyElement.getAttribute("auctionType");
-		
-		NodeList parameterNodeList = strategyElement.getElementsByTagName("parameter");
-		Element parameterElement1 = (Element) parameterNodeList.item(0);
-		double s_a = Double.parseDouble(parameterElement1.getAttribute("value"));
-		
-		System.err.println("agent Name:"+ agentName);
-		System.err.println("auction Type:" + strategey);
-		System.err.println("sunk awareness parameter:" + s_a);
-		
-		HashMap<List<AuctionItem>, Double> preference = new HashMap<List<AuctionItem>, Double>();
-		
-		
-		NodeList packageList = preferenceElement.getElementsByTagName("package");
-		Element packageElement = null;
+    	//Adding all agents in config file	
+    	for (int agentID=0; agentID<bidderNode.getLength(); agentID++) {
+    		Element agentElement = (Element) (bidderNode.item(agentID));
+    		String agentName = agentElement.getAttribute("name");
+    		
+    		NodeList preferenceNode = agentElement.getElementsByTagName("preference");
+    		Element preferenceElement = (Element) (preferenceNode.item(0));
+    		
+    		NodeList strategyNode = agentElement.getElementsByTagName("strategy");
+    		Element strategyElement = (Element) strategyNode.item(0);
+    		String strategey = strategyElement.getAttribute("auctionType");
+    		
+    		NodeList parameterNodeList = strategyElement.getElementsByTagName("parameter");
+    		Element parameterElement1 = (Element) parameterNodeList.item(0);
+    		double s_a = Double.parseDouble(parameterElement1.getAttribute("value"));
+    		
+    		System.err.println("agent Name:"+ agentName);
+    		System.err.println("auction Type:" + strategey);
+    		System.err.println("sunk awareness parameter:" + s_a);
+    		
+    		HashMap<List<AuctionItem>, Double> preference = new HashMap<List<AuctionItem>, Double>();
+    		
+    		
+    		NodeList packageList = preferenceElement.getElementsByTagName("package");
+    		Element packageElement = null;
 
-		for (int i=0; i<packageList.getLength(); i++) {
-			double packageValuation = 0;
-			ArrayList<AuctionItem> itemList = new ArrayList<AuctionItem>();
-			
-			packageElement = (Element) packageList.item(i);
-			packageValuation = Double.parseDouble(packageElement.getAttribute("valuation"));
-			
-			NodeList itemNodeList = packageElement.getElementsByTagName("item");
-			Element itemElement = null;
-			for (int j=0; j<itemNodeList.getLength(); j++) {
-				itemElement = (Element) itemNodeList.item(j);
-				int itemID = Integer.parseInt(itemElement.getAttribute("id"));
-				itemList.add(new AuctionItem(this.environment.context.searchItem(itemID)));
-			}
-			
-			preference.put(itemList, packageValuation);
-		}
+    		for (int i=0; i<packageList.getLength(); i++) {
+    			double packageValuation = 0;
+    			ArrayList<AuctionItem> itemList = new ArrayList<AuctionItem>();
+    			
+    			packageElement = (Element) packageList.item(i);
+    			packageValuation = Double.parseDouble(packageElement.getAttribute("valuation"));
+    			
+    			NodeList itemNodeList = packageElement.getElementsByTagName("item");
+    			Element itemElement = null;
+    			for (int j=0; j<itemNodeList.getLength(); j++) {
+    				itemElement = (Element) itemNodeList.item(j);
+    				int itemID = Integer.parseInt(itemElement.getAttribute("id"));
+    				itemList.add(new AuctionItem(this.environment.context.searchItem(itemID)));
+    			}
+    			
+    			preference.put(itemList, packageValuation);
+    		}
+    		
+    		Agent newAgent = new Agent(agentName, strategey, environment.context.getItemList(), preference, s_a);
+    		this.environment.bidderList.addBidder(newAgent);
+    	}
 		
-		Agent newAgent = new Agent(agentName, strategey, environment.context.getItemList(), preference, s_a);
-		this.environment.bidderList.addBidder(newAgent);
-		
-		return newAgent;
 	}
 
 }
