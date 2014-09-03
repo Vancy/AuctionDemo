@@ -115,11 +115,6 @@ public class AuctionPanel extends JPanel {
 	}
 	
 	private void updateAuctionInfo() {
-		if (this.environment.context.isFinalRound()) {
-			this.lblTimer.setText("Auction Finished");
-			this.lblRound.setText("Round:"+Integer.toString(this.environment.context.getRound()));
-			return;
-		}
 		this.lblAuctionType.setText(this.environment.context.getType() + " auction");
 		/*if current time remain is bigger than 0, minus it and display
 		 * Else, direcly display 0, until Auctioneer class refresh it

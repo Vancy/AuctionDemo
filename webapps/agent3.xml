@@ -1,0 +1,16 @@
+<agent  name="agentThree" ip="invalid">
+
+    <preference>
+      <package valuation="35"> <item id="1" name="ItemB"/> </package>
+      <package valuation="35"> <item id="4" name="ItemE"/> </package>
+	  <package valuation="35"> <item id="1" name="ItemB"/> <item id="4" name="ItemE"/></package>
+	  <package valuation="50"> <item id="4" name="ItemE"/> <item id="5" name="ItemF"/></package>
+        <!-- preference contains several combinations of auctionItems. If combination is not defined, we set 0 as default -->
+    </preference>
+
+    <strategy strategyType="Sunk-Awareness" auctionType="SAA">
+        <parameter name="Sunk-Awareness constant(k)" value="0.6"/>
+        <!-- parameter may contain several other parameters if needed-->
+    </strategy>
+
+</agent>

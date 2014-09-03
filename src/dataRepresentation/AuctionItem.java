@@ -1,21 +1,16 @@
 package dataRepresentation;
 
-import java.util.HashMap;
-
 public class AuctionItem implements Comparable<AuctionItem> {
 	private int ID;
 	private String name;
 	private double startingPrice;
 	private double price;
-	private Bidder owner;
 	
-	//this four parameters are used in CCA auction, SAA auction needn't use this values
+	//this two parameters are used in CCA auction, SAA auction needn't use this values
 	final private int quantity;
 	private int quantity_required;
-	private HashMap<String, Integer> owners = new HashMap<String, Integer>();
-	public boolean biddingFinised = false;
-	
 
+	private Bidder owner;
 	
 	static int number_of_items = 0;
 	
@@ -122,9 +117,6 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		return false;
 	}
 	
-	public int getID() {
-		return this.ID;
-	}
 	public String getName() {
 		return this.name;
 	}
@@ -152,21 +144,11 @@ public class AuctionItem implements Comparable<AuctionItem> {
 	public int getRequiredQuantity() {
 		return this.quantity_required;
 	}
-		
+	
 	public void setRequiredQuantity(int quantity) {
 		this.quantity_required = quantity;
 	}
-	
-	//for CCA auction to use
-	public void clearOwners() {
-		this.owners.clear();
-	}
-	//for CCA auction to use
-	public void placeOwner(String name, int quantity) {
-		this.owners.put(name, quantity);
-	}
-	//for CCA auction to use
-	public HashMap<String, Integer> getOwners() {
-		return this.owners;
+	public int getID() {
+		return this.ID;
 	}
 }

@@ -63,7 +63,7 @@ public class BidServlet extends DefaultServlet{
 		while ( this.auctionEnvironment.auctioneer.nextRoundNotReady ) {}
 		// get next round's context through auctioneer
 		AuctionContext context_updated  =  this.auctionEnvironment.auctioneer.nextRound();
-		System.out.println("updated:"+ context_updated.generateXml());
+		//System.out.println("updated:"+ context_updated.generateXml());
 		//Respond latest AuctionContext
 		PrintWriter out = response.getWriter();
 		out.println(context_updated.generateXml());
@@ -121,12 +121,7 @@ public class BidServlet extends DefaultServlet{
         		Node currentNode = itemList.item(i);
         		Element element = (Element) currentNode;
         		String itemName = element.getAttribute("name");
-        		int itemRequire = 0;
-        		try { //if bidder doesn't bid for this, the quantity_require may not be defined
-        			itemRequire = Integer.parseInt(element.getAttribute("quantity_require"));
-        		} catch(RuntimeException e) { // so put itemRequire as 0 
-        			itemRequire = 0;
-        		}
+        		int itemRequire = Integer.parseInt(element.getAttribute("quantity_require"));
         		int id = Integer.parseInt(element.getAttribute("id"));
         		bidderItemList.add(new AuctionItem(id, itemName, itemRequire));
         	}
