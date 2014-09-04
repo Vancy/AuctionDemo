@@ -36,7 +36,11 @@ public class Agent extends Bidder {
 		setSunkAwarenessConstant(k);
 		this.valuations = new HashMap<List<AuctionItem>, Double>(valuations);
 	}
-
+	
+	public Map<List<AuctionItem>, Double> getValuations() {
+		return valuations;
+	}
+	
 	public double getSunkAwarenessConstant() {
 		return sunkAwarenessConstant;
 	}

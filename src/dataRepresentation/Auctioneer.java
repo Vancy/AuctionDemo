@@ -123,18 +123,27 @@ public class Auctioneer extends Thread{
 	}
 	
 	private void processSAABids() {
+		boolean newBids = false;
 		for (Bid bid: this.requestedBids) {
 			for (AuctionItem bidderItem: bid.getItemList()) {
 				double originalPrice = fetchItemPrice(bidderItem.getID());
 
 				if (originalPrice < bidderItem.getPrice()) {
 					putItemPrice(bid.getBidder(), bidderItem.getID(), bidderItem.getPrice());
-				}
-				else if (Math.abs(originalPrice - bidderItem.getPrice()) <= 0.001 && filpCoinWin()) {
+					if (!newBids) {
+						newBids = true;
+					}
+				} else if (Math.abs(originalPrice - bidderItem.getPrice()) <= 0.001 && flipCoinWin()) {
 					//If this bidder's price is equal to current highest price, and win flip-a-coin
 					putItemPrice(bid.getBidder(), bidderItem.getID(), bidderItem.getPrice());
+					if (!newBids) {
+						newBids = true;
+					}
 				}
 			}
+		}
+		if (!newBids) {
+			this.environment.context.setFinalRound();
 		}
 	}
 	
@@ -256,16 +265,10 @@ public class Auctioneer extends Thread{
 		}
 	}
 	
-	static private boolean filpCoinWin() {
-		boolean iWin;
+	static private boolean flipCoinWin() {
 		Random generator = new Random(System.currentTimeMillis());
 		int coin = generator.nextInt(100);
-		if (coin > 50) {
-			iWin = true;
-		} else {
-			iWin = false;
-		}
-		return iWin;
+		return coin > 50 ? true : false;
 	}
 
 }
