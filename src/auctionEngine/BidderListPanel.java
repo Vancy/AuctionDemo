@@ -20,7 +20,6 @@ import dataRepresentation.BidderList;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.util.Vector;
 
 public class BidderListPanel extends JPanel {
 
@@ -112,7 +111,6 @@ public class BidderListPanel extends JPanel {
 
 	}
 	
-	// This method keeps on being called (maybe unnecessarily)
 	private void updateBidderList() {
 		
 		tableModel.setRowCount(0);
@@ -122,7 +120,7 @@ public class BidderListPanel extends JPanel {
 			String id = Integer.toString(bidder.getID());
 			String name = bidder.getName();
 			String ip = bidder.getIP();
-			String[] rowValue = {id, name, ip};
+			String[] rowValue = {id,name,ip};
 			tableModel.addRow(rowValue);
 		}
 	}

@@ -1,6 +1,8 @@
 package dataRepresentation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 import java.util.Timer;
 
 
@@ -47,10 +49,8 @@ public class Auctioneer extends Thread{
 	@Override
 	public void run() {
 		while (true) {
-			/**************deliberate delay**************/
+			/**************Next Round Start**************/
 			System.err.println("******Round " + this.environment.context.getRound() + " Start*****Min increment " + this.environment.context.getMinIncrement() + "*****");
-			deliberateDelay(1);
-			/**************deliberate delay**************/
 			
 			//Collect Agent's bid
 			for (Bidder bidder: this.environment.bidderList.getList()) {
@@ -66,12 +66,7 @@ public class Auctioneer extends Thread{
 			
 			while(this.environment.context.roundTimeElapse > 0) {
 				// Wait until current round time up, or all bidder send their bid
-				try {
-					Thread.currentThread();
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				deliberateDelay(0.2);
 				
 				synchronized(this.requestedBids) {
 					if (this.requestedBids.size() == this.environment.bidderList.getList().size()) {
@@ -80,8 +75,8 @@ public class Auctioneer extends Thread{
 				}
 			}
 			
-			// Wait two more seconds, to wait all defaults bids
-			deliberateDelay(2);
+			// Wait one more seconds, to wait all defaults bids
+			deliberateDelay(1);
 			
 			System.out.println("Processing Bids...");
 			processBids();
@@ -128,38 +123,51 @@ public class Auctioneer extends Thread{
 	}
 	
 	private void processSAABids() {
-		boolean newBids = false;
 		for (Bid bid: this.requestedBids) {
 			for (AuctionItem bidderItem: bid.getItemList()) {
 				double originalPrice = fetchItemPrice(bidderItem.getID());
-//				System.out.println("original price:"+originalPrice+"bidder"+bid.getBidder().getName()+"price:"+bidderItem.getPrice());
+
 				if (originalPrice < bidderItem.getPrice()) {
 					putItemPrice(bid.getBidder(), bidderItem.getID(), bidderItem.getPrice());
-					if (!newBids) {
-						newBids = true;
-					}
+				}
+				else if (Math.abs(originalPrice - bidderItem.getPrice()) <= 0.001 && filpCoinWin()) {
+					//If this bidder's price is equal to current highest price, and win flip-a-coin
+					putItemPrice(bid.getBidder(), bidderItem.getID(), bidderItem.getPrice());
 				}
 			}
-		}
-		if (!newBids) {
-			this.environment.context.setFinalRound();
 		}
 	}
 	
 	private void processCCABids() {
+		
+		//firstly clear last round temporary owners
+		for(AuctionItem item: this.environment.context.getItemList()) {
+			if (!item.biddingFinised) {
+				item.clearOwners();
+			}
+		}
+		
+		//creat a temporary array to story the total number all bidders require each round
 		int itemNumber = this.environment.context.getItemList().size();
 		int[] thisRoundRequirment = new int[itemNumber];
 		for (int i=0; i<itemNumber; i++) {
 			thisRoundRequirment[i] = 0;
 		}
+		
+		//collect requirment of each item
 		for (Bid bid: this.requestedBids) {
 			for (AuctionItem bidderItem: bid.getItemList()) {
 				thisRoundRequirment[bidderItem.getID()] += bidderItem.getRequiredQuantity();
+				placeItemOwner(bidderItem.getID(), bid.getBidder().getName(), bidderItem.getRequiredQuantity());
 				System.out.println("Bidder"+ bid.getBidder().getName()+ " wants itemID:" + bidderItem.getID() + " require " + bidderItem.getRequiredQuantity());
 			}
 		}
 		for (AuctionItem item: this.environment.context.getItemList()) {
 			item.setRequiredQuantity(thisRoundRequirment[item.getID()]);
+			if (item.getRequiredQuantity() <= item.getQuantity()) {
+				//set this item is finish bidding
+				item.biddingFinised = true; 
+			}
 		}
 		
 	}
@@ -175,11 +183,9 @@ public class Auctioneer extends Thread{
 		this.environment.context.incrementRound();
 		this.environment.context.roundTimeElapse = this.environment.context.getDurationTime();
 		
-		//set priceTick for CCA Auction
-		double priceTick = this.environment.context.getPriceTick() + this.environment.context.getMinIncrement();
-		System.out.println("DDDincrement:"+ this.environment.context.getMinIncrement());
-		System.out.println("DPPPD:PRICETICK:"+ priceTick);
-		this.environment.context.setPriceTick(priceTick);
+		//some update for CCA Auction
+		if (this.environment.context.getType() == AuctionContext.AuctionType.CCA) 
+			updateNextRoundPriceForCCA();
 		
 		//set flag true, bidservlet can send response
 		this.setNextRoundReady();
@@ -203,6 +209,18 @@ public class Auctioneer extends Thread{
 		return this.auctionLog;
 	}
 	
+	
+	private void updateNextRoundPriceForCCA() {
+		double priceTick = this.environment.context.getPriceTick() + this.environment.context.getMinIncrement();
+		this.environment.context.setPriceTick(priceTick);
+		ArrayList<AuctionItem> auctionItems = this.environment.context.getItemList();
+		for (AuctionItem item: auctionItems) {
+			if (!item.biddingFinised) {
+				item.setPrice(priceTick);
+			}
+		}
+	}
+	
 	private double fetchItemPrice(int itemID) {
 		for (AuctionItem item: this.environment.context.getItemList()) {
 			if (itemID == item.getID()) {
@@ -221,21 +239,33 @@ public class Auctioneer extends Thread{
 		}
 	}
 	
-	/*private void setItemRequired(int itemID, int required) {
+	private void placeItemOwner(int itemID, String name, int amount) {
 		for (AuctionItem item: this.environment.context.getItemList()) {
 			if (itemID == item.getID()) {
-				item.setRequiredQuantity(required);
+				item.placeOwner(name, amount);
 			}
 		}
-	}*/
+	}
 	
-	private void deliberateDelay(double sec) {
+	static private void deliberateDelay(double sec) {
 		try {
 			Thread.currentThread();
 			Thread.sleep((int)(sec * 1000));
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	static private boolean filpCoinWin() {
+		boolean iWin;
+		Random generator = new Random(System.currentTimeMillis());
+		int coin = generator.nextInt(100);
+		if (coin > 50) {
+			iWin = true;
+		} else {
+			iWin = false;
+		}
+		return iWin;
 	}
 
 }

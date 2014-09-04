@@ -9,17 +9,17 @@ public class BidderList {
 	
 	static{
 		colorList = new ArrayList<Color>();
+		colorList.add(Color.WHITE);
 		colorList.add(Color.GREEN);
 		colorList.add(Color.RED);
-		colorList.add(Color.BLUE);
-		colorList.add(Color.MAGENTA);
 		colorList.add(Color.CYAN);
 		colorList.add(Color.ORANGE);
 		colorList.add(Color.PINK);
 		colorList.add(Color.YELLOW);
-		colorList.add(Color.DARK_GRAY);
 		colorList.add(Color.LIGHT_GRAY);
-		colorList.add(Color.WHITE);
+		colorList.add(Color.MAGENTA);
+		colorList.add(new Color(210,240,120));
+		colorList.add(new Color(139,214,58));
 	}
 	
 	private ArrayList<Bidder> list;

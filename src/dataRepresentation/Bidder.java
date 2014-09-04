@@ -29,7 +29,7 @@ public class Bidder {
 	}
 	
 	public Bidder(String name, String ip) {
-		this.ID = ++BidderNumber - 1;
+		this.ID = ++BidderNumber;
 		this.name = name;
 		this.ipAdress  = ip;
 		this.colorRecognition = autoGenerateColor();

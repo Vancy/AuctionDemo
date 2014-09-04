@@ -45,20 +45,11 @@ public class PriceOwnerCellRenderer extends DefaultTableCellRenderer {
 	    		}
 	    	}
 	    	
-	    	//color coat the payoffs in the final round maybe
-	    	/*if (this.environment.context.isFinalRound()) {
-	    		
-	    	}*/
-	    	
 	    	if (-1 != ownerID){
 	    		setBackground(BidderList.colorList.get(ownerID));  
-	    	}
+	    	} 
 		 }
-		 if (value == null) {
-			 setText("null");
-		 } else {
-			 setText(value.toString());
-		 }
+		 setText(value.toString());   
 		 return this;
     }
 }
