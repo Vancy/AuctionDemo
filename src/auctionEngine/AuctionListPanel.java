@@ -83,7 +83,7 @@ public class AuctionListPanel extends JPanel {
 		}
 	}
 	
-	private String calculatePayoff(dataRepresentation.Agent currAgent) {
+	private double calculatePayoff(dataRepresentation.Agent currAgent) {
 		SortedSet<Map.Entry<List<AuctionItem>, Double>> sortedValuations = new TreeSet<Map.Entry<List<AuctionItem>, Double>>(
 	            new Comparator<Map.Entry<List<AuctionItem>, Double>>() {
 
@@ -117,9 +117,9 @@ public class AuctionListPanel extends JPanel {
 			}
 			//payoff = valuation - price paid;
 			double payoff = agentItemList.getValue() - totalPricePaid;
-			return String.valueOf(payoff);
+			return payoff;
 		}
-		return "0";
+		return 0.0;
 	}
 	
 	private void updateSaaAuctionList() {	
@@ -151,9 +151,9 @@ public class AuctionListPanel extends JPanel {
 				}
 				dataRepresentation.Agent currAgent = (dataRepresentation.Agent) currBidder;
 				
-				if (!calculatePayoff(currAgent).equals("0")) {
+				if (calculatePayoff(currAgent) != 0.0)) {
 					payoffHeader.add(currAgent.getName());
-					payoffData.add(calculatePayoff(currAgent));
+					payoffData.add(String.valueOf(calculatePayoff(currAgent)));
 					numberOfPayoffs++;
 				}
 			}
