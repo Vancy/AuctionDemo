@@ -53,16 +53,7 @@ public class Auctioneer extends Thread{
 			System.err.println("******Round " + this.environment.context.getRound() + " Start*****Min increment " + this.environment.context.getMinIncrement() + "*****");
 			
 			//Collect Agent's bid
-			for (Bidder bidder: this.environment.bidderList.getList()) {
-				if (bidder instanceof Agent) {
-					Bid agentBid = ((Agent)bidder).auctionResponse(this.environment.context);
-					requestedBids.add(agentBid);
-					System.err.println("Agent:"+bidder.getName()+" place a bid:");
-					for (AuctionItem item: agentBid.getItemList()) {
-						System.out.println("His price:"+item.getPrice()+"for item:"+item.getName());
-					}
-				}
-			}
+			collectAgentBid();
 			
 			while(this.environment.context.roundTimeElapse > 0) {
 				// Wait until current round time up, or all bidder send their bid
@@ -209,10 +200,32 @@ public class Auctioneer extends Thread{
 		this.requestedBids.clear();
 		this.setNextRoundNotReady();
 	}
+	
+	private void collectAgentBid() {
+		for (Bidder bidder: this.environment.bidderList.getList()) {
+			if (bidder instanceof Agent) {
+				Bid agentBid = ((Agent)bidder).auctionResponse(this.environment.context);
+				requestedBids.add(agentBid);
+				System.err.println("Agent:"+bidder.getName()+" place a bid:");
+				for (AuctionItem item: agentBid.getItemList()) {
+					System.out.println("His price:"+item.getPrice()+"for item:"+item.getName());
+				}
+			} else if (bidder instanceof CCAAgent) {
+				Bid agentBid = ((Agent)bidder).auctionResponse(this.environment.context);
+				requestedBids.add(agentBid);
+				System.err.println("Agent:"+bidder.getName()+" place a bid:");
+				for (AuctionItem item: agentBid.getItemList()) {
+					System.out.println("His demand:"+item.getRequiredQuantity()+"for item:"+item.getName());
+				}
+			}
+			
+		}
+	}
 	private void recordLog() {
 		
 		this.auctionLog.add(new AuctionContext(this.environment.context));
 	}
+	
 	
 	public ArrayList<AuctionContext> getLog() {
 		return this.auctionLog;

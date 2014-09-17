@@ -9,7 +9,7 @@ public class Agent extends Bidder {
 
 	private double sunkAwarenessConstant = 1;
 
-	private List<Bid> memory = new ArrayList<Bid>();
+	protected List<Bid> memory = new ArrayList<Bid>();
 	List<AuctionItem> items;
 
 	Map<List<AuctionItem>, Double> valuations;
