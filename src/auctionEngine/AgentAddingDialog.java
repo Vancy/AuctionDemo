@@ -26,6 +26,7 @@ import org.xml.sax.SAXException;
 import dataRepresentation.Agent;
 import dataRepresentation.AuctionEnvironment;
 import dataRepresentation.AuctionItem;
+import dataRepresentation.CCAAgent;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -34,6 +35,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AgentAddingDialog extends JDialog {
 
@@ -147,24 +149,9 @@ public class AgentAddingDialog extends JDialog {
     		NodeList preferenceNode = agentElement.getElementsByTagName("preference");
     		Element preferenceElement = (Element) (preferenceNode.item(0));
     		
-    		NodeList strategyNode = agentElement.getElementsByTagName("strategy");
-    		Element strategyElement = (Element) strategyNode.item(0);
-    		String strategey = strategyElement.getAttribute("auctionType");
-    		
-    		NodeList parameterNodeList = strategyElement.getElementsByTagName("parameter");
-    		Element parameterElement1 = (Element) parameterNodeList.item(0);
-    		double s_a = Double.parseDouble(parameterElement1.getAttribute("value"));
-    		
-    		System.err.println("agent Name:"+ agentName);
-    		System.err.println("auction Type:" + strategey);
-    		System.err.println("sunk awareness parameter:" + s_a);
-    		
-    		HashMap<List<AuctionItem>, Double> preference = new HashMap<List<AuctionItem>, Double>();
-    		
-    		
-    		NodeList packageList = preferenceElement.getElementsByTagName("package");
+      		NodeList packageList = preferenceElement.getElementsByTagName("package");
     		Element packageElement = null;
-
+    		HashMap<List<AuctionItem>, Double> preference = new HashMap<List<AuctionItem>, Double>();
     		for (int i=0; i<packageList.getLength(); i++) {
     			double packageValuation = 0;
     			ArrayList<AuctionItem> itemList = new ArrayList<AuctionItem>();
@@ -183,10 +170,60 @@ public class AgentAddingDialog extends JDialog {
     			preference.put(itemList, packageValuation);
     		}
     		
-    		Agent newAgent = new Agent(agentName, strategey, environment.context.getItemList(), preference, s_a);
-    		this.environment.bidderList.addBidder(newAgent);
+    		NodeList strategyNode = agentElement.getElementsByTagName("strategy");
+    		Element strategyElement = (Element) (strategyNode.item(0));
+    		String strategyName = strategyElement.getAttribute("auctionType");
+    		if (strategyName.equals("SAA")) {
+    			createAgentSAA(agentName, preference, strategyNode);
+    		} else if (strategyName.equals("CCA")) {
+    			createAgentCCA(agentName, preference, strategyNode);
+    		}
     	}
 		
+	}
+	
+	private void createAgentSAA(String agentName, Map<List<AuctionItem>, Double> preference, NodeList strategyNodes) {
+		
+		Element strategyElement = (Element) strategyNodes.item(0);
+		NodeList parameterNodeList = strategyElement.getElementsByTagName("parameter");
+		Element parameterElement1 = (Element) parameterNodeList.item(0);
+		double s_a = Double.parseDouble(parameterElement1.getAttribute("value"));
+		
+		System.err.println("agent Name:"+ agentName);
+		System.err.println("auction Type: SSA");
+		System.err.println("sunk awareness parameter:" + s_a);
+		
+		Agent newAgent = new Agent(agentName, "SSA", environment.context.getItemList(), preference, s_a);
+		this.environment.bidderList.addBidder(newAgent);
+		
+	}
+	
+	private void createAgentCCA(String agentName, Map<List<AuctionItem>, Double> preference, NodeList strategyNodes) {
+		
+		HashMap<Integer, ArrayList<Double>> demandVectors = new HashMap<Integer, ArrayList<Double>>();
+		Element strategyElement = (Element) strategyNodes.item(0);
+		NodeList parameterNodeList = strategyElement.getElementsByTagName("parameter");
+		for (int j=0; j<parameterNodeList.getLength(); j++) {
+			Element parameterElement = (Element) parameterNodeList.item(j);
+			String demandVectorString = parameterElement.getAttribute("value");
+			String[] strNumbers = demandVectorString.split(",");
+			ArrayList<Double> demandVector = new ArrayList<Double>();
+			for (int i=0; i<strNumbers.length; i++) {
+				demandVector.add(i, Double.parseDouble(strNumbers[i]));
+			}
+			
+			NodeList itemNodeList = parameterElement.getElementsByTagName("item");
+			for (int oliver=0; oliver<itemNodeList.getLength(); oliver++) {
+				Element itemElement = (Element) itemNodeList.item(oliver);
+				int itemID = Integer.parseInt(itemElement.getAttribute("id"));
+				demandVectors.put(itemID, demandVector);
+				
+			}
+			
+		}
+		
+		CCAAgent newAgent = new CCAAgent(agentName, "CCA", environment.context.getItemList(), preference, demandVectors);
+		this.environment.bidderList.addBidder(newAgent);
 	}
 
 }

@@ -203,22 +203,21 @@ public class Auctioneer extends Thread{
 	
 	private void collectAgentBid() {
 		for (Bidder bidder: this.environment.bidderList.getList()) {
-			if (bidder instanceof Agent) {
-				Bid agentBid = ((Agent)bidder).auctionResponse(this.environment.context);
-				requestedBids.add(agentBid);
-				System.err.println("Agent:"+bidder.getName()+" place a bid:");
-				for (AuctionItem item: agentBid.getItemList()) {
-					System.out.println("His price:"+item.getPrice()+"for item:"+item.getName());
-				}
-			} else if (bidder instanceof CCAAgent) {
+			if (bidder instanceof CCAAgent) {
 				Bid agentBid = ((Agent)bidder).auctionResponse(this.environment.context);
 				requestedBids.add(agentBid);
 				System.err.println("Agent:"+bidder.getName()+" place a bid:");
 				for (AuctionItem item: agentBid.getItemList()) {
 					System.out.println("His demand:"+item.getRequiredQuantity()+"for item:"+item.getName());
 				}
-			}
-			
+			} else if (bidder instanceof Agent) {
+				Bid agentBid = ((Agent)bidder).auctionResponse(this.environment.context);
+				requestedBids.add(agentBid);
+				System.err.println("Agent:"+bidder.getName()+" place a bid:");
+				for (AuctionItem item: agentBid.getItemList()) {
+					System.out.println("His price:"+item.getPrice()+"for item:"+item.getName());
+				}
+			} 	
 		}
 	}
 	private void recordLog() {
