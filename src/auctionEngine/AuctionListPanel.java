@@ -151,7 +151,7 @@ public class AuctionListPanel extends JPanel {
 				}
 				dataRepresentation.Agent currAgent = (dataRepresentation.Agent) currBidder;
 				
-				if (calculatePayoff(currAgent) != 0.0)) {
+				if (calculatePayoff(currAgent) != 0.0) {
 					payoffHeader.add(currAgent.getName());
 					payoffData.add(String.valueOf(calculatePayoff(currAgent)));
 					numberOfPayoffs++;
