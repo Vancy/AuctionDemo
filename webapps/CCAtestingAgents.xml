@@ -1,0 +1,46 @@
+<config>
+<agent  name="Agent1" ip="invalid">
+
+    <preference>
+      <package valuation="50"> <item id="0" name="ItemA"/> </package>
+      <package valuation="90"> <item id="1" name="ItemB"/> </package>
+      <package valuation="80"> <item id="2" name="ItemC"/> </package>
+        <!-- preference contains several combinations of auctionItems. If combination is not defined, we set 0 as default -->
+    </preference>
+
+     <strategy strategyType="StraightForward" auctionType="CCA">
+        <parameter name="Demand-Vectors" value="20,18,17,15,10,5,3,2,0">
+		<item id="0" name="ItemA"/>
+		<item id="2" name="ItemB"/>
+	</parameter>
+      <parameter name="Demand-Vectors" value="20,15,10,5,0">
+		<item id="1" name="ItemB"/>
+	</parameter>
+        <!-- parameter may contain several other parameters if needed-->
+    </strategy>
+
+</agent>
+
+<agent  name="Agent2" ip="invalid">
+
+    <preference>
+      <package valuation="50"> <item id="0" name="ItemA"/> </package>
+      <package valuation="90"> <item id="1" name="ItemB"/> </package>
+      <package valuation="100"> <item id="0" name="ItemA"/> <item id="1" name="ItemB"/></package>
+        <!-- preference contains several combinations of auctionItems. If combination is not defined, we set 0 as default -->
+    </preference>
+
+     <strategy strategyType="StraightForward" auctionType="CCA">
+        <parameter name="Demand-Vectors" value="20,18,17,15,10,5,3,2,0">
+		<item id="0" name="ItemA"/>
+		<item id="2" name="ItemB"/>
+	</parameter>
+      <parameter name="Demand-Vectors" value="20,15,10,2,1,0">
+		<item id="1" name="ItemB"/>
+	</parameter>
+        <!-- parameter may contain several other parameters if needed-->
+    </strategy>
+
+</agent>
+
+</config>

@@ -159,7 +159,7 @@ public class Auctioneer extends Thread{
 			for (AuctionItem bidderItem: bid.getItemList()) {
 				thisRoundRequirment[bidderItem.getID()] += bidderItem.getRequiredQuantity();
 				placeItemOwner(bidderItem.getID(), bid.getBidder().getName(), bidderItem.getRequiredQuantity());
-				System.out.println("Bidder"+ bid.getBidder().getName()+ " wants itemID:" + bidderItem.getID() + " require " + bidderItem.getRequiredQuantity());
+				System.out.println("Bidder "+ bid.getBidder().getName()+ " wants itemID:" + bidderItem.getID() + " require " + bidderItem.getRequiredQuantity());
 			}
 		}
 		for (AuctionItem item: this.environment.context.getItemList()) {
@@ -208,14 +208,14 @@ public class Auctioneer extends Thread{
 				requestedBids.add(agentBid);
 				System.err.println("Agent:"+bidder.getName()+" place a bid:");
 				for (AuctionItem item: agentBid.getItemList()) {
-					System.out.println("His demand:"+item.getRequiredQuantity()+"for item:"+item.getName());
+					System.out.println(bidder.getName()+" demands:"+item.getRequiredQuantity()+"for item:"+item.getName());
 				}
 			} else if (bidder instanceof Agent) {
 				Bid agentBid = ((Agent)bidder).auctionResponse(this.environment.context);
 				requestedBids.add(agentBid);
 				System.err.println("Agent:"+bidder.getName()+" place a bid:");
 				for (AuctionItem item: agentBid.getItemList()) {
-					System.out.println("His price:"+item.getPrice()+"for item:"+item.getName());
+					System.out.println(bidder.getName()+"'s price:"+item.getPrice()+"for item:"+item.getName());
 				}
 			} 	
 		}
