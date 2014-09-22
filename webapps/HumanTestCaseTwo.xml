@@ -1,0 +1,89 @@
+<config>
+<agent  name="agentOne" ip="invalid">
+
+    <preference>
+      <package valuation="30"> <item id="0" name="ItemA"/> </package>
+      <package valuation="50"> <item id="1" name="ItemB"/> </package>
+	  <package valuation="40"> <item id="2" name="ItemC"/> </package>
+        <!-- preference contains several combinations of auctionItems. If combination is not defined, we set 0 as default -->
+    </preference>
+
+    <strategy strategyType="Sunk-Awareness" auctionType="SAA">
+        <parameter name="Sunk-Awareness constant(k)" value="0.3"/>
+        <!-- parameter may contain several other parameters if needed-->
+    </strategy>
+
+</agent>
+<agent  name="agentTwo" ip="invalid">
+
+    <preference>
+      <package valuation="40"> <item id="0" name="ItemA"/> </package>
+      <package valuation="40"> <item id="1" name="ItemB"/> </package>
+	  <package valuation="50"> <item id="0" name="ItemA"/> <item id="1" name="ItemB"/> </package>
+        <!-- preference contains several combinations of auctionItems. If combination is not defined, we set 0 as default -->
+    </preference>
+
+    <strategy strategyType="Sunk-Awareness" auctionType="SAA">
+        <parameter name="Sunk-Awareness constant(k)" value="0.5"/>
+        <!-- parameter may contain several other parameters if needed-->
+    </strategy>
+
+</agent>
+<agent  name="agentThree" ip="invalid">
+
+    <preference>
+      <package valuation="50"> <item id="2" name="ItemC"/> </package>
+	  <package valuation="70"> <item id="0" name="ItemA"/> <item id="2" name="ItemC"/></package>
+        <!-- preference contains several combinations of auctionItems. If combination is not defined, we set 0 as default -->
+    </preference>
+
+    <strategy strategyType="Sunk-Awareness" auctionType="SAA">
+        <parameter name="Sunk-Awareness constant(k)" value="0.8"/>
+        <!-- parameter may contain several other parameters if needed-->
+    </strategy>
+
+</agent>
+<agent  name="humanOne" ip="invalid">
+
+    <preference>
+      <package valuation="60"> <item id="1" name="ItemB"/> </package>
+	  <package valuation="60"> <item id="2" name="ItemC"/> </package>
+        <!-- preference contains several combinations of auctionItems. If combination is not defined, we set 0 as default -->
+    </preference>
+
+    <strategy strategyType="Sunk-Awareness" auctionType="SAA">
+        <parameter name="Sunk-Awareness constant(k)" value="1.0"/>
+        <!-- parameter may contain several other parameters if needed-->
+    </strategy>
+
+</agent>
+<agent  name="humanTwo" ip="invalid">
+
+    <preference>
+      <package valuation="40"> <item id="1" name="ItemB"/> </package>
+	  <package valuation="75"> <item id="2" name="ItemC"/> <item id="1" name="ItemB"/></package>
+        <!-- preference contains several combinations of auctionItems. If combination is not defined, we set 0 as default -->
+    </preference>
+
+    <strategy strategyType="Sunk-Awareness" auctionType="SAA">
+        <parameter name="Sunk-Awareness constant(k)" value="0.8"/>
+        <!-- parameter may contain several other parameters if needed-->
+    </strategy>
+
+</agent>
+<agent  name="humanThree" ip="invalid">
+
+    <preference>
+      <package valuation="30"> <item id="0" name="ItemA"/> </package>
+      <package valuation="50"> <item id="2" name="ItemC"/> </package>
+	  <package valuation="65"> <item id="0" name="ItemA"/> <item id="1" name="ItemB"/> <item id="2" name="ItemC"/></package>
+        <!-- preference contains several combinations of auctionItems. If combination is not defined, we set 0 as default -->
+    </preference>
+
+    <strategy strategyType="Sunk-Awareness" auctionType="SAA">
+        <parameter name="Sunk-Awareness constant(k)" value="0.7"/>
+        <!-- parameter may contain several other parameters if needed-->
+    </strategy>
+
+</agent>
+</config>
