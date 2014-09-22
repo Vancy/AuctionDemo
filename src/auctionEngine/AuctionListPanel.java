@@ -9,6 +9,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -107,9 +108,12 @@ public class AuctionListPanel extends JPanel {
 			for (AuctionItem agentItem : agentItemList.getKey()) {
 				for (AuctionItem item : this.environment.context.getItemList()) {
 					if (item.getID() == agentItem.getID()) {
+						// item is in curr valuation
 						if (item.getOwner().getID() == currAgent.getID()) {
+							// agent won this item
 							totalPricePaid += item.getPrice();
 						} else {
+							// agent lost this item
 							continue nextValuation;
 						}
 					}
@@ -119,7 +123,14 @@ public class AuctionListPanel extends JPanel {
 			double payoff = agentItemList.getValue() - totalPricePaid;
 			return payoff;
 		}
-		return 0.0;
+		// agent didnt win anything that he has a valuation for. Therefore, his payoff is 0 - totalPricePaid
+		double payoff = 0.0;
+		for (AuctionItem item : this.environment.context.getItemList()) {
+			if (item.getOwner().getID() == currAgent.getID()) {
+				payoff -= item.getPrice();
+			}
+		}
+		return payoff;
 	}
 	
 	private void updateSaaAuctionList() {	
@@ -151,21 +162,27 @@ public class AuctionListPanel extends JPanel {
 				}
 				dataRepresentation.Agent currAgent = (dataRepresentation.Agent) currBidder;
 				
-				if (calculatePayoff(currAgent) != 0.0) {
-					payoffHeader.add(currAgent.getName());
-					payoffData.add(String.valueOf(calculatePayoff(currAgent)));
-					numberOfPayoffs++;
+				payoffHeader.add(currAgent.getName());
+				payoffData.add(String.valueOf(calculatePayoff(currAgent)));
+				numberOfPayoffs++;
+				
+				if (numberOfPayoffs == numberOfItems) {
+					tableModel.addRow(divider);
+					tableModel.addRow(payoffHeader);
+					tableModel.addRow(payoffData);
+					payoffHeader = new Vector<String>();
+					payoffData = new Vector<String>();
+					divider.add("");
+					payoffHeader.add("");
+					payoffData.add("");
 				}
-			}
-			
-			for (int i = 0; i < numberOfItems - numberOfPayoffs; i++) {
-				payoffHeader.add("");
-				payoffData.add("");
 			}
 			
 			tableModel.addRow(divider);
 			tableModel.addRow(payoffHeader);
 			tableModel.addRow(payoffData);
+			
+			
 		}
 	}
 	

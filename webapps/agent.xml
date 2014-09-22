@@ -1,3 +1,4 @@
+<config>
 <agent  name="ogen" ip="invalid">
 
     <preference>
@@ -13,4 +14,4 @@
     </strategy>
 
 </agent>
-
+</config>
