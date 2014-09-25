@@ -83,7 +83,7 @@ public class AuctionConfigPanel extends JPanel {
 		}
 		panel_auctionType.add(typeComboBox);
 		
-		SpinnerModel sm_roundDuration = new SpinnerNumberModel(60, 0, Integer.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
+		SpinnerModel sm_roundDuration = new SpinnerNumberModel(30, 0, Integer.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
 		
 		SpinnerModel sm_minIncrement = new SpinnerNumberModel(1, 0, Double.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
 		
@@ -233,7 +233,7 @@ public class AuctionConfigPanel extends JPanel {
 	private void changeParameterPanel(String auctionType) {
 		if (auctionType.equals("SAA")) {
 			this.lblRoundDurationsec.setText("Round Duration:(s)");
-			this.spinner_roundDuration.setValue(60);
+			this.spinner_roundDuration.setValue(30);
 
 		} else if (auctionType.equals("CCA")) {
 			this.lblRoundDurationsec.setText("Round Tick:(ms)");
@@ -249,9 +249,9 @@ public class AuctionConfigPanel extends JPanel {
 			tableModel.addColumn("Item");
 			tableModel.addColumn("Price");
 			//put some initial data
-			String[] s1 = {"ItemA", "10.0"};
-			String[] s2 = {"ItemB", "20.0"};
-			String[] s3 = {"ItemC", "30.0"};
+			String[] s1 = {"ItemA", "0.0"};
+			String[] s2 = {"ItemB", "0.0"};
+			String[] s3 = {"ItemC", "0.0"};
 			tableModel.addRow(s1);
 			tableModel.addRow(s2);
 			tableModel.addRow(s3);

@@ -41,7 +41,7 @@ public class AuctionContext {
 	public AuctionContext() {
 		this.type = AuctionType.SAA;
 		this.round = 1;
-		this.duration_Sec = 60;
+		this.duration_Sec = 30;
 		this.itemList = new ArrayList<AuctionItem>();
 		this.minIncreament = 0;
 		this.finalRound = false;
