@@ -80,6 +80,7 @@ public class BidderListPanel extends JPanel {
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				environment.AuctionStarted = true;
+				environment.context.incrementRound(); // increment round from 0 to 1
 				environment.auctioneer.start();
 				auctionPanel.startAuction();
 				System.err.println("Click Auction Start:"+ environment.AuctionStarted);

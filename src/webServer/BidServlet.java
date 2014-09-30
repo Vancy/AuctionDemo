@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
@@ -50,26 +49,20 @@ public class BidServlet extends DefaultServlet{
 		    builder.append(aux);
 		}
 		String xmlContent = builder.toString();
-		System.out.println("receive bid request:\n"+xmlContent);
 		Document doc = convertStringToDocument(xmlContent);
 		
 
 		//place a bid to environment, auctioneer will handle this bid
 		Bid myBid = placeBid(doc);
-		System.err.println(myBid.getBidder().getName()+"**********waiting response*********");
+		System.err.println(myBid.getBidder().getName()+"**********Get bid request*********");
 		
 		
-		// waiting for Auctioneer process bids, once next round info ready, get context update.
-		while ( this.auctionEnvironment.auctioneer.nextRoundNotReady ) {}
-		// get next round's context through auctioneer
+
 		AuctionContext context_updated  =  this.auctionEnvironment.auctioneer.nextRound();
-		System.out.println("updated:"+ context_updated.generateXml());
 		//Respond latest AuctionContext
 		PrintWriter out = response.getWriter();
 		out.println(context_updated.generateXml());
 		System.err.println(myBid.getBidder().getName()+"***********Response sent************");
-		//infrom auctioneer get the repsonse sucessfully 
-		ConfirmResponseSent(myBid);
 	}
 	
     private static Document convertStringToDocument(String xmlStr) {
@@ -138,13 +131,6 @@ public class BidServlet extends DefaultServlet{
     	return bid;
     }
     
-    private boolean ConfirmResponseSent(Bid bid) {
-    	if (this.auctionEnvironment.auctioneer.removeBid(bid)) {
-    		return true;
-    	}else {
-    		throw new RuntimeException("ERROR: Invalid Bid removing");
-    	}
-    }
 	public void destroy() {
 		// do nothing.
 	}

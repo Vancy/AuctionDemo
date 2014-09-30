@@ -38,12 +38,11 @@ public class Auctioneer extends Thread{
 		
 	}
 	
-	public boolean removeBid(Bid bid) {
-		synchronized(this.requestedBids) {
-			this.requestedBids.remove(bid);
-			System.out.println("current request list size after remove one:"+requestedBids.size());
+	private boolean removeBids() {
+
+			this.requestedBids.clear();
+			System.out.println("current request list size after remove all:"+requestedBids.size());
 			return true;
-		}
 	}
 	
 	@Override
@@ -72,6 +71,8 @@ public class Auctioneer extends Thread{
 			System.out.println("Processing Bids...");
 			processBids();
 			System.out.println("next round starting...");
+			removeBids();
+			deliberateDelay(2);
 			updateNextRoundContext();
 			/***************Next Round Will Start**********************/
 			if (this.environment.context.isFinalRound()) {
