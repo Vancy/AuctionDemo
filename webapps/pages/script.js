@@ -190,10 +190,10 @@ function saaUpdateInfo(data) {
     var $roundNumber = $context.children("round").attr("value");
 
     if ( round < $roundNumber ) {
-        unlockTheKeyboard();
+        unlockKeyboard();
     } else if (round == $roundNumber) {
         if ( ! isCurrentRoundSubmitted ) {
-            unlockTheKeyboard();
+            unlockKeyboard();
         } else {
             lockTheKeyboard();
         }
@@ -222,7 +222,7 @@ function saaUpdate(data) {
     var $isSubmitAllowed = true;
     
     isCurrentRoundSubmitted = false;
-    unlockTheKeyboard();
+    unlockKeyboard();
     round = $roundNumber;
 	var $isFinal = $context.children("round").attr("final");
     $isFinal = ( $isFinal === "yes" ) ? true : false; 
