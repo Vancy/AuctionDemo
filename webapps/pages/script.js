@@ -171,7 +171,7 @@ function saaSetUpdateInterval() {
     $updateInterval = setInterval(function() {
         console.log("-- FUN: saaSetUpdateInterval()");
         saaGetUpateInfo();
-    }, 3000);
+    }, 1000);
 }
 
 function saaGetUpateInfo() {
@@ -186,7 +186,7 @@ function saaGetUpateInfo() {
 }
 
 function saaUpdateInfo(data) {
-    console.log("---<><><>", time);
+    console.log("---<><><>", round);
     if ( time == 0 ) {
 
         saaUpdate(data);
@@ -197,13 +197,16 @@ function saaUpdateInfo(data) {
         data = $.parseXML(data);
     }
     var $context = ($(data)).find("auction_context");
-    SAA.setTimer($context.children("duration").attr("remain"));
+    
     console.log("remain", $context.children("duration").attr("remain"));
     
     var $roundNumber = $context.children("round").attr("value");
     var $isFinal = $context.children("round").attr("final");
     $isFinal = ( $isFinal === "yes" ) ? true : false; 
-    // changeStateTo( $isFinal ? STATE.FINAL : STATE.BIDDING);
+    changeStateTo( $isFinal ? STATE.FINAL : STATE.BIDDING);
+    if ( $isFinal ) {
+        saaUpdate(data);
+    }
     
     var $minIncreament = $context.children("minimum_increament").attr("value");
     $("#bid_table").data("minIncreament", $minIncreament);
@@ -211,16 +214,22 @@ function saaUpdateInfo(data) {
     $("#round_infomation").html("SAA Round {0}  <b>{1}</b>  <i>{2}</i>"
         .f($roundNumber, $isFinal===true ? "<b class='alert'>Final</b>" : "", $isFinal===false ? $temp_min_inc : ""));
 
-    if ( round < $roundNumber ) {
-        // unlockKeyboard();
-    } else if (round == $roundNumber) {
-        // if ( ! isCurrentRoundSubmitted ) {
-        //     unlockKeyboard();
-        // } else {
-        //     lockTheKeyboard();
-        // }
+    if ( round <= 0 ) {
+        console.log("?????????????????????????????");
+        $("#timer").text("Waiting the auction start...");
     } else {
-        console.log(">>>>>>>>>>>>EEEEEE");
+        SAA.setTimer($context.children("duration").attr("remain"));
+    }
+    if ( round <=0 ) {
+        lockTheKeyboard();
+    } else if ( round < $roundNumber ) {
+        unlockKeyboard();
+        isCurrentRoundSubmitted = false;
+    } else if (round >= $roundNumber && isCurrentRoundSubmitted ) {
+        lockTheKeyboard();
+    } else {
+        unlockKeyboard();
+       
     }
 
     $context.find("item").each(function(i) {
@@ -270,10 +279,28 @@ function saaUpdate(data) {
 	$("#round_infomation").html("SAA Round {0}  <b>{1}</b>  <i>{2}</i>"
 		.f($roundNumber, $isFinal===true ? "<b class='alert'>Final</b>" : "", $isFinal===false ? $temp_min_inc : ""));
 
-    if ( ! $isFinal ) {
-        SAA.setTimer($context.children("duration").attr("value"));
+    if ( round <= 0 ) {
+        console.log("999999987822222222222222");
+        $("#timer").text("Waiting the auction start...");
     } else {
+        SAA.setTimer($context.children("duration").attr("remain"));
+    }
+    if ( round <=0 ) {
+        console.log("GGHGHGHGHGHGHGHGHGHHGHGHGHGGHHGHGH");
+        lockTheKeyboard();
+    } else if ( round < $roundNumber ) {
+        unlockKeyboard();
+        isCurrentRoundSubmitted = false;
+    } else if (round >= $roundNumber && isCurrentRoundSubmitted ) {
+        lockTheKeyboard();
+    } else {
+        unlockKeyboard();
+       
+    }
+    if ( $isFinal ) {
         $("#timer").text("The final result.");
+    } else {
+        
     }
 	
 	$("#bid_table").find("tbody").find("tr").remove();
@@ -826,6 +853,9 @@ function lockTheKeyboard() {
     // $(".submit_button").addClass("disabled_button");
     console.log("++ lockTheKeyboard ++");
     $("#bid_table").data("keyboard_enable", false);
+    $("#submit_auction").removeClass("submit_button");
+    $("#submit_auction").addClass("disabled_button");
+    //
 }
 
 function unlockKeyboard() {
@@ -834,6 +864,8 @@ function unlockKeyboard() {
     // $(".submit_button").addClass("submit_button");
     console.log("-- unlockKeyboard --");
     $("#bid_table").data("keyboard_enable", true);
+    $("#submit_auction").addClass("submit_button");
+    $("#submit_auction").removeClass("disabled_button");
 }
 
 function endAuction() {
