@@ -101,6 +101,7 @@ $(document).ready(function() {
           	error: loginError
         });
         console.log("Name:{0}\nIP:{1}".f(getName(), getIp()));
+        //
   	});
 
 	// #
@@ -166,6 +167,7 @@ function switchTo(data) {
 /**  SAA ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 function saaSetUpdateInterval() {
     $updateInterval = setInterval(function() {
+        console.log("-- FUN: saaSetUpdateInterval()");
         getBid().getUpateInfo();
     }, 1000);
 }
