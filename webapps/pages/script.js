@@ -56,10 +56,8 @@ var CCA = {
     inputting: ccaInputting,
     collectData: ccaCollectData,
     validateAllInput: ccaValidateAllInput,
-    setAll2Valid: ccaSetAll2Valid,
-    setUpdateInterval: ccaSetUpdateInterval,
-    getUpateInfo: ccaGetUpateInfo,
-    updateInfo: ccaUpdateInfo
+    setAll2Valid: ccaSetAll2Valid
+    
 }
 
 var NOINPUT = 99999;
