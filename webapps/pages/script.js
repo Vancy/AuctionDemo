@@ -166,17 +166,18 @@ function switchTo(data) {
 function saaSetUpdateInterval() {
     $updateInterval = setInterval(function() {
         console.log("-- FUN: saaSetUpdateInterval()");
-        getBid().getUpateInfo();
+        saaGetUpateInfo();
     }, 1000);
 }
 
 function saaGetUpateInfo() {
     $.ajax({
         type: "GET",
-        url: "/servlet/update?name={0}&ip={1}".f(getName(), getIp()),
+        url: "/WEB-INF/update.xml?name={0}&ip={1}".f(getName(), getIp()),
         dataType: "xml",
-        success: getBid().getUpateInfo,
-        error: loginError
+        success: saaUpdateInfo,
+        error: loginError,
+        async: true
     });
 }
 
@@ -621,7 +622,7 @@ function ccaSetAll2Valid() {
 
 /** BID ++++++++++++++++++++++++++++++++++++++++++++++*/
 function setTimer(timeToCount) {
-    $("#timer").text("Time out after {0} seconds.".f($count));
+    $("#timer").text("Time out after {0} seconds.".f(timeToCount));
 	// $count = timeToCount;
 	// $timer = setInterval(function() {
 	// 	$("#timer").text("Time out after {0} seconds.".f($count));
@@ -874,6 +875,7 @@ function S2N(str) {
 function loginError() {
     $(".login_error").show();
     // BID.unlockScreen();
+    clearInterval($updateInterval);
     changeStateTo(STATE.ERROR);
 }
 
