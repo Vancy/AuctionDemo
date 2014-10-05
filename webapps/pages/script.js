@@ -17,7 +17,10 @@ var STATE = {
     ERROR: "Error"
 }
 
+
 var state = STATE.READY;
+var round = -1;
+var isCurrentRoundSubmitted = false;
 
 // A common BID object 
 var BID = {
@@ -40,7 +43,10 @@ var SAA = {
     inputting: saaInputting,
     validateAllInput: saaValidateAllInput,
     setAll2Valid: saaSetAll2Valid,
-    collectData: saaCollectData
+    collectData: saaCollectData,
+    setUpdateInterval: saaSetUpdateInterval,
+    getUpateInfo: saaGetUpateInfo,
+    updateInfo: saaUpdateInfo
 }
 
 // A CCA-BID object, 'subclass' of BID
@@ -50,7 +56,10 @@ var CCA = {
     inputting: ccaInputting,
     collectData: ccaCollectData,
     validateAllInput: ccaValidateAllInput,
-    setAll2Valid: ccaSetAll2Valid
+    setAll2Valid: ccaSetAll2Valid,
+    setUpdateInterval: ccaSetUpdateInterval,
+    getUpateInfo: ccaGetUpateInfo,
+    updateInfo: ccaUpdateInfo
 }
 
 var NOINPUT = 99999;
@@ -82,6 +91,7 @@ $(document).ready(function() {
 			$("#login_error_tips").show();
 			return;
 		}
+        // /servlet/update?name="+name+"ip="+getMyIp()
 		$("#login_error_tips").hide();
  	    $.ajax({
    	    	type: "GET",
@@ -135,6 +145,7 @@ function switchTo(data) {
         $("#bid_table").data("type", "SAA");
         $("#bid_table").data("object", SAA);
         SAA.update(data);
+        SAA.setUpdateInterval();
 
     } else if ( typeString === "CCA" )  {
         console.log("    Yes! this is CCA!");
@@ -150,7 +161,53 @@ function switchTo(data) {
 
 
 
+
+
 /**  SAA ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+function saaSetUpdateInterval() {
+    $updateInterval = setInterval(function() {
+        getBid().getUpateInfo();
+    }, 1000);
+}
+
+function saaGetUpateInfo() {
+    $.ajax({
+        type: "GET",
+        url: "/servlet/update?name={0}&ip={1}".f(getName(), getIp()),
+        dataType: "xml",
+        success: getBid().getUpateInfo,
+        error: loginError
+    });
+}
+
+function saaUpdateInfo(data) {
+    console.log("-- FUN: updateInfo()");
+    if ( $.type(data) === "string" ) {
+        data = $.parseXML(data);
+    }
+    var $context = ($(data)).find("auction_context");
+    SAA.setTimer($context.children("duration").attr("remain"));
+    var $roundNumber = $context.children("round").attr("value");
+
+    if ( round < $roundNumber ) {
+        unlockTheKeyboard();
+    } else if (round == $roundNumber) {
+        if ( ! isCurrentRoundSubmitted ) {
+            unlockTheKeyboard();
+        } else {
+            lockTheKeyboard();
+        }
+    } else {
+        console.log(">>>>>>>>>>>>EEEEEE");
+    }
+
+    $context.find("item").each(function(i) {
+        var $itemId = $(this).attr("id");
+        var $price = $(this).attr("price");
+        $("#ssa{0}".f($itemId)).text($price);
+    });
+}
+
 function saaUpdate(data) {
 	$("#login_box").hide();
 	console.log("-- FUN: SAAupdate()");
@@ -162,6 +219,11 @@ function saaUpdate(data) {
 
 	var $context = ($(data)).find("auction_context");
 	var $roundNumber = $context.children("round").attr("value");
+    var $isSubmitAllowed = true;
+    
+    isCurrentRoundSubmitted = false;
+    unlockTheKeyboard();
+    round = $roundNumber;
 	var $isFinal = $context.children("round").attr("final");
     $isFinal = ( $isFinal === "yes" ) ? true : false; 
     changeStateTo( $isFinal ? STATE.FINAL : STATE.BIDDING);
@@ -203,7 +265,7 @@ function saaUpdate(data) {
 
 		var $_id = $("<td class='invisible'></td>").text($itemId);
 		var $_name = $("<td></td>").text($itemName);
-		var $_price = $("<td></td>").text($price);
+		var $_price = $("<td id='ssa{0}'></td>".f($itemId)).text($price);
 
         // opt 1
         var $_owner = $("<td></td>").text($owner);
@@ -283,7 +345,6 @@ function saaValidateInput(input) {
     console.log("-- FUN: saaValidateInput");
     var $valid = true;
     var $item = input.parents("tr");
-
     var $id = $item.children("td:eq(0)").text();
     var $name = $item.children("td:eq(1)").text();
     var $price = $item.children("td:eq(2)").text();
@@ -307,7 +368,6 @@ function saaValidateInput(input) {
             // $valid = false;
         } 
     }
-
     return $valid;
 
     function hasInvalidCharacters(str) {
@@ -344,7 +404,6 @@ function saaSetAll2Valid() {
 
 
 /** CCA ++++++++++++++++++++++++++++++++++++++++++++++*/
-
 function ccaUpdate(data) {
     $("#login_box").hide();
     console.log("-- FUN: ccaUpdate()");
@@ -557,29 +616,26 @@ function ccaSetAll2Valid() {
         }     
     });
 }
-
-
 /** END OF CCA --------------------------------------------------------*/
-
-
-
-
 
 
 /** BID ++++++++++++++++++++++++++++++++++++++++++++++*/
 function setTimer(timeToCount) {
-    // console.log("-- FUN: setTimer");
-	$count = timeToCount;
-	$timer = setInterval(function() {
-		$("#timer").text("Time out after {0} seconds.".f($count));
-		$count = $count - 1;
+    $("#timer").text("Time out after {0} seconds.".f($count));
+	// $count = timeToCount;
+	// $timer = setInterval(function() {
+	// 	$("#timer").text("Time out after {0} seconds.".f($count));
+	// 	$count = $count - 1;
 
-		if ( $count == 0 ) {
-            clearInterval($timer);
-			getBid().submitAuction();
-		}
-	}, 1000);
+	// 	if ( $count == 0 ) {
+ //            clearInterval($timer);
+	// 		getBid().submitAuction();
+	// 	}
+	// }, 1000);
 }
+
+
+
 
 // Post xml to server
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -609,7 +665,7 @@ function submitAuction() {
 
     console.log("    * collected_data", $xmlData);
 
-
+    isCurrentRoundSubmitted = true;
     changeStateTo(STATE.SUBMITTING);
     storeAllValue();
     
@@ -632,16 +688,12 @@ function submitAuction() {
             changeStateTo(STATE.ERROR);
 
     });
-
-    
 }
-
 
 function isTimeUp(){
     // console.log("-- FUN:   ");
     return $count <= 0 ? true : false;
 }
-
 
 // ++++
 function lockScreen() {
@@ -666,7 +718,6 @@ function lockScreen() {
             // unlockScreen();
         })
         .appendTo('#lock_screen');
-
 }
 
 function loading() {
@@ -682,7 +733,6 @@ function loading() {
             'top': top-200,
             'left': left
     }).fadeIn();
-
 }
 
 function unlockScreen() {
@@ -745,8 +795,6 @@ function lockTheKeyboard() {
     // $(".submit_button").addClass("disabled_button");
     console.log("++ lockTheKeyboard ++");
     $("#bid_table").data("keyboard_enable", false);
-
-   
 }
 
 function unlockKeyboard() {

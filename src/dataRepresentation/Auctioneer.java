@@ -55,7 +55,7 @@ public class Auctioneer extends Thread{
 			collectAgentBid();
 			
 			while(this.environment.context.roundTimeElapse > 0) {
-				// Wait until current round time up, or all bidder send their bid
+				// Wait until current round time up, or all bidder send their bids
 				deliberateDelay(0.2);
 				
 				synchronized(this.requestedBids) {

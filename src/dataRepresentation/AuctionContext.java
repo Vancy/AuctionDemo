@@ -190,6 +190,7 @@ public class AuctionContext {
 	    root.appendChild(child);
 	    child = doc.createElement("duration");
 	    child.setAttribute("value", Integer.toString(this.duration_Sec));
+	    child.setAttribute("remain", Integer.toString(this.roundTimeElapse));
 	    root.appendChild(child);
 	    child = doc.createElement("minimum_increament");
 	    child.setAttribute("value", Double.toString(this.minIncreament));
