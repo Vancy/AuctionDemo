@@ -22,6 +22,8 @@ var state = STATE.READY;
 var round = -1;
 var isCurrentRoundSubmitted = false;
 
+var time = 0;
+
 // A common BID object 
 var BID = {
     // changeStateTo: changeStateTo,
@@ -143,7 +145,7 @@ function switchTo(data) {
         console.log("    Yes! this is SAA!");
         $("#bid_table").data("type", "SAA");
         $("#bid_table").data("object", SAA);
-        SAA.update(data);
+        saaUpdateInfo(data);
         SAA.setUpdateInterval();
 
     } else if ( typeString === "CCA" )  {
@@ -159,7 +161,9 @@ function switchTo(data) {
 }
 
 
-
+function buildTable(data) {
+    
+}
 
 
 /**  SAA ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
@@ -167,7 +171,7 @@ function saaSetUpdateInterval() {
     $updateInterval = setInterval(function() {
         console.log("-- FUN: saaSetUpdateInterval()");
         saaGetUpateInfo();
-    }, 1000);
+    }, 3000);
 }
 
 function saaGetUpateInfo() {
@@ -182,22 +186,39 @@ function saaGetUpateInfo() {
 }
 
 function saaUpdateInfo(data) {
+    console.log("---<><><>", time);
+    if ( time == 0 ) {
+
+        saaUpdate(data);
+        return;
+    }
     console.log("-- FUN: updateInfo()");
     if ( $.type(data) === "string" ) {
         data = $.parseXML(data);
     }
     var $context = ($(data)).find("auction_context");
     SAA.setTimer($context.children("duration").attr("remain"));
+    console.log("remain", $context.children("duration").attr("remain"));
+    
     var $roundNumber = $context.children("round").attr("value");
+    var $isFinal = $context.children("round").attr("final");
+    $isFinal = ( $isFinal === "yes" ) ? true : false; 
+    // changeStateTo( $isFinal ? STATE.FINAL : STATE.BIDDING);
+    
+    var $minIncreament = $context.children("minimum_increament").attr("value");
+    $("#bid_table").data("minIncreament", $minIncreament);
+    var $temp_min_inc = "Min Increament {0}".f($minIncreament);
+    $("#round_infomation").html("SAA Round {0}  <b>{1}</b>  <i>{2}</i>"
+        .f($roundNumber, $isFinal===true ? "<b class='alert'>Final</b>" : "", $isFinal===false ? $temp_min_inc : ""));
 
     if ( round < $roundNumber ) {
-        unlockKeyboard();
+        // unlockKeyboard();
     } else if (round == $roundNumber) {
-        if ( ! isCurrentRoundSubmitted ) {
-            unlockKeyboard();
-        } else {
-            lockTheKeyboard();
-        }
+        // if ( ! isCurrentRoundSubmitted ) {
+        //     unlockKeyboard();
+        // } else {
+        //     lockTheKeyboard();
+        // }
     } else {
         console.log(">>>>>>>>>>>>EEEEEE");
     }
@@ -207,9 +228,13 @@ function saaUpdateInfo(data) {
         var $price = $(this).attr("price");
         $("#ssa{0}".f($itemId)).text($price);
     });
+
+    //
+  
 }
 
 function saaUpdate(data) {
+    
 	$("#login_box").hide();
 	console.log("-- FUN: SAAupdate()");
 
@@ -219,7 +244,12 @@ function saaUpdate(data) {
     }
 
 	var $context = ($(data)).find("auction_context");
+
 	var $roundNumber = $context.children("round").attr("value");
+    if ($roundNumber > 0) {
+        console.log(")_)_)_)_))_", $roundNumber);
+        time += 1;
+    }
     var $isSubmitAllowed = true;
     
     isCurrentRoundSubmitted = false;
@@ -386,7 +416,7 @@ function saaValidateAllInput() {
         }
     });
 
-    console.log("    All", $valid, $count);
+    // console.log("    All", $valid, $count);
     return $valid;
 }
 
@@ -662,7 +692,7 @@ function submitAuction() {
     // collect data
     var $xmlData = getBid().collectData();
     
-    clearInterval($timer);
+    // clearInterval($timer);
 
     console.log("    * collected_data", $xmlData);
 
