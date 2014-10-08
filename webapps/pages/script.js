@@ -390,6 +390,10 @@ function saaCollectData() {
         var $id = $(this).children("td:eq(0)").text();
         var $name = $(this).children("td:eq(1)").text();
         var $yprice = $("#price{0}".f($id)).val();
+	//Xing: detect whether price input is '' string, if yes, assign '0' to it
+	if ($yprice == '') {
+		$yprice = '0'
+	}
         var $owner = " ";
         $items = $items + "<item id='{0}' name='{1}' price='{2}' owner='{3}'></item>".f($id, $name, $yprice, $owner);
     });
