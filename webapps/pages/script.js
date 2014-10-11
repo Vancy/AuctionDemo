@@ -683,7 +683,7 @@ function ccaSetAll2Valid() {
 
 /** BID ++++++++++++++++++++++++++++++++++++++++++++++*/
 function setTimer(timeToCount) {
-    $("#timer").text("Time out after {0} seconds.".f(timeToCount));
+    $("#timer").text("This round finishes in {0} seconds...".f(timeToCount));
 	// $count = timeToCount;
 	// $timer = setInterval(function() {
 	// 	$("#timer").text("Time out after {0} seconds.".f($count));
