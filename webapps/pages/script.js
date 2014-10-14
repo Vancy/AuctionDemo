@@ -21,11 +21,8 @@ var STATE = {
 var state = STATE.READY;
 var round = -1;
 var isCurrentRoundSubmitted = false;
-<<<<<<< HEAD
-=======
 
 var time = 0;
->>>>>>> nowait
 
 // A common BID object 
 var BID = {
@@ -61,15 +58,8 @@ var CCA = {
     inputting: ccaInputting,
     collectData: ccaCollectData,
     validateAllInput: ccaValidateAllInput,
-<<<<<<< HEAD
-    setAll2Valid: ccaSetAll2Valid,
-    setUpdateInterval: ccaSetUpdateInterval,
-    getUpateInfo: ccaGetUpateInfo,
-    updateInfo: ccaUpdateInfo
-=======
     setAll2Valid: ccaSetAll2Valid
     
->>>>>>> nowait
 }
 
 var NOINPUT = 99999;
@@ -155,11 +145,7 @@ function switchTo(data) {
         console.log("    Yes! this is SAA!");
         $("#bid_table").data("type", "SAA");
         $("#bid_table").data("object", SAA);
-<<<<<<< HEAD
-        SAA.update(data);
-=======
         saaUpdateInfo(data);
->>>>>>> nowait
         SAA.setUpdateInterval();
 
     } else if ( typeString === "CCA" )  {
@@ -180,68 +166,37 @@ function buildTable(data) {
 }
 
 
-
-
 /**  SAA ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 function saaSetUpdateInterval() {
     $updateInterval = setInterval(function() {
-<<<<<<< HEAD
-        getBid().getUpateInfo();
-=======
         console.log("-- FUN: saaSetUpdateInterval()");
         saaGetUpateInfo();
->>>>>>> nowait
     }, 1000);
 }
 
 function saaGetUpateInfo() {
     $.ajax({
         type: "GET",
-<<<<<<< HEAD
-        url: "/servlet/update?name={0}&ip={1}".f(getName(), getIp()),
-        dataType: "xml",
-        success: getBid().getUpateInfo,
-        error: loginError
-=======
         url: "/WEB-INF/update.xml?name={0}&ip={1}".f(getName(), getIp()),
         dataType: "xml",
         success: saaUpdateInfo,
         error: loginError,
         async: true
->>>>>>> nowait
     });
 }
 
 function saaUpdateInfo(data) {
-<<<<<<< HEAD
-=======
     console.log("---<><><>", round);
     if ( time == 0 ) {
 
         saaUpdate(data);
         return;
     }
->>>>>>> nowait
     console.log("-- FUN: updateInfo()");
     if ( $.type(data) === "string" ) {
         data = $.parseXML(data);
     }
     var $context = ($(data)).find("auction_context");
-<<<<<<< HEAD
-    SAA.setTimer($context.children("duration").attr("remain"));
-    var $roundNumber = $context.children("round").attr("value");
-
-    if ( round < $roundNumber ) {
-        unlockTheKeyboard();
-    } else if (round == $roundNumber) {
-        if ( ! isCurrentRoundSubmitted ) {
-            unlockTheKeyboard();
-        } else {
-            lockTheKeyboard();
-        }
-    } else {
-        console.log(">>>>>>>>>>>>EEEEEE");
-=======
     
     console.log("remain", $context.children("duration").attr("remain"));
     
@@ -275,7 +230,6 @@ function saaUpdateInfo(data) {
     } else {
         unlockKeyboard();
        
->>>>>>> nowait
     }
 
     $context.find("item").each(function(i) {
@@ -283,12 +237,9 @@ function saaUpdateInfo(data) {
         var $price = $(this).attr("price");
         $("#ssa{0}".f($itemId)).text($price);
     });
-<<<<<<< HEAD
-=======
 
     //
   
->>>>>>> nowait
 }
 
 function saaUpdate(data) {
@@ -304,12 +255,6 @@ function saaUpdate(data) {
 	var $context = ($(data)).find("auction_context");
 
 	var $roundNumber = $context.children("round").attr("value");
-<<<<<<< HEAD
-    var $isSubmitAllowed = true;
-    
-    isCurrentRoundSubmitted = false;
-    unlockTheKeyboard();
-=======
     if ($roundNumber > 0) {
         console.log(")_)_)_)_))_", $roundNumber);
         time += 1;
@@ -318,7 +263,6 @@ function saaUpdate(data) {
     
     isCurrentRoundSubmitted = false;
     unlockKeyboard();
->>>>>>> nowait
     round = $roundNumber;
 	var $isFinal = $context.children("round").attr("final");
     $isFinal = ( $isFinal === "yes" ) ? true : false; 
@@ -739,11 +683,7 @@ function ccaSetAll2Valid() {
 
 /** BID ++++++++++++++++++++++++++++++++++++++++++++++*/
 function setTimer(timeToCount) {
-<<<<<<< HEAD
-    $("#timer").text("Time out after {0} seconds.".f($count));
-=======
     $("#timer").text("This round finishes in {0} seconds...".f(timeToCount));
->>>>>>> nowait
 	// $count = timeToCount;
 	// $timer = setInterval(function() {
 	// 	$("#timer").text("Time out after {0} seconds.".f($count));
@@ -917,12 +857,9 @@ function lockTheKeyboard() {
     // $(".submit_button").addClass("disabled_button");
     console.log("++ lockTheKeyboard ++");
     $("#bid_table").data("keyboard_enable", false);
-<<<<<<< HEAD
-=======
     $("#submit_auction").removeClass("submit_button");
     $("#submit_auction").addClass("disabled_button");
     //
->>>>>>> nowait
 }
 
 function unlockKeyboard() {
