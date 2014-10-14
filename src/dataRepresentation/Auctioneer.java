@@ -18,7 +18,7 @@ public class Auctioneer extends Thread{
 	 * 5> set flag, bidServlet checks this flag, send response.
 	 */
 	
-	ArrayList<Bid> requestedBids;
+	HashMap<Integer, Bid> requestedBids;
 	AuctionEnvironment environment;
 	ArrayList<AuctionContext> auctionLog = new ArrayList<AuctionContext>();
 	Timer roundTimer = new Timer();
@@ -27,13 +27,15 @@ public class Auctioneer extends Thread{
 	
 	public Auctioneer(AuctionEnvironment e) {
 		this.environment = e;
-		this.requestedBids = new ArrayList<Bid>();
+		this.requestedBids = new HashMap<Integer, Bid>();
 	}
 	
 	public void getBid(Bid bid) {
 		synchronized(this.requestedBids) {
-			this.requestedBids.add(bid);
-			System.err.println("get a request current size:"+requestedBids.size()+",bidder list size:"+this.environment.bidderList.getList().size());
+			int bidderID = bid.getBidder().getID();
+			String bidderName = bid.getBidder().getName();
+			this.requestedBids.put(bidderID, bid);
+			System.err.println("get bidder " + bidderName + "'s new bid");
 		}
 		
 	}
@@ -55,16 +57,10 @@ public class Auctioneer extends Thread{
 			collectAgentBid();
 			
 			while(this.environment.context.roundTimeElapse > 0) {
-				// Wait until current round time up, or all bidder send their bids
+				// Wait until current round time up
 				deliberateDelay(0.2);
-				
-				synchronized(this.requestedBids) {
-					if (this.requestedBids.size() == this.environment.bidderList.getList().size()) {
-						break;
-					}
-				}
 			}
-			
+		
 			// Wait one more seconds, to wait all defaults bids
 			deliberateDelay(1);
 			
@@ -116,7 +112,7 @@ public class Auctioneer extends Thread{
 	
 	private void processSAABids() {
 		boolean newBids = false;
-		for (Bid bid: this.requestedBids) {
+		for (Bid bid: this.requestedBids.values()) {
 			for (AuctionItem bidderItem: bid.getItemList()) {
 				double originalPrice = fetchItemPrice(bidderItem.getID());
 
@@ -156,7 +152,7 @@ public class Auctioneer extends Thread{
 		}
 		
 		//collect requirment of each item
-		for (Bid bid: this.requestedBids) {
+		for (Bid bid: this.requestedBids.values()) {
 			for (AuctionItem bidderItem: bid.getItemList()) {
 				thisRoundRequirment[bidderItem.getID()] += bidderItem.getRequiredQuantity();
 				placeItemOwner(bidderItem.getID(), bid.getBidder().getName(), bidderItem.getRequiredQuantity());
@@ -206,14 +202,14 @@ public class Auctioneer extends Thread{
 		for (Bidder bidder: this.environment.bidderList.getList()) {
 			if (bidder instanceof CCAAgent) {
 				Bid agentBid = ((Agent)bidder).auctionResponse(this.environment.context);
-				requestedBids.add(agentBid);
+				requestedBids.put(agentBid.getBidder().getID(), agentBid);
 				System.err.println("Agent:"+bidder.getName()+" place a bid:");
 				for (AuctionItem item: agentBid.getItemList()) {
 					System.out.println(bidder.getName()+" demands:"+item.getRequiredQuantity()+"for item:"+item.getName());
 				}
 			} else if (bidder instanceof Agent) {
 				Bid agentBid = ((Agent)bidder).auctionResponse(this.environment.context);
-				requestedBids.add(agentBid);
+				requestedBids.put(agentBid.getBidder().getID(), agentBid);
 				System.err.println("Agent:"+bidder.getName()+" place a bid:");
 				for (AuctionItem item: agentBid.getItemList()) {
 					System.out.println(bidder.getName()+"'s price:"+item.getPrice()+"for item:"+item.getName());
