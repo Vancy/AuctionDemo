@@ -21,6 +21,11 @@ var STATE = {
 var state = STATE.READY;
 var round = -1;
 var isCurrentRoundSubmitted = false;
+<<<<<<< HEAD
+=======
+
+var time = 0;
+>>>>>>> nowait
 
 // A common BID object 
 var BID = {
@@ -56,10 +61,15 @@ var CCA = {
     inputting: ccaInputting,
     collectData: ccaCollectData,
     validateAllInput: ccaValidateAllInput,
+<<<<<<< HEAD
     setAll2Valid: ccaSetAll2Valid,
     setUpdateInterval: ccaSetUpdateInterval,
     getUpateInfo: ccaGetUpateInfo,
     updateInfo: ccaUpdateInfo
+=======
+    setAll2Valid: ccaSetAll2Valid
+    
+>>>>>>> nowait
 }
 
 var NOINPUT = 99999;
@@ -101,6 +111,7 @@ $(document).ready(function() {
           	error: loginError
         });
         console.log("Name:{0}\nIP:{1}".f(getName(), getIp()));
+        //
   	});
 
 	// #
@@ -144,7 +155,11 @@ function switchTo(data) {
         console.log("    Yes! this is SAA!");
         $("#bid_table").data("type", "SAA");
         $("#bid_table").data("object", SAA);
+<<<<<<< HEAD
         SAA.update(data);
+=======
+        saaUpdateInfo(data);
+>>>>>>> nowait
         SAA.setUpdateInterval();
 
     } else if ( typeString === "CCA" )  {
@@ -160,32 +175,59 @@ function switchTo(data) {
 }
 
 
+function buildTable(data) {
+    
+}
+
 
 
 
 /**  SAA ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 function saaSetUpdateInterval() {
     $updateInterval = setInterval(function() {
+<<<<<<< HEAD
         getBid().getUpateInfo();
+=======
+        console.log("-- FUN: saaSetUpdateInterval()");
+        saaGetUpateInfo();
+>>>>>>> nowait
     }, 1000);
 }
 
 function saaGetUpateInfo() {
     $.ajax({
         type: "GET",
+<<<<<<< HEAD
         url: "/servlet/update?name={0}&ip={1}".f(getName(), getIp()),
         dataType: "xml",
         success: getBid().getUpateInfo,
         error: loginError
+=======
+        url: "/WEB-INF/update.xml?name={0}&ip={1}".f(getName(), getIp()),
+        dataType: "xml",
+        success: saaUpdateInfo,
+        error: loginError,
+        async: true
+>>>>>>> nowait
     });
 }
 
 function saaUpdateInfo(data) {
+<<<<<<< HEAD
+=======
+    console.log("---<><><>", round);
+    if ( time == 0 ) {
+
+        saaUpdate(data);
+        return;
+    }
+>>>>>>> nowait
     console.log("-- FUN: updateInfo()");
     if ( $.type(data) === "string" ) {
         data = $.parseXML(data);
     }
     var $context = ($(data)).find("auction_context");
+<<<<<<< HEAD
     SAA.setTimer($context.children("duration").attr("remain"));
     var $roundNumber = $context.children("round").attr("value");
 
@@ -199,6 +241,41 @@ function saaUpdateInfo(data) {
         }
     } else {
         console.log(">>>>>>>>>>>>EEEEEE");
+=======
+    
+    console.log("remain", $context.children("duration").attr("remain"));
+    
+    var $roundNumber = $context.children("round").attr("value");
+    var $isFinal = $context.children("round").attr("final");
+    $isFinal = ( $isFinal === "yes" ) ? true : false; 
+    changeStateTo( $isFinal ? STATE.FINAL : STATE.BIDDING);
+    if ( $isFinal ) {
+        saaUpdate(data);
+    }
+    
+    var $minIncreament = $context.children("minimum_increament").attr("value");
+    $("#bid_table").data("minIncreament", $minIncreament);
+    var $temp_min_inc = "Min Increament {0}".f($minIncreament);
+    $("#round_infomation").html("SAA Round {0}  <b>{1}</b>  <i>{2}</i>"
+        .f($roundNumber, $isFinal===true ? "<b class='alert'>Final</b>" : "", $isFinal===false ? $temp_min_inc : ""));
+
+    if ( round <= 0 ) {
+        console.log("?????????????????????????????");
+        $("#timer").text("Waiting the auction start...");
+    } else {
+        SAA.setTimer($context.children("duration").attr("remain"));
+    }
+    if ( round <=0 ) {
+        lockTheKeyboard();
+    } else if ( round < $roundNumber ) {
+        unlockKeyboard();
+        isCurrentRoundSubmitted = false;
+    } else if (round >= $roundNumber && isCurrentRoundSubmitted ) {
+        lockTheKeyboard();
+    } else {
+        unlockKeyboard();
+       
+>>>>>>> nowait
     }
 
     $context.find("item").each(function(i) {
@@ -206,9 +283,16 @@ function saaUpdateInfo(data) {
         var $price = $(this).attr("price");
         $("#ssa{0}".f($itemId)).text($price);
     });
+<<<<<<< HEAD
+=======
+
+    //
+  
+>>>>>>> nowait
 }
 
 function saaUpdate(data) {
+    
 	$("#login_box").hide();
 	console.log("-- FUN: SAAupdate()");
 
@@ -218,11 +302,23 @@ function saaUpdate(data) {
     }
 
 	var $context = ($(data)).find("auction_context");
+
 	var $roundNumber = $context.children("round").attr("value");
+<<<<<<< HEAD
     var $isSubmitAllowed = true;
     
     isCurrentRoundSubmitted = false;
     unlockTheKeyboard();
+=======
+    if ($roundNumber > 0) {
+        console.log(")_)_)_)_))_", $roundNumber);
+        time += 1;
+    }
+    var $isSubmitAllowed = true;
+    
+    isCurrentRoundSubmitted = false;
+    unlockKeyboard();
+>>>>>>> nowait
     round = $roundNumber;
 	var $isFinal = $context.children("round").attr("final");
     $isFinal = ( $isFinal === "yes" ) ? true : false; 
@@ -239,10 +335,28 @@ function saaUpdate(data) {
 	$("#round_infomation").html("SAA Round {0}  <b>{1}</b>  <i>{2}</i>"
 		.f($roundNumber, $isFinal===true ? "<b class='alert'>Final</b>" : "", $isFinal===false ? $temp_min_inc : ""));
 
-    if ( ! $isFinal ) {
-        SAA.setTimer($context.children("duration").attr("value"));
+    if ( round <= 0 ) {
+        console.log("999999987822222222222222");
+        $("#timer").text("Waiting the auction start...");
     } else {
+        SAA.setTimer($context.children("duration").attr("remain"));
+    }
+    if ( round <=0 ) {
+        console.log("GGHGHGHGHGHGHGHGHGHHGHGHGHGGHHGHGH");
+        lockTheKeyboard();
+    } else if ( round < $roundNumber ) {
+        unlockKeyboard();
+        isCurrentRoundSubmitted = false;
+    } else if (round >= $roundNumber && isCurrentRoundSubmitted ) {
+        lockTheKeyboard();
+    } else {
+        unlockKeyboard();
+       
+    }
+    if ( $isFinal ) {
         $("#timer").text("The final result.");
+    } else {
+        
     }
 	
 	$("#bid_table").find("tbody").find("tr").remove();
@@ -332,6 +446,10 @@ function saaCollectData() {
         var $id = $(this).children("td:eq(0)").text();
         var $name = $(this).children("td:eq(1)").text();
         var $yprice = $("#price{0}".f($id)).val();
+	//Xing: detect whether price input is '' string, if yes, assign '0' to it
+	if ($yprice == '') {
+		$yprice = '0'
+	}
         var $owner = " ";
         $items = $items + "<item id='{0}' name='{1}' price='{2}' owner='{3}'></item>".f($id, $name, $yprice, $owner);
     });
@@ -385,7 +503,7 @@ function saaValidateAllInput() {
         }
     });
 
-    console.log("    All", $valid, $count);
+    // console.log("    All", $valid, $count);
     return $valid;
 }
 
@@ -621,7 +739,11 @@ function ccaSetAll2Valid() {
 
 /** BID ++++++++++++++++++++++++++++++++++++++++++++++*/
 function setTimer(timeToCount) {
+<<<<<<< HEAD
     $("#timer").text("Time out after {0} seconds.".f($count));
+=======
+    $("#timer").text("This round finishes in {0} seconds...".f(timeToCount));
+>>>>>>> nowait
 	// $count = timeToCount;
 	// $timer = setInterval(function() {
 	// 	$("#timer").text("Time out after {0} seconds.".f($count));
@@ -661,7 +783,7 @@ function submitAuction() {
     // collect data
     var $xmlData = getBid().collectData();
     
-    clearInterval($timer);
+    // clearInterval($timer);
 
     console.log("    * collected_data", $xmlData);
 
@@ -795,6 +917,12 @@ function lockTheKeyboard() {
     // $(".submit_button").addClass("disabled_button");
     console.log("++ lockTheKeyboard ++");
     $("#bid_table").data("keyboard_enable", false);
+<<<<<<< HEAD
+=======
+    $("#submit_auction").removeClass("submit_button");
+    $("#submit_auction").addClass("disabled_button");
+    //
+>>>>>>> nowait
 }
 
 function unlockKeyboard() {
@@ -803,6 +931,8 @@ function unlockKeyboard() {
     // $(".submit_button").addClass("submit_button");
     console.log("-- unlockKeyboard --");
     $("#bid_table").data("keyboard_enable", true);
+    $("#submit_auction").addClass("submit_button");
+    $("#submit_auction").removeClass("disabled_button");
 }
 
 function endAuction() {
@@ -874,6 +1004,7 @@ function S2N(str) {
 function loginError() {
     $(".login_error").show();
     // BID.unlockScreen();
+    clearInterval($updateInterval);
     changeStateTo(STATE.ERROR);
 }
 

@@ -49,7 +49,7 @@ public class PriceOwnerCellRenderer extends DefaultTableCellRenderer {
 	    		setBackground(BidderList.colorList.get(ownerID));  
 	    	} 
 		 }
-		 setText(value.toString());   
+		 setText(value != null ? value.toString() : "");   
 		 return this;
     }
 }

@@ -42,6 +42,7 @@ public class WebServer extends Thread{
 	private void addServlets() {
 		servletContextHandler.addServlet(new ServletHolder(new LoginServlet(auctionEnvironment)),"/login.xml");
 		servletContextHandler.addServlet(new ServletHolder(new BidServlet(auctionEnvironment)),"/bid.xml");
+		servletContextHandler.addServlet(new ServletHolder(new UpdateServlet(auctionEnvironment)),"/update.xml");
 	}
 	
 	@Override

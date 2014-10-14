@@ -40,7 +40,7 @@ public class AuctionContext {
 	
 	public AuctionContext() {
 		this.type = AuctionType.SAA;
-		this.round = 1;
+		this.round = 0;
 		this.duration_Sec = 30;
 		this.itemList = new ArrayList<AuctionItem>();
 		this.minIncreament = 0;
@@ -64,7 +64,7 @@ public class AuctionContext {
 	
 	public AuctionContext(AuctionType type, int time, double min, ArrayList<AuctionItem> list) {
 		this.type = type;
-		this.round = 1;
+		this.round = 0;
 		this.duration_Sec = time;
 		this.itemList = list;
 		this.minIncreament = min;
@@ -72,7 +72,7 @@ public class AuctionContext {
 	}
 	
 	public void setData(int time, double min, ArrayList<AuctionItem> list) {
-		this.round = 1;
+		this.round = 0;
 		this.duration_Sec = time;
 		this.itemList = list;
 		this.minIncreament = min;
@@ -190,6 +190,7 @@ public class AuctionContext {
 	    root.appendChild(child);
 	    child = doc.createElement("duration");
 	    child.setAttribute("value", Integer.toString(this.duration_Sec));
+	    child.setAttribute("remain", Integer.toString(this.roundTimeElapse));
 	    root.appendChild(child);
 	    child = doc.createElement("minimum_increament");
 	    child.setAttribute("value", Double.toString(this.minIncreament));
