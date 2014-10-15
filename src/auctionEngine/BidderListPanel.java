@@ -6,17 +6,12 @@ import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.ListSelectionModel;
 import javax.swing.Timer;
-
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.table.DefaultTableModel;
-
 import dataRepresentation.AuctionEnvironment;
 import dataRepresentation.Bidder;
 import dataRepresentation.BidderList;
-
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;

@@ -16,8 +16,7 @@ public class LoginServlet extends DefaultServlet{
 
 	private static final long serialVersionUID = 2172189957056566935L;
 	
-	private String logo;
-	
+
 	private AuctionEnvironment auctionEnvironment = null;
 	
 	public LoginServlet(AuctionEnvironment ae) {
@@ -25,8 +24,8 @@ public class LoginServlet extends DefaultServlet{
 	}
 	
 	public void init(){
-		logo = "Login Servlet";
 	}
+	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		//set response content type

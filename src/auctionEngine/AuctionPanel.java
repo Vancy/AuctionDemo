@@ -5,17 +5,16 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.JButton;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.Timer;
 
-import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.BorderLayout;
-import javax.swing.BoxLayout;
+
 
 public class AuctionPanel extends JPanel {
-
 
 	private static final long serialVersionUID = 2896868153742237502L;
 
@@ -23,6 +22,7 @@ public class AuctionPanel extends JPanel {
 	
 	public AuctionListPanel auctionListPanel;
 	private JSpinner spinner_Increment;
+	private JSpinner spinner_timeDuration;
 	private JLabel lblAuctionType;
 	private JLabel lblRound;
 	private JLabel lblTimer;
@@ -62,16 +62,26 @@ public class AuctionPanel extends JPanel {
 		panel.setBounds(0, 529, 571, 35);
 		panel_All.add(panel);
 		
-		JLabel lblMinimunIncrement = new JLabel("Minimun Increment: ");
-		panel.add(lblMinimunIncrement);
 		
-		spinner_Increment = new JSpinner();
+		JLabel lblMinimunIncrement = new JLabel("Minimun Increment: ");
+		
+		panel.add(lblMinimunIncrement);
+		//SpinnerModel sm_minIncrement = new SpinnerNumberModel(1, 0, Double.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
+		spinner_Increment = new JSpinner(/*sm_minIncrement*/);
 		panel.add(spinner_Increment);
+		
+		JLabel lblTimeDuration = new JLabel("Duration Time: ");
+		panel.add(lblTimeDuration);
+
+		//SpinnerModel sm_timeDuration = new SpinnerNumberModel(30, 0, Integer.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
+		spinner_timeDuration = new JSpinner(/*sm_timeDuration*/);
+		panel.add(spinner_timeDuration);
 		
 		JButton btnNewButton_Stop = new JButton("Set");
 		btnNewButton_Stop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				environment.context.setMinIncrement(Integer.parseInt(spinner_Increment.getValue().toString()));
+				environment.context.setMinIncrement(Double.parseDouble(spinner_Increment.getValue().toString()));
+				environment.context.setDurationTime((int)Math.round(Double.parseDouble(spinner_timeDuration.getValue().toString())));
 			}
 		});
 		panel.add(btnNewButton_Stop);
@@ -112,6 +122,8 @@ public class AuctionPanel extends JPanel {
 		
 		//Set minimun increment to spinner
 		this.spinner_Increment.setValue(environment.context.getMinIncrement());
+		//Set time_duration to spinner
+		this.spinner_timeDuration.setValue(environment.context.getDurationTime());
 	}
 	
 	private void updateAuctionInfo() {

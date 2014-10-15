@@ -41,7 +41,6 @@ public class Auctioneer extends Thread{
 	}
 	
 	private boolean removeBids() {
-
 			this.requestedBids.clear();
 			System.out.println("current request list size after remove all:"+requestedBids.size());
 			return true;
@@ -60,7 +59,7 @@ public class Auctioneer extends Thread{
 				// Wait until current round time up
 				deliberateDelay(0.2);
 			}
-		
+
 			// Wait one more seconds, to wait all defaults bids
 			deliberateDelay(1);
 			
@@ -68,7 +67,7 @@ public class Auctioneer extends Thread{
 			processBids();
 			System.out.println("next round starting...");
 			removeBids();
-			deliberateDelay(2);
+			deliberateDelay(1);
 			updateNextRoundContext();
 			/***************Next Round Will Start**********************/
 			if (this.environment.context.isFinalRound()) {
@@ -88,7 +87,7 @@ public class Auctioneer extends Thread{
 	}
 	
 	public AuctionContext nextRound() {
-		
+		//this method is invoked by BidServlet, to get the latest auctionContext
 		return this.environment.context;
 	}
 	
@@ -111,6 +110,10 @@ public class Auctioneer extends Thread{
 	}
 	
 	private void processSAABids() {
+		/*
+		 * newBids is true when there is at least one new bid, then auction will keep going,
+		 * otherwise, newBids is false, means nobody bids, then next round is the final. 
+		 */
 		boolean newBids = false;
 		for (Bid bid: this.requestedBids.values()) {
 			for (AuctionItem bidderItem: bid.getItemList()) {
@@ -168,8 +171,8 @@ public class Auctioneer extends Thread{
 		}
 		
 	}
+	
 	private void updateNextRoundContext() {
-		
 		
 		/*
 		 * reset parameter via GUI, e.g. minimun_increment
@@ -217,16 +220,14 @@ public class Auctioneer extends Thread{
 			} 	
 		}
 	}
-	private void recordLog() {
-		
+	
+	private void recordLog() {	
 		this.auctionLog.add(new AuctionContext(this.environment.context));
 	}
-	
 	
 	public ArrayList<AuctionContext> getLog() {
 		return this.auctionLog;
 	}
-	
 	
 	private void updateNextRoundPriceForCCA() {
 		double priceTick = this.environment.context.getPriceTick() + this.environment.context.getMinIncrement();
@@ -238,7 +239,9 @@ public class Auctioneer extends Thread{
 			}
 		}
 	}
-	
+	/*
+	 * three helper methods: fetchItemPrice, putItemPrice, placeItemOwner
+	 */
 	private double fetchItemPrice(int itemID) {
 		for (AuctionItem item: this.environment.context.getItemList()) {
 			if (itemID == item.getID()) {
@@ -265,6 +268,9 @@ public class Auctioneer extends Thread{
 		}
 	}
 	
+	/*
+	 * Two utility funcitons: deliberateDelay, flipCoinWin
+	 */
 	static private void deliberateDelay(double sec) {
 		try {
 			Thread.currentThread();
