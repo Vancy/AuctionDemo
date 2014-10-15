@@ -3,6 +3,7 @@ package dataRepresentation;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -118,6 +119,9 @@ public class AuctionContext {
 		return this.duration_Sec;
 	}
 	public ArrayList<AuctionItem> getItemList() {
+		synchronized (this) {
+			Collections.sort(itemList);
+		}
 		return this.itemList;
 	}
 	

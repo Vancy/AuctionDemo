@@ -2,6 +2,7 @@ package dataRepresentation;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class BidderList {
 	

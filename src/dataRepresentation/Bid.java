@@ -1,6 +1,7 @@
 package dataRepresentation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -23,6 +24,9 @@ public class Bid{
 	}
 	
 	public List<AuctionItem> getItemList() {
+		synchronized (this) {
+			Collections.sort(itemList);
+		}
 		return this.itemList;
 	}
 
