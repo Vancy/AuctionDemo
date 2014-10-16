@@ -14,6 +14,35 @@ public class Bidder {
 	private String ipAdress = "127.0.0.1";
 	private Color colorRecognition;
 	
+	// variables for activity rule
+	private int activityRuleCounter = 2;
+	private int eligibility = 0;
+	private int activity = 0;
+	
+	protected int getActivityRuleCounter() {
+		return activityRuleCounter;
+	}
+
+	protected void decrementActivityRuleCounter() {
+		this.activityRuleCounter--;
+	}
+
+	protected int getEligibility() {
+		return eligibility;
+	}
+
+	protected void setEligibility(int eligibility) {
+		this.eligibility = eligibility;
+	}
+
+	protected int getActivity() {
+		return activity;
+	}
+
+	protected void setActivity(int activity) {
+		this.activity = activity;
+	}
+
 	public Bidder() {
 		this.name = "Unknown";
 		this.ID = -1;

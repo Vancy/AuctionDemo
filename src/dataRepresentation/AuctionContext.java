@@ -119,9 +119,6 @@ public class AuctionContext {
 		return this.duration_Sec;
 	}
 	public ArrayList<AuctionItem> getItemList() {
-		synchronized (this) {
-			Collections.sort(itemList);
-		}
 		return this.itemList;
 	}
 	

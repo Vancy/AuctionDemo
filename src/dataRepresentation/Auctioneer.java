@@ -91,19 +91,6 @@ public class Auctioneer extends Thread{
 			/***************Next Round Will Start**********************/
 			if (this.environment.context.isFinalRound()) {
 				System.err.println("Auction End");
-				// Create the excel log file
-				/*int roundCounter = 1;
-				for (Collection<Bid> bids : getExcelLog()) {
-					System.out.println(roundCounter++);
-					for (Bid bid : bids) {
-						System.out.println(bid.getBidder().getName());
-						for (AuctionItem ai : bid.getItemList()) {
-							System.out.println(ai.getName() + " " + ai.getPrice());
-						}
-					}
-					System.out.println();
-				}*/
-				
 				createExcelLogSheet();
 				break; // break from while loop, terminate auctioneer
 			}
@@ -114,11 +101,13 @@ public class Auctioneer extends Thread{
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		HSSFSheet sheet = workbook.createSheet("Sample sheet");
 		
-		int numberOfBidders = this.environment.bidderList.size();
-		int numberOfItems = this.environment.context.getItemList().size();
-		
 		ArrayList<AuctionItem> items = this.environment.context.getItemList();
 		ArrayList<Bidder> bidders = this.environment.bidderList.getList();
+		
+		Collections.sort(items);
+		
+		int numberOfBidders = bidders.size();
+		int numberOfItems = items.size();
 		
 		Map<Integer, Object[]> data = new TreeMap<Integer, Object[]>();
 		Object[] itemRowHeader = new Object[numberOfItems * numberOfBidders];
@@ -211,7 +200,7 @@ public class Auctioneer extends Thread{
 		            new FileOutputStream(new File("C:\\Users\\oodi687\\workspace\\AuctionResults.xls"));
 		    workbook.write(out);
 		    out.close();
-		    System.out.println("Excel written successfully..");
+		    System.out.println("Excel written successfully!");
 		     
 		} catch (FileNotFoundException e) {
 		    e.printStackTrace();
@@ -258,23 +247,64 @@ public class Auctioneer extends Thread{
 		 */
 		boolean newBids = false;
 		for (Bid bid: this.requestedBids.values()) {
-			for (AuctionItem bidderItem: bid.getItemList()) {
-				System.out.print(bidderItem.getName() + " " + bidderItem.getPrice());
-				double originalPrice = fetchItemPrice(bidderItem.getID());
+			Bidder currBidder = bid.getBidder();
+			List<AuctionItem> currItems = bid.getItemList();
+			int itemsNotBidOn = 0;
+			int itemsLeading = 0;
 
+			for (AuctionItem bidderItem: currItems) {
+				System.out.println(bidderItem.getName() + " " + bidderItem.getPrice());
+				double originalPrice = fetchItemPrice(bidderItem.getID());
+				
 				if (originalPrice < bidderItem.getPrice()) {
-					putItemPrice(bid.getBidder(), bidderItem.getID(), bidderItem.getPrice());
+					putItemPrice(currBidder, bidderItem.getID(), bidderItem.getPrice());
 					if (!newBids) {
 						newBids = true;
 					}
 				} else if (Math.abs(originalPrice - bidderItem.getPrice()) <= 0.001 && flipCoinWin()) {
 					//If this bidder's price is equal to current highest price, and win flip-a-coin
-					putItemPrice(bid.getBidder(), bidderItem.getID(), bidderItem.getPrice());
+					putItemPrice(currBidder, bidderItem.getID(), bidderItem.getPrice());
 					if (!newBids) {
 						newBids = true;
 					}
+				} else if (bidderItem.getPrice() == 0.0) {
+					// bidder did not bid on this item
+					itemsNotBidOn++;
 				}
 			}
+			
+			for (AuctionItem bidderItem: currItems) {
+				for (AuctionItem item: this.environment.context.getItemList()) {
+					System.out.println(bidderItem.getID() + " " + item.getID() +
+							" " + currBidder.getID() + " " + item.getOwner().getID());
+					if (bidderItem.getID() == item.getID()) {
+						if (currBidder.getID() == item.getOwner().getID()) {
+							itemsLeading++;
+						}
+					}
+				}
+			}
+			
+			if (this.environment.context.getRound() == 1) {
+				// eligibility and activity for the first round
+				currBidder.setEligibility(currItems.size() - itemsNotBidOn);
+				currBidder.setActivity(currItems.size() - itemsNotBidOn);
+			} else {
+				// set eligibility to previous activity
+				currBidder.setEligibility(currBidder.getActivity());
+				
+				// set the current activity to the #items bid on + #items leading initially
+				currBidder.setActivity((currItems.size() - itemsNotBidOn) + itemsLeading);
+				if (currBidder.getActivity() > currBidder.getEligibility()) {
+					currBidder.decrementActivityRuleCounter();
+					System.out.println("ACTIVITY WARNING!");
+					if (currBidder.getActivityRuleCounter() == 0) {
+						System.out.println("KICKED!");
+					}
+				}
+			}
+			
+			System.out.println(itemsNotBidOn + " " + itemsLeading);
 		}
 		if (!newBids) {
 			this.environment.context.setFinalRound();
