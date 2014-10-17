@@ -118,6 +118,10 @@ public class Auctioneer extends Thread{
 		for (Bid bid: this.requestedBids.values()) {
 			for (AuctionItem bidderItem: bid.getItemList()) {
 				double originalPrice = fetchItemPrice(bidderItem.getID());
+				
+				if (bid.getBidder().getID() == fetchItemOwnerID(bidderItem.getID())) {
+					continue;
+				}
 
 				if (originalPrice < bidderItem.getPrice()) {
 					putItemPrice(bid.getBidder(), bidderItem.getID(), bidderItem.getPrice());
@@ -249,6 +253,15 @@ public class Auctioneer extends Thread{
 			}
 		}
 		return Double.MAX_VALUE;
+	}
+	
+	private int fetchItemOwnerID(int itemID) {
+		for (AuctionItem item: this.environment.context.getItemList()) { 
+			if (itemID == item.getID()) {
+				return item.getOwner().getID();
+			}
+		}
+		return -1;
 	}
 	
 	private void putItemPrice(Bidder bidder, int itemID, double price) {
