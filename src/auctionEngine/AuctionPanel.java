@@ -70,7 +70,7 @@ public class AuctionPanel extends JPanel {
 		spinner_Increment = new JSpinner(/*sm_minIncrement*/);
 		panel.add(spinner_Increment);
 		
-		JLabel lblTimeDuration = new JLabel("Round Duration: ");
+		JLabel lblTimeDuration = new JLabel("Duration Time: ");
 		panel.add(lblTimeDuration);
 
 		//SpinnerModel sm_timeDuration = new SpinnerNumberModel(30, 0, Integer.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
