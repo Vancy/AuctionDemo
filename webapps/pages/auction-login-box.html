@@ -1,0 +1,33 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+
+<polymer-element name="auction-login-box" attributes="host">
+  <template>
+    <link rel="stylesheet" href="./auction-login-box.css" type="text/css" />
+
+    <div id="auction-login-box">
+      <div class="title">
+        <p>Auction System</p>
+      </div>
+      <div id="box">
+        <p id="login_tips" class="login_tips"></p>
+        <div>
+          <input type="text" id="name" placeholder="please enter your name" autofocus/>
+          <label for="name"><i>Enter your name</i></lable>
+        </div>
+       <div id="div-btn-login">
+          <button class="btn"  id="btn-login">Enter</button>
+        </div>
+    </div>
+
+
+
+  </template>
+
+  <script>
+    Polymer('auction-login-box', {
+      ready: function  () {
+
+      } 
+    });
+  </script>
+</polymer-element>

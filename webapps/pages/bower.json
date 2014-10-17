@@ -22,6 +22,7 @@
   "dependencies": {
     "polymer": "Polymer/polymer#~0.4.1",
     "core-elements": "Polymer/core-elements#~0.4.1",
-    "paper-elements": "Polymer/paper-elements#~0.4.1"
+    "paper-elements": "Polymer/paper-elements#~0.4.1",
+    "abdmob/x2js": "~1.1.7"
   }
 }

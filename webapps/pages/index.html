@@ -1,61 +1,42 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!doctype html>
 <html>
-	<head>
-		<meta http-equiv="Content-Type"
-			content="text/html; charset=ISO-8859-1">
-		<title>Auction System</title>
-		<script type="text/javascript" src="./jquery-1.11.1.js"></script>
-		<script type="text/javascript" src="./script.js"></script>
-    	<link rel="stylesheet" href="./style.css" type="text/css" />
-	</head>
-	
-	<body>
-		<div id="content">
-			<div id="login_box">
-				<div class="title">
-					<p>Auction System</p>
-				</div>
-			    <div id="login">
-					<p id="login_error_tips" class="login_error"></p>
-					<div>
-						<input type="text" id="name" placeholder="input your name" autofocus />
-						<label for="name"><i>Enter your name</i></lable>
-					</div>
-					<div id="login_button_div">
-						<button id="button" class="submit_button" >Enter</button>
-					</div>
-			    </div>
-			</div>
-		    <div id="bid">
-		    	<div class="title">
-					<p id="round_infomation"></p>
-		    	
-				</div>
 
-		    	<div id="data">
-		    		<p id="timer"></p>
-			    	<table id="bid_table"> 
-			        <thead>
-			            <tr>
-				            <th>Item</th>
-				            <th>Price</th>
-				            <th>Your Price</th>
-			            </tr>
-			        </thead>
-			        <tbody>
-			        	<!-- auction items here -->
-			        </tbody>
-			        </table>
+<head>
 
-			        <div id="submit_button_div">
-			        	<p id="disp_username"></p>
-		        		<button id="submit_auction" class="submit_button">Bid!</button>
-		    		</div>
-		    	</div>
-		  	
-		    	
-		    </div> 
-	    	
-    	</div>
-	</body>
+  <title>Auction Demo</title>
+
+  <link rel="stylesheet" href="./main.css" type="text/css" />
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <!-- // <script src="bower_components/platform/platform.js"></script> -->
+  <script src="bower_components/polymer/polymer.html"></script>
+
+  <link rel="import" href="bower_components/font-roboto/roboto.html">
+  <link rel="import" href="bower_components/core-header-panel/core-header-panel.html">
+  <link rel="import" href="bower_components/core-toolbar/core-toolbar.html">
+  <link rel="import" href="bower_components/core-icon-button/core-icon-button.html">
+  <link rel="import" href="bower_components/core-icon/core-icon.html">
+  
+  <link  rel="import" href="auction-login-box.html">
+
+ 
+</head>
+
+<body unresolved>
+  <core-header-panel mode="standard" id="core_header_panel">
+    <core-toolbar id="core_toolbar">
+      <!-- <core-icon id="core_icon" src="../img/asq-logo.png"></core-icon> -->
+      <!-- <core-icon-button icon="src" id="core_icon_button"></core-icon-button> -->
+      <div id="div">Auction Demo</div>
+    </core-toolbar>
+    <section id="section" class="container " center horizontal layout>
+      
+      <auction-login-box host="127.0.0.1" ></auction-login-box>
+
+    </section>
+  </core-header-panel>
+  
+  <script></script>
+</body>
+
 </html>
