@@ -5,21 +5,16 @@
 
 <polymer-element name="auction-saa">
   <template>
-    <!-- <link rel="stylesheet" href="./auction-saa.css" type="text/css" /> -->
+    <link rel="stylesheet" href="./auction-saa.css" type="text/css" />
+    
     
 
+
     <div id="auction-saa">
-      <div class="panel panel-default">
-        <div class="panel-heading">SAA</div>
-          <p>Round {{ round }}</p>
-          <p id="time"></p>
-
-          <auction-saa-table items="{{ items }}" final="{{ isFinalRound }}"></auction-saa-table>
-          
-          <button id="bid">Bid</button>
-        </div>
-      </div>
-
+      <p>Round {{ round }}</p>
+      <p id="time"></p>
+      <auction-saa-table id="table" items="{{ items }}" final="{{ isFinal }}"></auction-saa-table>
+      <button id="bid">Bid</button>
     </div>
 
 
@@ -34,28 +29,24 @@
       timeRemain: 0,
       minimumIncreament: 0,
       items: [],
+      isFinal: false,
 
 
-      getData: function(data) {
+      setData: function(data) {
         console.log("saa.getData", data);
         this.saa = data;
-        
-        this.updateTable();
         this.updateInfomation();
 
         // start ajax timer
       },
 
       updateInfomation: function() {
-
-        // update ui
-      },
-
-      updateTable: function() {
         this.items = this.saa.auction_context.item;
         this.round = this.saa.auction_context.round._value;
         this.timeRemain = this.saa.auction_context.duration._remain;
         this.minimumIncreament = this.saa.auction_context.minimum_increament._value;
+
+        this.isFinal = this.saa.auction_context.round._final == "no" ? false : true;
 
         this.$.bid.disabled = false;
         if ( ! this.isAuctionStarted() ) {
@@ -63,7 +54,8 @@
           this.$.bid.disabled = true;
           // not stated yet
         }
-        if ( this.isFinalRound() ) {
+        if ( this.isFinal ) {
+          this.$.time.innerHTML = "Time remain: " + this.timeRemain + "s";
           this.$.bid.disabled = true;
           // final
         }
@@ -78,12 +70,6 @@
         return true;
       },
 
-      isFinalRound: function() {
-        if ( this.saa.auction_context.round._final == "no" ) {
-          return false
-        }
-        return true;
-      }
 
     });
   </script>

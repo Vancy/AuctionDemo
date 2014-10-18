@@ -4,47 +4,59 @@
 
 <polymer-element name="auction-saa-table" attributes="items final">
   <template>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+    <style>
+      .panel {
+          margin: auto;
+          width: 400px;
+      }
+    </style>
 
-    <table class="table table-hover" >
-      <thead>
-        <th>Item</th>
-        <th>Price</th> 
+    <div class="panel panel-default">
+      <!-- <div class="panel-heading">SAA</div> -->
+        <table class="table table-hover">
+          <thead>
+            <th>Item</th>
+            <th>Price</th> 
 
-        <template if="{{ final }}">
-          <th>Owner</th> 
-        </template>
+            <template if="{{ final }}">
+              <th>Owner</th> 
+            </template>
 
-        <template if="{{ ! final }}">
-          <th>Your Price</th>
-        </template>
+            <template if="{{ ! final }}">
+              <th>Your Price</th>
+            </template>           
+          </thead>
 
-        
-      </thead>
+          <!-- items here -->
+          <template repeat="{{ item in items }}">     
+            <tr>
+              <td>{{ item._name }}</td>
+              <td>{{ item._price }}</td> 
+      
+              <template if="{{ final }}">
+                <td>{{ item._owner }}</td> 
+              </template>
 
-      <!-- items here -->
-      <template repeat="{{ item in items }}">     
-        <tr>
-          <td>{{ item._name }}</td>
-          <td>{{ item._price }}</td> 
-  
-          <template if="{{ final }}">
-            <td>{{ item._owner }}</td> 
+              <template if="{{ ! final }}">
+                <td><input type="text" class="form-control" placeholder=""></td>
+              </template>
+            </tr>
           </template>
 
-          <template if="{{ ! final }}">
-            <td><input type="text" class="form-control" placeholder=""></td>
-          </template>
-        </tr>
-      </template>
-
-    </table>
+        </table>
+      <!-- </div> -->
+    </div>
 
   </template>
 
   <script>
     Polymer('auction-saa-table', {
-      items: {},
+      items: [],
+
+      domReady: function () {
+        console.log( this.final );
+      }
     });
   </script>
 </polymer-element>
