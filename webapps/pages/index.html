@@ -1,42 +1,39 @@
 <!doctype html>
 <html>
+  <head>
+    <title>Auction Demo</title>
 
-<head>
+    <link rel="stylesheet" href="./main.css" type="text/css" />
 
-  <title>Auction Demo</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="bower_components/platform/platform.js"></script>
 
-  <link rel="stylesheet" href="./main.css" type="text/css" />
+    <link rel="import" href="bower_components/font-roboto/roboto.html">
+    <link rel="import" href="bower_components/core-header-panel/core-header-panel.html">
+    <link rel="import" href="bower_components/core-toolbar/core-toolbar.html">
+    <!-- <link rel="import" href="bower_components/core-icon-button/core-icon-button.html"> -->
+    <!-- <link rel="import" href="bower_components/core-icon/core-icon.html"> -->
+    
+    <link  rel="import" href="auction-login-box.html">
+    <link  rel="import" href="auction-saa.html">
+  </head>
 
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script src="bower_components/platform/platform.js"></script>
-  <!-- // <script src="bower_components/polymer/polymer.html"></script> -->
+  <body unresolved>
+    <core-header-panel mode="standard" id="core_header_panel">
+      <core-toolbar id="core_toolbar">
+        <!-- <core-icon id="core_icon" src="../img/asq-logo.png"></core-icon> -->
+        <!-- <core-icon-button icon="src" id="core_icon_button"></core-icon-button> -->
+        <div id="div">Auction Demo</div>
+      </core-toolbar>
+      <section id="section" class="container " center horizontal layout>
+        
+        <auction-login-box ></auction-login-box>
+        <auction-saa></auction-saa>
 
-  <link rel="import" href="bower_components/font-roboto/roboto.html">
-  <link rel="import" href="bower_components/core-header-panel/core-header-panel.html">
-  <link rel="import" href="bower_components/core-toolbar/core-toolbar.html">
-  <link rel="import" href="bower_components/core-icon-button/core-icon-button.html">
-  <link rel="import" href="bower_components/core-icon/core-icon.html">
-  
-  <link  rel="import" href="auction-login-box.html">
-
- 
-</head>
-
-<body unresolved>
-  <core-header-panel mode="standard" id="core_header_panel">
-    <core-toolbar id="core_toolbar">
-      <!-- <core-icon id="core_icon" src="../img/asq-logo.png"></core-icon> -->
-      <!-- <core-icon-button icon="src" id="core_icon_button"></core-icon-button> -->
-      <div id="div">Auction Demo</div>
-    </core-toolbar>
-    <section id="section" class="container " center horizontal layout>
-      
-      <auction-login-box ></auction-login-box>
-
-    </section>
-  </core-header-panel>
-  
-  <script></script>
-</body>
+      </section>
+    </core-header-panel>
+    
+    <script></script>
+  </body>
 
 </html>

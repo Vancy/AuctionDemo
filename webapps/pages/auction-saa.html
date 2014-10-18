@@ -1,0 +1,109 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="utils.html">
+<link rel="import" href="auction-saa-item.html">
+
+
+<polymer-element name="auction-saa">
+  <template>
+    <!-- <link rel="stylesheet" href="./auction-saa.css" type="text/css" /> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+     
+  
+
+    <div id="auction-saa">
+      <div class="panel panel-default">
+        <div class="panel-heading">SAA</div>
+          <p>Round {{ round }}</p>
+          <p id="time"></p>
+
+          <table class="table table-hover" >
+            <thead>
+              <th>Item</th>
+              <th>Price</th> 
+              <th>Your Price</th>
+            </thead>
+
+            <!-- items here -->
+            <template repeat="{{ item in items }}">
+              <acution-saa-item 
+                itemName="{{ item.name }}" 
+                price="{{ item.price }}" 
+                yourPrice="{{ item.yourPirce }}"
+                minInc="{{ minimumIncreament }}"
+                owner="{{ item.owner }}"
+                final="{{ isFinalRound }}"
+              ></acution-saa-item>
+            </template>
+          </table>
+          <button id="bid">Bid</button>
+        </div>
+      </div>
+
+    </div>
+
+
+
+  </template>
+
+  <script>
+    Polymer('auction-saa', {
+      saa: {"auction_context":{"type":{"_value":"SAA"},"round":{"_final":"no","_value":"0"},"duration":{"_remain":"0","_value":"30"},"minimum_increament":{"_value":"1.0"},"item":[{"_final":"no","_id":"0","_name":"ItemA","_owner":"Unknown","_price":"0.0","_quantity":"0"},{"_final":"no","_id":"1","_name":"ItemB","_owner":"Unknown","_price":"0.0","_quantity":"0"},{"_final":"no","_id":"2","_name":"ItemC","_owner":"Unknown","_price":"0.0","_quantity":"0"}]}},
+
+      round: 0,
+      timeRemain: 0,
+      minimumIncreament: 0,
+      items: [],
+  
+
+      getData: function(data) {
+        this.saa = data;
+        this.updateInfomation();
+        this.updateTable();
+
+        // start ajax timer
+      },
+
+      updateInfomation: function() {
+
+
+
+        // update ui
+      },
+
+      updateTable: function() {
+        this.items = this.auction_context.saa.item;
+        this.round = this.saa.auction_context.round._value;
+        this.timeRemain = this.saa.auction_context.duration._remain;
+        this.minimumIncreament = this.saa.auction_context.minimum_increament._value;
+
+        this.$.bid.disabled = false;
+        if ( ! this.isAuctionStarted() ) {
+          this.$.time.innerHTML = "Please wait, auction haven't started yet.";
+          this.$.bid.disabled = true;
+          // not stated yet
+        }
+        if ( this.isFinalRound() ) {
+          this.$.bid.disabled = true;
+          // final
+        }
+
+      },
+
+      isAuctionStarted: function() {
+        if ( this.saa.auction_context.round._value == "0" ) {
+          return false
+        }
+        return true;
+      },
+
+      isFinalRound: function() {
+        if ( this.saa.auction_context.round._final == "no" ) {
+          return false
+        }
+        return true;
+      }
+
+    });
+  </script>
+</polymer-element>
