@@ -1,5 +1,6 @@
 <link rel="import" href="bower_components/polymer/polymer.html">
 <link rel="import" href="bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="utils.html">
 
 <polymer-element name="auction-login-box">
   <template>
@@ -56,12 +57,20 @@
       },
 
       handleResponse: function(e) {
-        console.log(e.detail.xhr.response);
+        var xml = e.detail.xhr.response; 
+        console.log(xml);
+        this.switchTo(xml);
       },
 
       onClick: function() {
         console.log("on-click", this.requestUrl);
         this.$.submit.go();
+      },
+
+      switchTo: function(xml) {
+        var x2js = new X2JS();
+        var json = x2js.xml_str2json(xml);
+        console.log(json);
       }
 
     });
