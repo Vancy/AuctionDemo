@@ -53,12 +53,10 @@
       getIP: function(e) {
         this.localIP = e.detail.response.ip;
         this.requestUrl = "/WEB-INF/login.xml?name=" + this.username + "&ip=" + this.localIP;
-        console.log(this.requestUrl);
       },
 
       handleResponse: function(e) {
         var xml = e.detail.xhr.response; 
-        console.log(xml);
         this.switchTo(xml);
       },
 
@@ -70,8 +68,24 @@
       switchTo: function(xml) {
         var x2js = new X2JS();
         var json = x2js.xml_str2json(xml);
-        console.log(JSON.stringify(json));
-      }
+
+        var type = json.auction_context.type._value;
+        if ( type == "SAA" ) {
+          var saa = document.querySelector("#saa");
+          saa.hidden = false;
+          this.hidden = true;
+          saa.getData(json);
+        } else if ( type == "CCA" ) {
+
+        } else {
+
+        }
+      },
+
+      // domReady: function() {
+      //   var saa = document.querySelector("#saa");
+      //   console.log(saa);
+      // }
 
     });
   </script>

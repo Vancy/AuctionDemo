@@ -1,0 +1,54 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/core-ajax/core-ajax.html">
+
+
+<polymer-element name="auction-saa-table" attributes="items final">
+  <template>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <table class="table table-hover" >
+      <thead>
+        <th>Item</th>
+        <th>Price</th> 
+
+        <template if="{{ final }}">
+          <th>Owner</th> 
+        </template>
+
+        <template if="{{ ! final }}">
+          <th>Your Price</th>
+        </template>
+
+        
+      </thead>
+
+      <!-- items here -->
+      <template repeat="{{ item in items }}">     
+        <tr>
+          <td>{{ item._name }}</td>
+          <td>{{ item._price }}</td> 
+  
+          <template if="{{ final }}">
+            <td>{{ item._owner }}</td> 
+          </template>
+
+          <template if="{{ ! final }}">
+            <td><input type="text" class="form-control" placeholder=""></td>
+          </template>
+        </tr>
+      </template>
+
+    </table>
+
+  </template>
+
+  <script>
+    Polymer('auction-saa-table', {
+      items: {},
+    });
+  </script>
+</polymer-element>
+
+<!--
+
+  -->
