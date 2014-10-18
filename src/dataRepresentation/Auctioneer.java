@@ -242,6 +242,22 @@ public class Auctioneer extends Thread{
 		 * newBids is true when there is at least one new bid, then auction will keep going,
 		 * otherwise, newBids is false, means nobody bids, then next round is the final. 
 		 */
+		for (Bidder b : this.environment.bidderList.getList()) {
+			if (!this.requestedBids.containsKey(b.getID())) {
+				// this bidder did not make a bid - give him a dummy bid
+				System.err.println(b.getName() + " did not submit a bid! Assigning a dummy bid...");
+				ArrayList<AuctionItem> dummyItems = new ArrayList<AuctionItem>();
+				for (AuctionItem i : this.environment.context.getItemList()) {
+					AuctionItem dummyItem = new AuctionItem(i);
+					dummyItem.setOwner(b);
+					dummyItem.setPrice(0);
+					dummyItems.add(dummyItem);
+				}
+				Bid dummyAbortedBid = new Bid(b, dummyItems);
+				this.requestedBids.put(b.getID(), dummyAbortedBid);
+			}
+		}
+		
 		boolean newBids = false;
 		HashMap<Bidder, ArrayList<AuctionItem>> bidderPrices = new HashMap <Bidder, ArrayList<AuctionItem>>();
 		HashMap<Integer, Double> originalPrices = new HashMap <Integer, Double>();
@@ -325,7 +341,7 @@ public class Auctioneer extends Thread{
 			thisRoundRequirment[i] = 0;
 		}
 		
-		//collect requirment of each item
+		//collect requirement of each item
 		for (Bid bid: this.requestedBids.values()) {
 			for (AuctionItem bidderItem: bid.getItemList()) {
 				thisRoundRequirment[bidderItem.getID()] += bidderItem.getRequiredQuantity();
