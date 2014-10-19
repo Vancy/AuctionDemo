@@ -6,7 +6,7 @@
   <template>
     <link rel="stylesheet" href="./auction-login-box.css" type="text/css" />
 
-    <!-- Get l -->
+    <!-- Get IP address. Called only once. -->
     <core-ajax
       auto
       url="http://jsonip.com"
@@ -14,7 +14,7 @@
       on-core-response="{{ getIP }}"
     ></core-ajax>
 
-     
+    <!-- Login --> 
     <core-ajax
       id="submit"
       url="{{ requestUrl }}"
@@ -29,7 +29,7 @@
       <div id="box">
         <p id="login_tips" class="login_tips"></p>
         <div>
-          <input type="text" id="name" value="{{ username }}" placeholder="please enter your name" autofocus/>
+          <input type="text" id="name" value="{{ username }}" placeholder="please enter your name" on-keypress="{{keypressHandler}}" autofocus/>
           <label for="name"><i>Enter your name</i></lable>
         </div>
         
@@ -47,12 +47,10 @@
   <script>
     Polymer('auction-login-box', {
       localIP : "127.0.0.1",
-      username : "",
       requestUrl : "",
 
       getIP: function(e) {
         this.localIP = e.detail.response.ip;
-        this.requestUrl = "/WEB-INF/login.xml?name=" + this.username + "&ip=" + this.localIP;
       },
 
       handleResponse: function(e) {
@@ -61,6 +59,7 @@
       },
 
       onClick: function() {
+        this.requestUrl = "/WEB-INF/login.xml?name=" + this.username + "&ip=" + this.localIP;
         console.log("on-click", this.requestUrl);
         this.$.submit.go();
       },
@@ -74,15 +73,23 @@
           var saa = document.querySelector("#saa");
           saa.hidden = false;
           this.hidden = true;
+
+          console.log("SAA -->", this.username, this.localIP);
           saa.setUp(this.username, this.localIP);
           saa.setData(json);
         } else if ( type == "CCA" ) {
-
+          // for CCA
         } else {
-
+          // Error
         }
       },
 
+      keypressHandler: function(event, detail, sender) {
+        // 13 means `Enter` key
+        if ( event.keyCode == 13 ) {
+          this.onClick();
+        }
+      }
 
     });
   </script>

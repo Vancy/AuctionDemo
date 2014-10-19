@@ -31,14 +31,14 @@
             <template repeat="{{ item in items }}">     
               <tr>
                 <td>{{ item._name }}</td>
-                <td>{{ item._price }}</td> 
+                <td id="price{{item._id}}">{{ item._price }}</td> 
         
                 <template if="{{ final }}">
-                  <td>{{ item._owner }}</td> 
+                  <td id="owner{{item._id}}">{{ item._owner }}</td> 
                 </template>
 
                 <template if="{{ ! final }}">
-                  <td><input id="yprice{{item._id}}" type="text" class="form-control" value="{{item._value}}"></td>
+                  <td><input id="yprice{{item._id}}" type="text" class="form-control" ></td>
                 </template>
               </tr>
             </template>
@@ -76,44 +76,12 @@
         return item;
       },
 
-      getValues: function() {
-        var values = [];
-        for ( i=0; i < this.items.length; i++ ) {
-          var id = this.items[i]._id;
-          values[i] = this.$.tbody.querySelector("#yprice" + id).value;
-
+      update: function(newItems) {
+        for ( i=0; i < newItems.length; i++ ) {
+          var id = newItems[i]._id;
+          this.$.tbody.querySelector("#price" + id).innerHTML = newItems[i]._price;
         }
-        return values;
       }
     });
   </script>
 </polymer-element>
-
-<!--
-{
-   "bid": {
-      "item_list": {
-         "item": [
-            {
-               "_id": "0",
-               "_name": "dogfood",
-               "_price": "120",
-               "_owner": ""
-            },
-            {
-               "_id": "1",
-               "_name": "kennel",
-               "_price": "290",
-               "_owner": ""
-            },
-            {
-               "_id": "2",
-               "_name": "dota",
-               "_price": "0",
-               "_owner": ""
-            }
-         ]
-      }
-   }
-}
-  -->
