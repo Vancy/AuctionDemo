@@ -3,8 +3,6 @@
 <link rel="import" href="auction-saa-table.html">
 <link rel="import" href="utils.html">
 <link rel="import" href="native-post.html">
-<link rel="import" href="native-timer.html">
-
 
 
 <polymer-element name="auction-saa">
@@ -17,16 +15,8 @@
       <auction-saa-table id="table" items="{{ items }}" final="{{ isFinal }}"></auction-saa-table>
       <button id="bid" on-click="{{submit}}">Bid</button>
     </div>
-    
-    <!-- <core-ajax
-      id="submit"
-      url="/WEB-INF/bid.xml"
-      method="POST"
-      handleAs="xml"
-      params="{{ data }}"
-      on-core-response="{{ handleResponse }}"
-    ></core-ajax> -->
 
+    <!-- The ajax that submits a bid. -->
     <native-post
       id="submit"
       url="/WEB-INF/bid.xml"
@@ -35,7 +25,7 @@
       fail="{{ fail }}"
     ></native-post>
 
-    <!-- The ajax that ask for newer inforamtion. -->
+    <!-- The ajax that asks for newer inforamtion. -->
     <core-ajax
       id="period"
       url="{{ updateUrl }}"

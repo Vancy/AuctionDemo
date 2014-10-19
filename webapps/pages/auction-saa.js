@@ -88,9 +88,9 @@ Polymer('auction-saa', {
     } else {
      if ( ! this.isFinal  ) {
         this.$.time.innerHTML = "Time remain: " + this.timeRemain + "s";
-        
-        // final
       } else {
+        // final
+        clearInterval(this.timer);
         this.$.time.innerHTML = "<b>Final</b>";
         this.$.bid.disabled = true;
       }
@@ -107,15 +107,7 @@ Polymer('auction-saa', {
   submit: function() {
     // validate
     this.data = this.collectData();
-
-    // console.log("submit", this.data);
-
-
-    // this.$.submit.go();
-
-    // this.$.submit.go();
-
-
+    this.$.submit.go();
   },
 
   collectData: function() {
@@ -135,6 +127,7 @@ Polymer('auction-saa', {
   },
 
   fail: function(e) {
+    clearInterval(this.timer);
     console.log("fail", e);
   }
 });
