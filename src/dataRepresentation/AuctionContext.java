@@ -15,6 +15,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import com.google.gson.Gson;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -239,15 +241,19 @@ public class AuctionContext {
 			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
 			transformer.transform(new DOMSource(doc), new StreamResult(sw));
-		
+			this.generateJson();
 			return sw.toString();
 		} catch (TransformerConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
     }
+		
+	public String generateJson() {
+		Gson gson = new Gson();
+		String jsonData = gson.toJson(this);
+		return jsonData;
+	}
 }

@@ -50,8 +50,8 @@ public class LoginServlet extends DefaultServlet{
 		
 		// Actual logic goes here.
 		PrintWriter out = response.getWriter();
-		out.println(this.auctionEnvironment.context.generateXml());
-//		System.out.println("Login Response:"+this.auctionEnvironment.context.generateXml());
+		out.println(this.auctionEnvironment.context.generateJson());
+//		System.out.println("Login Response:"+this.auctionEnvironment.context.generateJson());
 
 	}
 	

@@ -20,6 +20,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import dataRepresentation.AuctionContext;
 import dataRepresentation.AuctionEnvironment;
 import dataRepresentation.AuctionItem;
@@ -49,7 +53,8 @@ public class BidServlet extends DefaultServlet{
 		    builder.append(aux);
 		}
 		String xmlContent = builder.toString();
-		Document doc = convertStringToDocument(xmlContent);
+		//Document doc = convertStringToDocument(xmlContent);
+		JsonObject doc = convertStringToJson(xmlContent);
 		
 
 		//place a bid to environment, auctioneer will handle this bid
@@ -125,6 +130,60 @@ public class BidServlet extends DefaultServlet{
         	}
     	}
 
+
+    	Bid bid = new Bid(bidder, bidderItemList);
+    	bidder.placeBid(this.auctionEnvironment, bid);
+    	return bid;
+    }
+    
+    private static JsonObject convertStringToJson(String jsonStr) {
+    	JsonParser parser = new JsonParser();
+    	JsonObject jsonObj = (JsonObject)parser.parse(jsonStr);
+    	return jsonObj;
+    }
+    
+    private Bid placeBid(JsonObject json) {
+    	
+    	String name = json.get("name").getAsString();
+    	String ip = json.get("ip").getAsString();
+    	
+    	Bidder bidder = this.auctionEnvironment.bidderList.getBidder(name, ip);
+    	if (null == bidder) {
+    		try {
+				throw new Exception("BidServlet: Cannot find bidder inside bidderlist");
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+    	}
+    	
+    	List<AuctionItem> bidderItemList = new ArrayList<AuctionItem>();
+    	JsonArray itemList = json.get("item_list").getAsJsonArray();
+    	/*
+    	 * Check current auction type, SAA or CCA.
+    	 */
+    	if  (this.auctionEnvironment.context.getType() == AuctionContext.AuctionType.SAA) {
+    		for (int i=0; i<itemList.size(); i++) {
+    			JsonObject item = itemList.get(i).getAsJsonObject();
+    			String itemName = item.get("name").getAsString();
+    			double itemPrice = item.get("price").getAsDouble();
+    			int id  = item.get("id").getAsInt();
+    			bidderItemList.add(new AuctionItem(id, itemName, itemPrice));
+    		}
+    	} else  if (this.auctionEnvironment.context.getType() == AuctionContext.AuctionType.CCA) {
+    		for (int i=0; i<itemList.size(); i++) {
+    			JsonObject item = itemList.get(i).getAsJsonObject();
+    			String itemName = item.get("name").getAsString();
+    			int itemRequire = 0;
+    			try { //if bidder doesn't bid for this, the quantity_require may not be defined
+        			itemRequire = json.get("quantity_require").getAsInt();
+        		} catch(RuntimeException e) { // so put itemRequire as 0 
+        			itemRequire = 0;
+        		}
+    			int id  = item.get("id").getAsInt();
+    			bidderItemList.add(new AuctionItem(id, itemName, itemRequire));
+    		}
+    	}
 
     	Bid bid = new Bid(bidder, bidderItemList);
     	bidder.placeBid(this.auctionEnvironment, bid);
