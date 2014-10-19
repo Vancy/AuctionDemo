@@ -111,14 +111,6 @@ Polymer('auction-saa', {
     // console.log("submit", this.data);
 
 
-    // this.$.xhr.request({
-    //   url: "/WEB-INF/bid.xml",
-    //   method: "POST",
-    //   params: this.data,
-    //   responseType: "xml",
-    //   callback: this.handleResponse
-    // });
-
     // this.$.submit.go();
 
     // this.$.submit.go();

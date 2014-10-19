@@ -35,21 +35,15 @@
       fail="{{ fail }}"
     ></native-post>
 
-
-    <!-- <native-timer id="timer"></native-timer> @possible to imporve by using this components-->
-
+    <!-- The ajax that ask for newer inforamtion. -->
     <core-ajax
       id="period"
       url="{{ updateUrl }}"
       handleAs="xml"
       on-core-response="{{ update }}"
-    ></core-ajax>
+    ></core-ajax>    
 
-    <!-- <core-xhr id="xhr"></core-xhr> -->
-
-
-    
-
+    <!-- <native-timer id="timer"></native-timer> @possible to imporve by using this components-->
   </template>
   <script src="./auction-saa.js"></script>
 </polymer-element>
