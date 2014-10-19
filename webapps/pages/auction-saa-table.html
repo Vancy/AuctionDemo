@@ -1,6 +1,4 @@
 <link rel="import" href="bower_components/polymer/polymer.html">
-<link rel="import" href="bower_components/core-ajax/core-ajax.html">
-
 
 <polymer-element name="auction-saa-table" attributes="items final">
   <template>
@@ -29,21 +27,22 @@
           </thead>
 
           <!-- items here -->
-          <template repeat="{{ item in items }}">     
-            <tr>
-              <td>{{ item._name }}</td>
-              <td>{{ item._price }}</td> 
-      
-              <template if="{{ final }}">
-                <td>{{ item._owner }}</td> 
-              </template>
+          <tbody id="tbody">
+            <template repeat="{{ item in items }}">     
+              <tr>
+                <td>{{ item._name }}</td>
+                <td>{{ item._price }}</td> 
+        
+                <template if="{{ final }}">
+                  <td>{{ item._owner }}</td> 
+                </template>
 
-              <template if="{{ ! final }}">
-                <td><input type="text" class="form-control" placeholder=""></td>
-              </template>
-            </tr>
-          </template>
-
+                <template if="{{ ! final }}">
+                  <td><input id="yprice{{item._id}}" type="text" class="form-control" placeholder=""></td>
+                </template>
+              </tr>
+            </template>
+          </tbody>
         </table>
       <!-- </div> -->
     </div>
@@ -54,13 +53,58 @@
     Polymer('auction-saa-table', {
       items: [],
 
-      domReady: function () {
-        console.log( this.final );
+      ko: function() {
+        var x = this.$.tbody;
+        var y = x.querySelector("#yprice0");
+        console.log("xxyx", x, y);
+      },
+
+      getItems: function() {
+        //validate
+
+        var item = [];
+        for ( i=0; i < this.items.length; i++ ) {
+          var bid = {};
+          bid._id = this.items[i]._id;
+          bid._name = this.items[i]._name;
+          bid._price = this.$.tbody.querySelector("#yprice" + bid._id).value;
+          bid._owner = "";
+
+          item[i] = bid;
+        }
+
+        return item;
       }
+
     });
   </script>
 </polymer-element>
 
 <!--
-
+{
+   "bid": {
+      "item_list": {
+         "item": [
+            {
+               "_id": "0",
+               "_name": "dogfood",
+               "_price": "120",
+               "_owner": ""
+            },
+            {
+               "_id": "1",
+               "_name": "kennel",
+               "_price": "290",
+               "_owner": ""
+            },
+            {
+               "_id": "2",
+               "_name": "dota",
+               "_price": "0",
+               "_owner": ""
+            }
+         ]
+      }
+   }
+}
   -->

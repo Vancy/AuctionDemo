@@ -1,0 +1,37 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+
+<polymer-element name="native-post" attributes="url params success fail">
+  <template>
+  </template>
+
+  <script>
+    Polymer('native-post', {
+      xhr: new XMLHttpRequest(),
+
+      go: function( ) {
+        console.log("this", this);
+        console.log("  -->", this.url, this.params);
+
+        this.xhr.onreadystatechange = function(x) {
+          console.log(x);
+          if ( x.readyState == 4 ) {
+              if ( x.status == 200 ) {
+                this.success(x.responseText);
+              } else {
+                this.fail(x.responseText);
+              }
+          }
+        };
+        this.xhr.open("POST", this.url, true);
+        this.xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        // this.xhr.setRequestHeader("Content-length", this.params.length);
+        // this.xhr.setRequestHeader("Connection", "close");
+        this.xhr.send(this.params);
+      }
+
+    });
+  </script>
+</polymer-element>
+
+  
+

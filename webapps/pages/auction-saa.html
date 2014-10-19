@@ -1,20 +1,39 @@
 <link rel="import" href="bower_components/polymer/polymer.html">
 <link rel="import" href="bower_components/core-ajax/core-ajax.html">
 <link rel="import" href="auction-saa-table.html">
+<link rel="import" href="utils.html">
+<link rel="import" href="native-post.html">
 
 
 <polymer-element name="auction-saa">
   <template>
     <link rel="stylesheet" href="./auction-saa.css" type="text/css" />
     
-    
+    <!-- <core-ajax
+      id="submit"
+      url="/WEB-INF/bid.xml"
+      method="POST"
+      handleAs="xml"
+      params="{{ data }}"
+      on-core-response="{{ handleResponse }}"
+    ></core-ajax> -->
+
+    <native-post
+      id="submit"
+      url="/WEB-INF/bid.xml"
+      params="{{ data }}"
+      success="{{ handleResponse }}"      
+      fail="{{ fail }}"
+    ></native-post>
+
+    <!-- <core-xhr id="xhr"></core-xhr> -->
 
 
     <div id="auction-saa">
       <p>Round {{ round }}</p>
       <p id="time"></p>
       <auction-saa-table id="table" items="{{ items }}" final="{{ isFinal }}"></auction-saa-table>
-      <button id="bid">Bid</button>
+      <button id="bid" on-click="{{submit}}">Bid</button>
     </div>
 
 
@@ -23,6 +42,8 @@
 
   <script>
     Polymer('auction-saa', {
+      localIP: "127.0.0.1",
+      username: "",
       saa: {},
 
       round: -1,
@@ -30,15 +51,18 @@
       minimumIncreament: 0,
       items: [],
       isFinal: false,
+      data: "",
 
-
-      setData: function(data) {
+      setData: function(localIP, username, data) {
         console.log("saa.getData", data);
         this.saa = data;
         this.updateInfomation();
 
+        this.username = username;
+        this.localIP = localIP;
         // start ajax timer
       },
+
 
       updateInfomation: function() {
         this.items = this.saa.auction_context.item;
@@ -51,7 +75,7 @@
         this.$.bid.disabled = false;
         if ( ! this.isAuctionStarted() ) {
           this.$.time.innerHTML = "Please wait, auction haven't started yet.";
-          this.$.bid.disabled = true;
+          // this.$.bid.disabled = true;
           // not stated yet
         }
         if ( this.isFinal ) {
@@ -70,7 +94,48 @@
         return true;
       },
 
+      submit: function() {
+        // validate
+        // collect data
+        this.data = this.collectData();
 
+        console.log("submit", this.data);
+
+
+        // this.$.xhr.request({
+        //   url: "/WEB-INF/bid.xml",
+        //   method: "POST",
+        //   params: this.data,
+        //   responseType: "xml",
+        //   callback: this.handleResponse
+        // });
+
+        // this.$.submit.go();
+
+        this.$.submit.go();
+
+
+      },
+
+      collectData: function() {
+        var x2js = new X2JS();
+        var data = {};
+        data.bid = {};
+        data.bid.bidder = {_name: this.username, _ip: this.localIP};
+        data.bid.item_list = {}
+        data.bid.item_list.item = this.$.table.getItems();
+        
+        return x2js.json2xml(data);
+      }, 
+
+      handleResponse: function(e) {
+        // var xml = e.detail.xhr.response;
+        console.log("ok", e);
+      },
+
+      fail: function(e) {
+        console.log("fail", e);
+      }
     });
   </script>
 </polymer-element>
