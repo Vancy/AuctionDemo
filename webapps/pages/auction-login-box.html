@@ -74,7 +74,8 @@
           var saa = document.querySelector("#saa");
           saa.hidden = false;
           this.hidden = true;
-          saa.setData(this.localIP, this.username, json);
+          saa.setUp(this.username, this.localIP);
+          saa.setData(json);
         } else if ( type == "CCA" ) {
 
         } else {

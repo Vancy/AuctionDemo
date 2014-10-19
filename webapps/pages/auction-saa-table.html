@@ -38,7 +38,7 @@
                 </template>
 
                 <template if="{{ ! final }}">
-                  <td><input id="yprice{{item._id}}" type="text" class="form-control" placeholder=""></td>
+                  <td><input id="yprice{{item._id}}" type="text" class="form-control" value="{{item._value}}"></td>
                 </template>
               </tr>
             </template>
@@ -74,8 +74,17 @@
         }
 
         return item;
-      }
+      },
 
+      getValues: function() {
+        var values = [];
+        for ( i=0; i < this.items.length; i++ ) {
+          var id = this.items[i]._id;
+          values[i] = this.$.tbody.querySelector("#yprice" + id).value;
+
+        }
+        return values;
+      }
     });
   </script>
 </polymer-element>
