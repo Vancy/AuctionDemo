@@ -21,8 +21,11 @@ Polymer('auction-saa', {
     this.updateUrl = "/WEB-INF/update.xml?name=" + this.username + "&ip=" + this.localIP;
   },
 
+  /**
+  *  Entry to set all data.
+  */
   setData: function(data) {
-    console.log("saa.getData", data, this.items);
+    console.log("SAA: ", data);
 
     this.saa = data;
     this.updateInfomation();
@@ -37,9 +40,18 @@ Polymer('auction-saa', {
     }
   },
 
+  /**
+  *  To get updation information from server every 1s.
+  */
   update: function(e) {
-    console.log("update!!", e, e.detail, e.detail.xhr);
+    // console.log("update!!", e, e.detail, e.detail.xhr);
 
+    if ( e.detail.xhr.status != 200 ) {
+        clearInterval(this.timer);
+        console.log("Unable to connect to server. Status code: ", e.detail.xhr.status);
+        this.$.time.innerHTML = "</b>There is a problem to connect to server.</b>";
+        return;
+    }
     var xml = e.detail.xhr.response; 
     var x2js = new X2JS();
     var json = x2js.xml_str2json(xml);
@@ -83,7 +95,6 @@ Polymer('auction-saa', {
         this.$.bid.disabled = true;
       }
     }
-    console.log(this.items);
   },
 
   isAuctionStarted: function() {
@@ -111,8 +122,6 @@ Polymer('auction-saa', {
     // this.$.submit.go();
 
     // this.$.submit.go();
-
-
 
 
   },
