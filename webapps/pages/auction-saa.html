@@ -7,13 +7,16 @@
 
 <polymer-element name="auction-saa">
   <template>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
     <link rel="stylesheet" href="./auction-saa.css" type="text/css" />
 
     <div id="auction-saa">
       <p>Round {{ round }}</p>
       <p id="time"></p>
       <auction-saa-table id="table" items="{{ items }}" final="{{ isFinal }}"></auction-saa-table>
-      <button id="bid" on-click="{{submit}}">Bid</button>
+      <div class="btn-group">
+        <button id="bid" on-click="{{submit}}" type="button" class="btn btn-default">Bid</button>
+      </div>
     </div>
 
     <!-- The ajax that submits a bid. -->
@@ -21,7 +24,7 @@
       id="submit"
       url="/WEB-INF/bid.xml"
       params="{{ data }}"
-      success="{{ handleResponse }}"      
+      success="{{ success }}"      
       fail="{{ fail }}"
     ></native-post>
 

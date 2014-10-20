@@ -121,11 +121,13 @@ Polymer('auction-saa', {
     return x2js.json2xml(data);
   }, 
 
-  handleResponse: function(e) {
+  // successfully submit
+  success: function(e) {
     // var xml = e.detail.xhr.response;
     console.log("ok", e);
   },
 
+  // fail to submit
   fail: function(e) {
     clearInterval(this.timer);
     console.log("fail", e);
