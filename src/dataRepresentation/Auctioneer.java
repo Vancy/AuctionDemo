@@ -55,7 +55,7 @@ public class Auctioneer extends Thread{
 			//Collect Agent's bid
 			collectAgentBid();
 			
-			while(this.environment.context.roundTimeElapse > 0) {
+			while(this.environment.context.roundTimeRemain > 0) {
 				// Wait until current round time up
 				deliberateDelay(0.2);
 			}
@@ -185,7 +185,7 @@ public class Auctioneer extends Thread{
 		while (false == this.environment.context.bidsProcessingFinished); //wait till GUI finish update
 		
 		this.environment.context.incrementRound();
-		this.environment.context.roundTimeElapse = this.environment.context.getDurationTime();
+		this.environment.context.roundTimeRemain = this.environment.context.getDurationTime();
 		
 		//some update for CCA Auction
 		if (this.environment.context.getType() == AuctionContext.AuctionType.CCA) 

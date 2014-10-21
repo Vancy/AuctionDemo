@@ -136,17 +136,17 @@ public class AuctionPanel extends JPanel {
 		/*if current time remain is bigger than 0, minus it and display
 		 * Else, direcly display 0, until Auctioneer class refresh it
 		 */
-		if (this.environment.context.roundTimeElapse > 0) {
-			this.environment.context.roundTimeElapse--;
+		if (this.environment.context.roundTimeRemain > 0) {
+			this.environment.context.roundTimeRemain--;
 		}
-		this.lblTimer.setText("Remain:"+Integer.toString(this.environment.context.roundTimeElapse));
+		this.lblTimer.setText("Remain:"+Integer.toString(this.environment.context.roundTimeRemain));
 		this.lblRound.setText("Round:"+Integer.toString(this.environment.context.getRound()));
 	}
 	private void setAuctionEndFlag() {
 		this.environment.context.setFinalRound();
 	}
 	public void startAuction() {
-		this.environment.context.roundTimeElapse = this.environment.context.getDurationTime();
+		this.environment.context.roundTimeRemain = this.environment.context.getDurationTime();
 		this.displayTimer.start();
 	}
 }

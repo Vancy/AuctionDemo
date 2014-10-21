@@ -37,7 +37,7 @@ public class AuctionContext {
 	 * GUI check this flag, if true, GUI update auction_context to 
 	 * table. Then set back to false
 	 */
-	public int roundTimeElapse = 0;
+	public int roundTimeRemain = 0;
 	public boolean bidsProcessingFinished = false;
 	
 	public AuctionContext() {
@@ -192,7 +192,7 @@ public class AuctionContext {
 	    root.appendChild(child);
 	    child = doc.createElement("duration");
 	    child.setAttribute("value", Integer.toString(this.duration_Sec));
-	    child.setAttribute("remain", Integer.toString(this.roundTimeElapse));
+	    child.setAttribute("remain", Integer.toString(this.roundTimeRemain));
 	    root.appendChild(child);
 	    child = doc.createElement("minimum_increament");
 	    child.setAttribute("value", Double.toString(this.minIncreament));

@@ -138,6 +138,7 @@ public class BidServlet extends DefaultServlet{
     
     private static JsonObject convertStringToJson(String jsonStr) {
     	JsonParser parser = new JsonParser();
+    	System.out.println("-->" + jsonStr);
     	JsonObject jsonObj = (JsonObject)parser.parse(jsonStr);
     	return jsonObj;
     }
