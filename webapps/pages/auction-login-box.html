@@ -59,9 +59,22 @@
       },
 
       onClick: function() {
+        if ( ! this.validate() ) {
+          this.$.login_tips.innerHTML = "Please enter a valid username! Only letters, number and '-' are accepted. The first characters should be a letters";
+          return;
+        }
+
         this.requestUrl = "/WEB-INF/login.xml?name=" + this.username + "&ip=" + this.localIP;
         console.log("on-click", this.requestUrl);
         this.$.submit.go();
+      },
+
+      validate: function() {
+        var re = /^[a-zA-Z][a-zA-Z0-9\-]+$/;
+        if ( ! re.test(this.username) ) {
+          return false;
+        }
+        return true;
       },
 
       switchTo: function(json) {
