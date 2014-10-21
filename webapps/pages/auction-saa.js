@@ -132,8 +132,8 @@ Polymer('auction-saa', {
     data.bid.itemList = this.$.table.getItems();
     console.log("SUBMIT ", data.bid);
     console.log("  ", JSON.stringify(data));
-    // return JSON.stringify(data);
-    return '{"bid":{"bidder":{"name":"Zhenfei","ip":"195.176.178.184"},"itemList":[{"ID":0,"name":"ItemA","price":"1","owners":{}},{"ID":1,"name":"ItemB","price":"2","owners":{}},{"ID":2,"name":"ItemC","price":"3","owners":{}}]}} ';
+    return JSON.stringify(data);
+    // return '{"bid":{"bidder":{"name":"Zhenfei","ip":"195.176.178.184"},"itemList":[{"ID":0,"name":"ItemA","price":"1","owners":{}},{"ID":1,"name":"ItemB","price":"2","owners":{}},{"ID":2,"name":"ItemC","price":"3","owners":{}}]}} ';
 
   }, 
 
