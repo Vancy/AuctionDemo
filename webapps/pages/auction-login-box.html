@@ -54,8 +54,8 @@
       },
 
       handleResponse: function(e) {
-        var xml = e.detail.xhr.response; 
-        this.switchTo(xml);
+        var json = JSON.parse(e.detail.xhr.response);
+        this.switchTo(json);
       },
 
       onClick: function() {
@@ -64,17 +64,16 @@
         this.$.submit.go();
       },
 
-      switchTo: function(xml) {
-        var x2js = new X2JS();
-        var json = x2js.xml_str2json(xml);
-
-        var type = json.auction_context.type._value;
+      switchTo: function(json) {
+        // console.log(json, json.type);
+        var type = json.type;
         if ( type == "SAA" ) {
           var saa = document.querySelector("#saa");
           saa.hidden = false;
           this.hidden = true;
 
           console.log("SAA -->", this.username, this.localIP);
+          console.log("SAA: ", json);
           saa.setUp(this.username, this.localIP);
           saa.setData(json);
         } else if ( type == "CCA" ) {

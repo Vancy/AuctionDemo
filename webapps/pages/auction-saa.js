@@ -25,8 +25,6 @@ Polymer('auction-saa', {
   *  Entry to set all data.
   */
   setData: function(data) {
-    console.log("SAA: ", data);
-
     this.saa = data;
     this.updateInfomation();
 
@@ -52,20 +50,20 @@ Polymer('auction-saa', {
         this.$.time.innerHTML = "</b>There is a problem to connect to server.</b>";
         return;
     }
-    var xml = e.detail.xhr.response; 
-    var x2js = new X2JS();
-    var json = x2js.xml_str2json(xml);
+    var json = JSON.parse(e.detail.xhr.response); 
+    console.log("Timer ", json);
+    
 
     this.setData(json);
   },
 
 
   updateInfomation: function() {
-    var tmp = this.saa.auction_context.item;
-    this.round = this.saa.auction_context.round._value;
-    this.timeRemain = this.saa.auction_context.duration._remain;
-    this.minimumIncreament = this.saa.auction_context.minimum_increament._value;
-    this.isFinal = this.saa.auction_context.round._final == "no" ? false : true;
+    var tmp = this.saa.itemList;
+    this.round = this.saa.round;
+    this.timeRemain = this.saa.roundTimeRemain;
+    this.minimumIncreament = this.saa.minIncreament;
+    this.isFinal = this.saa.finalRound;
 
     /**
      *  1. When it is the first time to get data or last time(final round), it's fine to refresh the UI by update 
@@ -98,7 +96,7 @@ Polymer('auction-saa', {
   },
 
   isAuctionStarted: function() {
-    if ( this.saa.auction_context.round._value == "0" ) {
+    if ( this.round == 0 ) {
       return false
     }
     return true;
@@ -107,18 +105,20 @@ Polymer('auction-saa', {
   submit: function() {
     // validate
     this.data = this.collectData();
+
     this.$.submit.go();
   },
 
   collectData: function() {
-    var x2js = new X2JS();
+
     var data = {};
     data.bid = {};
-    data.bid.bidder = {_name: this.username, _ip: this.localIP};
-    data.bid.item_list = {}
-    data.bid.item_list.item = this.$.table.getItems();
-    
-    return x2js.json2xml(data);
+    data.bid.bidder = {name: this.username, ip: this.localIP};
+    data.bid.itemList = this.$.table.getItems();
+    console.log("SUBMIT ", data.bid);
+    console.log("  ", JSON.stringify(data));
+    return '{"bid":{"bidder":{"name":"Zhenfei","ip":"195.176.178.184"},"itemList":[{"ID":0,"name":"ItemA","price":"1","owners":{}},{"ID":1,"name":"ItemB","price":"2","owners":{}},{"ID":2,"name":"ItemC","price":"3","owners":{}}]}} ';
+
   }, 
 
   // successfully submit

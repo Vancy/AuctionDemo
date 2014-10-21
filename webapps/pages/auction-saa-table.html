@@ -30,15 +30,22 @@
           <tbody id="tbody">
             <template repeat="{{ item in items }}">     
               <tr>
-                <td>{{ item._name }}</td>
-                <td id="price{{item._id}}">{{ item._price }}</td> 
+                <td>{{ item.name }}</td>
+                <td id="price{{item.ID}}">{{ item.price }}</td> 
         
                 <template if="{{ final }}">
-                  <td id="owner{{item._id}}">{{ item._owner }}</td> 
+                  <td id="owner{{item.ID}}">
+                    <template if="{{ item.owners.name != undefined }}">
+                      {{ item.owners.name }}
+                    </template>
+                    <template if="{{ item.owners.name == undefined }}">
+                      unknown
+                    </template>
+                  </td> 
                 </template>
 
                 <template if="{{ ! final }}">
-                  <td><input id="yprice{{item._id}}" type="text" class="form-control" ></td>
+                  <td><input id="yprice{{item.ID}}" type="text" class="form-control" ></td>
                 </template>
               </tr>
             </template>
@@ -53,31 +60,25 @@
     Polymer('auction-saa-table', {
       items: [],
 
-      ko: function() {
-        var x = this.$.tbody;
-        var y = x.querySelector("#yprice0");
-        console.log("xxyx", x, y);
-      },
-
       getItems: function() {
         //validate
-        var item = [];
+        var itemList = [];
         for ( i=0; i < this.items.length; i++ ) {
           var bid = {};
-          bid._id = this.items[i]._id;
-          bid._name = this.items[i]._name;
-          bid._price = this.$.tbody.querySelector("#yprice" + bid._id).value;
-          bid._owner = "";
+          bid.ID = this.items[i].ID;
+          bid.name = this.items[i].name;
+          bid.price = this.$.tbody.querySelector("#yprice" + bid.ID).value;
+          bid.owners = {};
 
-          item[i] = bid;
+          itemList[i] = bid;
         }
-        return item;
+        return itemList;
       },
 
       update: function(newItems) {
         for ( i=0; i < newItems.length; i++ ) {
-          var id = newItems[i]._id;
-          this.$.tbody.querySelector("#price" + id).innerHTML = newItems[i]._price;
+          var id = newItems[i].ID;
+          this.$.tbody.querySelector("#price" + id).innerHTML = newItems[i].price;
         }
       }
     });
