@@ -299,7 +299,8 @@ public class Auctioneer extends Thread{
 				currBidder.setActivity(numberOfItemsBidOn + numberOfItemsLeading);
 				if (currBidder.getActivity() > currBidder.getEligibility()) {
 					currBidder.decrementActivityCounter();
-					if (currBidder.getActivityCounter() == 0) {
+					// alert bidder of decremented activity counter
+					if (currBidder.getActivityCounter() <= 0) {
 						// kick currBidder
 					}
 				}

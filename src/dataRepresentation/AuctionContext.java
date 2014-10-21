@@ -29,6 +29,7 @@ public class AuctionContext {
 	//priceTick is used in CCA auction, keep track of current price for all items
 	private double priceTick = 0;
 	private boolean finalRound;
+	static int numberOfActivityRuleWaivers = 2;
 	
 	
 	/* bidsProcessingFinished flag, to decide current round data processing is finished
@@ -116,6 +117,12 @@ public class AuctionContext {
 	}
 	public int getDurationTime() {
 		return this.duration_Sec;
+	}
+	public void setNumberOfActivityRuleWaivers(int numberOfActivityRuleWaivers) {
+		AuctionContext.numberOfActivityRuleWaivers = numberOfActivityRuleWaivers;
+	}
+	public int getNumberOfActivityRuleWaivers() {
+		return AuctionContext.numberOfActivityRuleWaivers;
 	}
 	public ArrayList<AuctionItem> getItemList() {
 		return this.itemList;

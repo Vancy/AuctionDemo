@@ -16,7 +16,7 @@ public class Bidder {
 	
 	private int eligibility;
 	private int activity;
-	private int activityCounter = 2;
+	private int activityCounter = AuctionContext.numberOfActivityRuleWaivers;
 	
 	public int getEligibility() {
 		return eligibility;
