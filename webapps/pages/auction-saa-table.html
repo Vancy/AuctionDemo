@@ -67,18 +67,30 @@
       items: [],
 
       getItems: function() {
-        //validate
+        
         var itemList = [];
         for ( i=0; i < this.items.length; i++ ) {
           var bid = {};
           bid.ID = this.items[i].ID;
           bid.name = this.items[i].name;
-          bid.price = this.$.tbody.querySelector("#yprice" + bid.ID).value;
+          bid.price = testAndSet(this, id, this.items[i].price);
           bid.owners = {};
 
           itemList[i] = bid;
         }
         return itemList;
+
+        function testAndSet(self, id, price) {
+          var yprice = self.$.tbody.querySelector("#yprice" + id).value;
+          var re = /^[0-9]+$/;
+          if ( ! re.test(yprice)  ||  parseInt(price) > parseInt(yprice) ) {
+            return "0";
+          } else {
+            return yprice;
+          }
+        }
+
+       
       },
 
       update: function(newItems) {
@@ -96,23 +108,21 @@
           id = this.items[i].ID;
           price = this.items[i].price;
           yprice = this.$.tbody.querySelector("#yprice" + id).value;
-          tips = this.$.tbody.querySelector("#yprice_tips" + id)
+          tips = this.$.tbody.querySelector("#yprice_tips" + id);
 
+          tips.innerHTML = "";
           if ( N2S(yprice).length != 0 ) {
             var re = /^[0-9]+$/;
             if ( ! re.test(yprice) ) {
               tips.innerHTML = "please enter a positive number";
-
             }
-
             if ( S2N(price) > S2N(yprice) ) {
               tips.innerHTML = "you are aborting this bid";
             }
-          } else {
-            tips.innerHTML = "";
           }
-        }
+        } 
 
+        // helper functions
         function S2N(str) {
           return parseInt(str);
         }

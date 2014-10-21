@@ -14,10 +14,21 @@ Polymer('auction-saa', {
   updateUrl: "",
   timer: undefined,
 
+   domReady: function() {
+    this.disableSubmittion();
+  },
+
+  enableSubmittion: function() {
+    this.$.bid.disabled = false;
+  },
+
+  disableSubmittion: function() {
+    this.$.bid.disabled = true;
+  },
+
   setUp: function(username, localIP) {
     this.username = username;
     this.localIP = localIP;
-
     this.updateUrl = "/WEB-INF/update.xml?name=" + this.username + "&ip=" + this.localIP;
   },
 
@@ -48,10 +59,11 @@ Polymer('auction-saa', {
         clearInterval(this.timer);
         console.log("Unable to connect to server. Status code: ", e.detail.xhr.status);
         this.$.time.innerHTML = "</b>There is a problem to connect to server.</b>";
+        this.disableSubmittion();
         return;
     }
     var json = JSON.parse(e.detail.xhr.response); 
-    console.log("Timer ", json);
+    // console.log("Timer ", json);
     
 
     this.setData(json);
@@ -60,6 +72,9 @@ Polymer('auction-saa', {
 
   updateInfomation: function() {
     var tmp = this.saa.itemList;
+    if ( this.saa.round > this.round && this.saa.round > 0) {
+      this.enableSubmittion();
+    }
     this.round = this.saa.round;
     this.timeRemain = this.saa.roundTimeRemain;
     this.minimumIncreament = this.saa.minIncreament;
@@ -78,7 +93,7 @@ Polymer('auction-saa', {
         this.$.table.update(tmp);
     }
 
-    this.$.bid.disabled = false;
+    // this.$.bid.disabled = false;
     if ( ! this.isAuctionStarted() ) {
       this.$.time.innerHTML = "Please wait, auction haven't started yet.";
       // this.$.bid.disabled = true;
@@ -90,7 +105,7 @@ Polymer('auction-saa', {
         // final
         clearInterval(this.timer);
         this.$.time.innerHTML = "<b>Final</b>";
-        this.$.bid.disabled = true;
+        this.disableSubmittion();
       }
     }
   },
@@ -105,7 +120,7 @@ Polymer('auction-saa', {
   submit: function() {
     // validate
     this.data = this.collectData();
-
+    this.disableSubmittion();
     this.$.submit.go();
   },
 
@@ -117,6 +132,7 @@ Polymer('auction-saa', {
     data.bid.itemList = this.$.table.getItems();
     console.log("SUBMIT ", data.bid);
     console.log("  ", JSON.stringify(data));
+    // return JSON.stringify(data);
     return '{"bid":{"bidder":{"name":"Zhenfei","ip":"195.176.178.184"},"itemList":[{"ID":0,"name":"ItemA","price":"1","owners":{}},{"ID":1,"name":"ItemB","price":"2","owners":{}},{"ID":2,"name":"ItemC","price":"3","owners":{}}]}} ';
 
   }, 
