@@ -145,8 +145,10 @@ public class BidServlet extends DefaultServlet{
     
     private Bid placeBid(JsonObject json) {
     	
-    	String name = json.get("name").getAsString();
-    	String ip = json.get("ip").getAsString();
+    	JsonObject jsonBid = json.get("bid").getAsJsonObject();
+    	JsonObject jsonBidder = jsonBid.get("bidder").getAsJsonObject();
+    	String name = jsonBidder.get("name").getAsString();
+    	String ip = jsonBidder.get("ip").getAsString();
     	
     	Bidder bidder = this.auctionEnvironment.bidderList.getBidder(name, ip);
     	if (null == bidder) {
@@ -159,7 +161,7 @@ public class BidServlet extends DefaultServlet{
     	}
     	
     	List<AuctionItem> bidderItemList = new ArrayList<AuctionItem>();
-    	JsonArray itemList = json.get("itemList").getAsJsonArray();
+    	JsonArray itemList = jsonBid.get("itemList").getAsJsonArray();
     	/*
     	 * Check current auction type, SAA or CCA.
     	 */
@@ -168,7 +170,8 @@ public class BidServlet extends DefaultServlet{
     			JsonObject item = itemList.get(i).getAsJsonObject();
     			String itemName = item.get("name").getAsString();
     			double itemPrice = item.get("price").getAsDouble();
-    			int id  = item.get("id").getAsInt();
+    			int id  = item.get("ID").getAsInt();
+    			System.out.println("name:"+itemName+"price:"+ itemPrice);
     			bidderItemList.add(new AuctionItem(id, itemName, itemPrice));
     		}
     	} else  if (this.auctionEnvironment.context.getType() == AuctionContext.AuctionType.CCA) {
