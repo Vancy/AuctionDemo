@@ -40,3 +40,14 @@ html,body {
     width: 400px;
   }
 }
+
+.ok {
+  background-color: blue;
+}
+
+.et {
+  background-color: red;
+}
+
+
+

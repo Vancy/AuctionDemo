@@ -2,20 +2,12 @@
 
 <polymer-element name="auction-saa-table" attributes="items final">
   <template>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
-    <style>
-      .panel {
-          margin: auto;
-          width: 400px;
-      }
-      .tip {
-        display: none;
-      }
-    </style>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" /> -->
+    <link rel="stylesheet" href="./auction-saa-table.css" />
 
     <div class="panel panel-default">
       <!-- <div class="panel-heading">SAA</div> -->
-        <table class="table table-hover">
+        <table id="bidTable" class="table table-hover">
           <thead>
             <th>Item</th>
             <th>Price</th> 
@@ -110,14 +102,14 @@
           yprice = this.$.tbody.querySelector("#yprice" + id).value;
           tips = this.$.tbody.querySelector("#yprice_tips" + id);
 
-          tips.innerHTML = "";
+          hideTips(tips);
           if ( N2S(yprice).length != 0 ) {
             var re = /^[0-9]+$/;
             if ( ! re.test(yprice) ) {
-              tips.innerHTML = "please enter a positive number";
+              showTips(tips, "please enter a positive number");
             }
             if ( S2N(price) > S2N(yprice) ) {
-              tips.innerHTML = "you are aborting this bid";
+              showTips(tips, "you are aborting this bid");
             }
           }
         } 
@@ -132,6 +124,15 @@
             return number.toString();
           }
           return number;
+        }
+
+        function showTips(tip, str) {
+          tip.innerHTML = str;
+          tip.style.display = "block";
+        }
+
+        function hideTips(tip) {
+          tip.style.display = "none";
         }
       }
     });

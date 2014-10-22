@@ -7,15 +7,23 @@
 
 <polymer-element name="auction-saa">
   <template>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" /> -->
     <link rel="stylesheet" href="./auction-saa.css" type="text/css" />
 
     <div id="auction-saa">
-      <p>Round {{ round }}</p>
-      <p id="time"></p>
-      <auction-saa-table id="table" items="{{ items }}" final="{{ isFinal }}"></auction-saa-table>
-      <div class="btn-group">
-        <button id="bid" on-click="{{submit}}" type="button" class="btn btn-default">Bid</button>
+      <div class="title">
+        <p>SAA - <span>Round {{ round }}</span></p>
+      </div>
+      <div id="box">
+        <p id="time"></p>
+        <div>
+          <auction-saa-table id="table" items="{{ items }}" final="{{ isFinal }}"></auction-saa-table>
+        </div>
+        <div id="div-btn-submit" class="btn-group">
+          <button id="bid" on-click="{{submit}}" type="button" class="btn btn-default">Bid</button>
+          <span>{{ username }}@{{ localIP }}</span>
+        </div>
+
       </div>
     </div>
 
@@ -28,6 +36,7 @@
       fail="{{ fail }}"
     ></native-post>
 
+    <!-- Why doesn't it work? -->
     <!-- <core-ajax
       id="submit"
       url="/WEB-INF/bid.xml"

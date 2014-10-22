@@ -18,12 +18,17 @@ Polymer('auction-saa', {
     this.disableSubmittion();
   },
 
+  // Explaination: http://stackoverflow.com/questions/195951/change-an-elements-css-class-with-javascript
   enableSubmittion: function() {
     this.$.bid.disabled = false;
+    this.$.bid.className = this.$.bid.className.replace( /(?:^|\s)btn-disabled(?!\S)/g , '' );
+    this.$.bid.className += " btn";
   },
 
   disableSubmittion: function() {
     this.$.bid.disabled = true;
+    this.$.bid.className = this.$.bid.className.replace( /(?:^|\s)btn(?!\S)/g , '' );
+    this.$.bid.className += " btn-disabled";
   },
 
   setUp: function(username, localIP) {
@@ -59,7 +64,7 @@ Polymer('auction-saa', {
     if ( e.detail.xhr.status != 200 ) {
         clearInterval(this.timer);
         console.log("Unable to connect to server. Status code: ", e.detail.xhr.status);
-        this.$.time.innerHTML = "</b>There is a problem to connect to server.</b>";
+        this.$.time.innerHTML = "</b>Error. Cannot connect to the server.</b>";
         this.disableSubmittion();
         return;
     }
@@ -96,7 +101,7 @@ Polymer('auction-saa', {
 
     // this.$.bid.disabled = false;
     if ( ! this.isAuctionStarted() ) {
-      this.$.time.innerHTML = "Please wait, auction haven't started yet.";
+      this.$.time.innerHTML = "Please wait, auction hasn't started yet.";
       // this.$.bid.disabled = true;
       // not stated yet
     } else {
@@ -132,7 +137,6 @@ Polymer('auction-saa', {
     data.bid.bidder = {name: this.username, ip: this.localIP};
     data.bid.itemList = this.$.table.getItems();
     return JSON.stringify(data);
-    // return '{"bid":{"bidder":{"name":"Zhenfei","ip":"195.176.178.184"},"itemList":[{"ID":0,"name":"ItemA","price":"1","owners":{}},{"ID":1,"name":"ItemB","price":"2","owners":{}},{"ID":2,"name":"ItemC","price":"3","owners":{}}]}} ';
 
   }, 
 
