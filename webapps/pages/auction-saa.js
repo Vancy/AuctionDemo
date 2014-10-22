@@ -38,6 +38,7 @@ Polymer('auction-saa', {
   setData: function(data) {
     this.saa = data;
     this.updateInfomation();
+    console.log("SAA ", this.saa);
 
     // Start the ajax timer when it is the first time.
     var self = this;
@@ -126,13 +127,10 @@ Polymer('auction-saa', {
   },
 
   collectData: function() {
-
     var data = {};
     data.bid = {};
     data.bid.bidder = {name: this.username, ip: this.localIP};
     data.bid.itemList = this.$.table.getItems();
-    console.log("SUBMIT ", data.bid);
-    console.log("  ", JSON.stringify(data));
     return JSON.stringify(data);
     // return '{"bid":{"bidder":{"name":"Zhenfei","ip":"195.176.178.184"},"itemList":[{"ID":0,"name":"ItemA","price":"1","owners":{}},{"ID":1,"name":"ItemB","price":"2","owners":{}},{"ID":2,"name":"ItemC","price":"3","owners":{}}]}} ';
 
