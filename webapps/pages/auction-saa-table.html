@@ -73,7 +73,7 @@
           var bid = {};
           bid.ID = this.items[i].ID;
           bid.name = this.items[i].name;
-          bid.price = testAndSet(this, id, this.items[i].price);
+          bid.price = testAndSet(this, bid.ID, this.items[i].price);
           bid.owners = {};
 
           itemList[i] = bid;
@@ -100,7 +100,7 @@
         }
       },
 
-      // for now, it simply try to validate all the input
+      // until now, it simply tries to validate all the input
       // later I will improve it
       //  1. addEventListener   2. auction-input
       validate: function() {

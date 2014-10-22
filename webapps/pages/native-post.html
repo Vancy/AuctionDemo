@@ -9,15 +9,15 @@
       xhr: new XMLHttpRequest(),
 
       go: function( ) {
-        console.log("this", this);
         console.log("  POST-->", this.url, this.params);
         var self = this;
         this.xhr.onreadystatechange = function(x) {
-          console.log(" RESPONSE", self, x);
+
           if ( x.readyState == 4 && x.status == 200 ) {
+            console.log(" RESPONSE", self, x);
             self.success(x.responseText);
           } else {
-            self.fail(x.responseText);
+            // self.fail(x.responseText);
           }
 
         };
