@@ -20,22 +20,23 @@
     </div>
 
     <!-- The ajax that submits a bid. -->
-<!--     <native-post
+    <native-post
       id="submit"
       url="/WEB-INF/bid.xml"
       params="{{ data }}"
       success="{{ success }}"      
       fail="{{ fail }}"
-    ></native-post> -->
+    ></native-post>
 
-    <core-ajax
+    <!-- <core-ajax
       id="submit"
       url="/WEB-INF/bid.xml"
       params="{{ data }}"
       method="POST"
+      contentType="text/plain"
       on-core-response="{{ success }}"
-      error="{{ fail }}"
-    ></core-ajax> 
+      on-core-rror="{{ fail }}"
+    ></core-ajax>  -->
 
     <!-- The ajax TIMER that asks for newer inforamtion. -->
     <core-ajax

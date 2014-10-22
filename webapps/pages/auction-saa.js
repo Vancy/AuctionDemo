@@ -119,9 +119,10 @@ Polymer('auction-saa', {
 
   submit: function() {
     // validate
-    this.data = this.collectData();
     this.disableSubmittion();
+    this.data = this.collectData();
     this.$.submit.go();
+    
   },
 
   collectData: function() {

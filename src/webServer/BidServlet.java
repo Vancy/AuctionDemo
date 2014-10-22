@@ -56,7 +56,7 @@ public class BidServlet extends DefaultServlet{
 		//Document doc = convertStringToDocument(xmlContent);
 		JsonObject doc = convertStringToJson(xmlContent);
 		
-
+		System.out.println(doc.toString());
 		//place a bid to environment, auctioneer will handle this bid
 		Bid myBid = placeBid(doc);
 		System.err.println(myBid.getBidder().getName()+"**********Get bid request*********");
@@ -159,7 +159,7 @@ public class BidServlet extends DefaultServlet{
     	}
     	
     	List<AuctionItem> bidderItemList = new ArrayList<AuctionItem>();
-    	JsonArray itemList = json.get("item_list").getAsJsonArray();
+    	JsonArray itemList = json.get("itemList").getAsJsonArray();
     	/*
     	 * Check current auction type, SAA or CCA.
     	 */
