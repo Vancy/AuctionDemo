@@ -30,10 +30,10 @@
         
                 <template if="{{ final }}">
                   <td id="owner{{item.ID}}">
-                    <template if="{{ item.owners.name != undefined }}">
-                      {{ item.owners.name }}
+                    <template if="{{ item.owner != undefined }}">
+                      {{ item.owner.name }}
                     </template>
-                    <template if="{{ item.owners.name == undefined }}">
+                    <template if="{{ item.owner == undefined }}">
                       unknown
                     </template>
                   </td> 
