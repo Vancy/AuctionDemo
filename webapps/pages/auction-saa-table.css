@@ -73,13 +73,14 @@ input[type=text] {
   box-shadow: inset 1px 1px 1px #FA7070;
 }
 
+/*tbody>tr:nth-of-type(even) {
+  color: #000000;
+  background-color: #EAF2D3;
+}*/
+
 tr:hover {
   background-color: #FFFACD;
   box-shadow: inset 3px 3px 3px #f1f1f1;
 }
 
-/*
-.table-row-even {
-  color: #000000;
-    background-color: #EAF2D3;
-}*/
+
