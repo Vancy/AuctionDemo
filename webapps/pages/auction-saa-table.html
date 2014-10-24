@@ -2,11 +2,9 @@
 
 <polymer-element name="auction-saa-table" attributes="items final">
   <template>
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" /> -->
     <link rel="stylesheet" href="./auction-saa-table.css" />
 
     <div class="panel panel-default">
-      <!-- <div class="panel-heading">SAA</div> -->
         <table id="bidTable" class="table table-hover">
           <thead>
             <th>Item</th>
@@ -21,7 +19,6 @@
             </template>           
           </thead>
 
-          <!-- items here -->
           <tbody id="tbody">
             <template repeat="{{ item in items }}">     
               <tr>
@@ -49,7 +46,6 @@
             </template>
           </tbody>
         </table>
-      <!-- </div> -->
     </div>
 
   </template>
@@ -81,8 +77,6 @@
             return yprice;
           }
         }
-
-       
       },
 
       update: function(newItems) {
@@ -129,12 +123,15 @@
         function showTips(tip, str) {
           tip.innerHTML = str;
           tip.style.display = "block";
+          
         }
 
         function hideTips(tip) {
           tip.style.display = "none";
+          
         }
       }
+
     });
   </script>
 </polymer-element>

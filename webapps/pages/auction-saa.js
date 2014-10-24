@@ -64,23 +64,23 @@ Polymer('auction-saa', {
     if ( e.detail.xhr.status != 200 ) {
         clearInterval(this.timer);
         console.log("Unable to connect to server. Status code: ", e.detail.xhr.status);
-        this.$.time.innerHTML = "</b>Error. Cannot connect to the server.</b>";
+        this.$.time.innerHTML = "<b class='error'>Error. Cannot connect to the server.</b>";
         this.disableSubmittion();
         return;
     }
     var json = JSON.parse(e.detail.xhr.response); 
-    // console.log("Timer ", json);
-    
-
     this.setData(json);
   },
 
 
   updateInfomation: function() {
     var tmp = this.saa.itemList;
+    /**
+    * If the last round(`this.round`) is smaller than current round, then enable submit button.
+    */
     if ( this.saa.round > this.round && this.saa.round > 0) {
       this.enableSubmittion();
-    }
+    } 
     this.round = this.saa.round;
     this.timeRemain = this.saa.roundTimeRemain;
     this.minimumIncreament = this.saa.minIncreament;
@@ -124,11 +124,9 @@ Polymer('auction-saa', {
   },
 
   submit: function() {
-    // validate
     this.disableSubmittion();
     this.data = this.collectData();
     this.$.submit.go();
-    
   },
 
   collectData: function() {
@@ -137,7 +135,6 @@ Polymer('auction-saa', {
     data.bid.bidder = {name: this.username, ip: this.localIP};
     data.bid.itemList = this.$.table.getItems();
     return JSON.stringify(data);
-
   }, 
 
   // successfully submit

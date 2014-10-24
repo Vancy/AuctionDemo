@@ -117,3 +117,7 @@ div {
     margin-bottom: 1em;
 }
 
+.error {
+    color: red;
+}
+

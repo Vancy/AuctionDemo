@@ -42,22 +42,20 @@
     padding: 3px 7px 2px 7px;
 }
 
-
-
-
 input[type=text] {
   width: 90%;
   height: 24px;
   line-height: 22px;
   font-size: 18px;
   margin: auto;
-  border: 1px solid #b0d3ee;
+  
   -webkit-border-radius: 3px;
+  border: 1px solid #b0d3ee;
   box-shadow: inset 3px 3px 3px #f1f1f1;
   -webkit-transition: -webkit-box-shadow .2s linear;
 
   background: #fff;
-  padding-left: 6px;
+  /*padding-left: 6px;*/
 
 
   display: inline-block;
@@ -66,15 +64,21 @@ input[type=text] {
   font-weight: normal;
 }
 
-/*****/
-tr.zhover {
+.normal {
+  
+}
+
+.error {
+  border: 1px solid #F90505;
+  box-shadow: inset 1px 1px 1px #FA7070;
+}
+
+tr:hover {
   background-color: #FFFACD;
   box-shadow: inset 3px 3px 3px #f1f1f1;
 }
-/*.th-wide {
-  width: 72px;
-}
 
+/*
 .table-row-even {
   color: #000000;
     background-color: #EAF2D3;
