@@ -95,7 +95,14 @@
           saa.setUp(this.username, this.localIP);
           saa.setData(json);
         } else if ( type == "CCA" ) {
-          // for CCA
+          var cca = document.querySelector("#cca");
+          cca.hidden = false;
+          this.hidden = true;
+
+          console.log("CCA -->", this.username, this.localIP);
+          console.log("CCA: ", json);
+          cca.setUp(this.username, this.localIP);
+          cca.setData(json);
         } else {
           // Error
         }
