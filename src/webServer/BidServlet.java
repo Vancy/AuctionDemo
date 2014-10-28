@@ -184,7 +184,7 @@ public class BidServlet extends DefaultServlet{
         		} catch(RuntimeException e) { // so put itemRequire as 0 
         			itemRequire = 0;
         		}
-    			int id  = item.get("id").getAsInt();
+    			int id  = item.get("ID").getAsInt();
     			bidderItemList.add(new AuctionItem(id, itemName, itemRequire));
     		}
     	}

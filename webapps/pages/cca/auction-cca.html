@@ -1,0 +1,46 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="./auction-cca-table.html">
+<link rel="import" href="../utils/native-post.html">
+
+<polymer-element name="auction-cca">
+  <template>
+    <link rel="stylesheet" href="./auction-cca.css" type="text/css" />
+
+    <div id="auction-cca">
+      <div class="title">
+        <p>CCA - <span>Round {{ round }}</span></p>
+      </div>
+      <div id="box">
+        <p id="time"></p>
+        <div>
+          <auction-cca-table id="table" items="{{ items }}" final="{{ isFinal }}"></auction-cca-table>
+        </div>
+        <div id="div-btn-submit" class="btn-group">
+          <button id="bid" on-click="{{submit}}" type="button" class="btn btn-default">Bid</button>
+          <span>{{ username }}@{{ localIP }}</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- The ajax that submits a bid. -->
+    <native-post
+      id="submit"
+      url="/WEB-INF/bid.xml"
+      params="{{ data }}"
+      success="{{ success }}"      
+      fail="{{ fail }}"
+    ></native-post>
+
+    <!-- The ajax TIMER that asks for newer inforamtion. -->
+    <core-ajax
+      id="period"
+      url="{{ updateUrl }}"
+      handleAs="xml"
+      on-core-response="{{ update }}"
+    ></core-ajax>    
+
+  </template>
+  <script src="./auction-cca.js"></script>
+</polymer-element>

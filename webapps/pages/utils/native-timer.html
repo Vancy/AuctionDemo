@@ -1,0 +1,24 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<polymer-element name="native-timer" attributes="">
+  <template>
+  </template>
+
+  <script>
+    Polymer('native-timer', {
+      timer: undefined,
+      
+      start: function (callback, interval) {
+        this.timer = setInterval(callback, interval);
+      },
+
+      stop: function() {
+        clearInterval(this.timer);
+      }
+      
+    });
+  </script>
+</polymer-element>
+
+  
+

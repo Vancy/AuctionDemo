@@ -1,0 +1,51 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<polymer-element name="native-post" attributes="url params success fail">
+  <template>
+  </template>
+
+  <script>
+    Polymer('native-post', {
+      xhr: new XMLHttpRequest(),
+
+      go: function( ) {
+        console.log("  POST-->", this.url, this.params);
+        var self = this;
+        this.xhr.onreadystatechange = function(x) {
+
+          if ( x.readyState == 4 && x.status == 200 ) {
+            console.log(" RESPONSE", self, x);
+            self.success(x.responseText);
+          } else {
+            // self.fail(x.responseText);
+          }
+
+        };
+        this.xhr.open("POST", this.url, true);
+        this.xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        this.xhr.send(this.params);
+      }
+
+    });
+  </script>
+</polymer-element>
+
+  
+
+<!--
+xhr=new XMLHttpRequest();
+xhr.open("POST", "http://subinsb.com/request.php", true);
+xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+xhr.send("who=subin&what=personalBelongings");
+xhr.onreadystatechange=function(){
+ if(xhr.readyState==4 && xhr.status==200){
+  console.log(xhr.responseText);
+ }
+}
+
+//
+
+       
+        this.xhr.setRequestHeader("Content-length", this.params.length);
+        this.xhr.setRequestHeader("Connection", "close");
+  -->
