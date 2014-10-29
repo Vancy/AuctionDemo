@@ -268,6 +268,17 @@ public class Auctioneer extends Thread{
 			for (AuctionItem bidderItem: bid.getItemList()) {
 				
 				double originalPrice = fetchItemPrice(bidderItem.getID());
+<<<<<<< HEAD
+				
+				if (bid.getBidder().getID() == fetchItemOwnerID(bidderItem.getID())) {
+					continue;
+				}
+
+				if (originalPrice < bidderItem.getPrice()) {
+					putItemPrice(bid.getBidder(), bidderItem.getID(), bidderItem.getPrice());
+					if (!newBids) {
+						newBids = true;
+=======
 				originalPrices.put(bidderItem.getID(), fetchItemPrice(bidderItem.getID()));
 				if (currBidder.getID() == fetchItemOwnerID(bidderItem.getID())) {
 					numberOfItemsLeading++;
@@ -278,6 +289,7 @@ public class Auctioneer extends Thread{
 						items = new ArrayList<AuctionItem>();
 					} else {
 						items = bidderPrices.get(currBidder);
+>>>>>>> logging
 					}
 					items.add(bidderItem);
 					bidderPrices.put(currBidder, items);
@@ -450,7 +462,10 @@ public class Auctioneer extends Thread{
 	private int fetchItemOwnerID(int itemID) {
 		for (AuctionItem item: this.environment.context.getItemList()) { 
 			if (itemID == item.getID()) {
+<<<<<<< HEAD
+=======
 				System.err.println(item.getOwner().getName());
+>>>>>>> logging
 				return item.getOwner().getID();
 			}
 		}
