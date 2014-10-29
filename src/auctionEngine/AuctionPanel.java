@@ -64,9 +64,9 @@ public class AuctionPanel extends JPanel {
 		panel_All.add(panel);
 		
 		
-		JLabel lblMinimunIncrement = new JLabel("Minimun Increment: ");
+		JLabel lblMinimumIncrement = new JLabel("Minimum Increment: ");
 		
-		panel.add(lblMinimunIncrement);
+		panel.add(lblMinimumIncrement);
 		//SpinnerModel sm_minIncrement = new SpinnerNumberModel(1, 0, Double.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
 		spinner_Increment = new JSpinner(/*sm_minIncrement*/);
 		panel.add(spinner_Increment);

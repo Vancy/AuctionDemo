@@ -1,24 +1,9 @@
 package dataRepresentation;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import java.util.Timer;
-import java.util.TreeMap;
-
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 
 
 public class Auctioneer extends Thread{
@@ -36,14 +21,16 @@ public class Auctioneer extends Thread{
 	HashMap<Integer, Bid> requestedBids;
 	AuctionEnvironment environment;
 	ArrayList<AuctionContext> auctionLog = new ArrayList<AuctionContext>();
-	ArrayList<Collection<Bid>> excelLog = new ArrayList<Collection<Bid>>();
 	Timer roundTimer = new Timer();
+	
+	SAALogger saaLogger;
 	
 	public volatile boolean nextRoundNotReady = true;
 	
 	public Auctioneer(AuctionEnvironment e) {
 		this.environment = e;
 		this.requestedBids = new HashMap<Integer, Bid>();
+		saaLogger = new SAALogger();
 	}
 	
 	public void getBid(Bid bid) {
@@ -88,121 +75,8 @@ public class Auctioneer extends Thread{
 			/***************Next Round Will Start**********************/
 			if (this.environment.context.isFinalRound()) {
 				System.err.println("Auction End");
-				createExcelLogSheet();
 				break; // break from while loop, terminate auctioneer
 			}
-		}
-	}
-	
-	private void createExcelLogSheet() {
-		HSSFWorkbook workbook = new HSSFWorkbook();
-		HSSFSheet sheet = workbook.createSheet("Sample sheet");
-		
-		ArrayList<AuctionItem> items = this.environment.context.getItemList();
-		ArrayList<Bidder> bidders = this.environment.bidderList.getList();
-		
-		Collections.sort(items);
-		
-		int numberOfBidders = bidders.size();
-		int numberOfItems = items.size();
-		
-		Map<Integer, Object[]> data = new TreeMap<Integer, Object[]>();
-		Object[] itemRowHeader = new Object[numberOfItems * numberOfBidders];
-		Object[] bidderRowHeader = new Object[numberOfItems * numberOfBidders];
-		
-		itemRowHeader[0] = "";
-		bidderRowHeader[0] = "";
-		
-		int counter = 0;
-		for (int i = 0; i < numberOfItems * numberOfBidders; i++) {
-			if (i == 0) {
-				itemRowHeader[i] = items.get(counter).getName();
-				counter++;
-				continue;
-			}
-			if (i % numberOfBidders == 0) { 
-				itemRowHeader[i] = items.get(counter).getName();
-				counter++;
-			} else {
-				itemRowHeader[i] = "";
-			}
-		}
-		
-		counter = 0;
-		for (int i = 0; i < numberOfItems; i++) {
-			for (int j = 0; j < numberOfBidders; j++) {
-				bidderRowHeader[counter] = bidders.get(j).getName();
-				counter++;
-			}
-		}
-		
-		data.put(1, itemRowHeader);
-		data.put(2, bidderRowHeader);
-		
-		counter = 3;
-		Object[] entry = new Object[numberOfItems * numberOfBidders];
-		for (Collection<Bid> bids : getExcelLog()) {
-			entry = new Object[numberOfItems * numberOfBidders];
-			int currentBidder = 0;
-			for (Bid bid : bids) {
-				int pos = currentBidder;
-				for (AuctionItem ai : bid.getItemList()) {
-					entry[pos] = ai.getPrice();
-					pos += numberOfBidders;
-				}
-				currentBidder++;
-			}
-			data.put(counter, entry);
-			counter++;
-		}
-		
-		Set<Integer> keyset = data.keySet();
-		int rownum = 0;
-		int roundNumber = 1;
-		for (Integer key : keyset) {
-		    Row row = sheet.createRow(rownum);
-		    // create the round numbers column
-		    if (rownum == 1) {
-		    	row.createCell(0).setCellValue("Round");
-		    }
-		    if (rownum > 1) {
-		    	row.createCell(0).setCellValue(roundNumber);
-		    	roundNumber++;
-		    }
-		    
-		    Object [] objArr = data.get(key);
-		    int cellnum = 1;
-		    for (Object obj : objArr) {
-		        Cell cell = row.createCell(cellnum);
-		        if(obj instanceof String) {
-		            cell.setCellValue((String)obj);
-		    	} else if(obj instanceof Double) {
-		        	if (((Double) obj) == 0d) {
-		        		if (sheet.getRow(rownum-1).getCell(cellnum).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
-		        			cell.setCellValue(sheet.getRow(rownum-1).getCell(cellnum).getNumericCellValue());
-		        		} else {
-		        			cell.setCellValue((Double)obj);
-		        		}
-		        	} else {
-		        		cell.setCellValue((Double)obj);
-		        	}
-		        }
-		        cellnum++;
-		    }
-		    rownum++;
-		}
-		 
-		try {
-		    FileOutputStream out = 
-		            new FileOutputStream(new File("C:\\Users\\oodi687\\workspace\\AuctionResults.xls"));
-		    workbook.write(out);
-		    out.close();
-		    System.out.println("Excel written successfully!");
-		     
-		} catch (FileNotFoundException e) {
-		    e.printStackTrace();
-		} catch (IOException e) {
-		    e.printStackTrace();
 		}
 	}
 	
@@ -299,9 +173,9 @@ public class Auctioneer extends Thread{
 				currBidder.setActivity(numberOfItemsBidOn + numberOfItemsLeading);
 				if (currBidder.getActivity() > currBidder.getEligibility()) {
 					currBidder.decrementActivityCounter();
-					// alert bidder of decremented activity counter
+					// WARN THE BIDDER THAT THEY WERE INACTIVE AND LOST A WAIVER HERE.
 					if (currBidder.getActivityCounter() <= 0) {
-						// kick currBidder
+						// ALERT THE BIDDER THAT THEY GOT KICKED HERE.
 					}
 				}
 			}
@@ -319,11 +193,12 @@ public class Auctioneer extends Thread{
 			}
 		}
 		
+		saaLogger.addToExcelLog(this.requestedBids.values());
+		
 		if (!newBids) {
 			this.environment.context.setFinalRound();
+			saaLogger.createExcelLogSheet(this.environment.context.getItemList(), this.environment.bidderList.getList(), "C:\\Users\\oodi687\\workspace\\AuctionResults.xls", "SAA Auction Results");
 		}
-		
-		recordExcelLog(this.requestedBids.values()); 
 	}
 	
 	private void processCCABids() {
@@ -415,14 +290,6 @@ public class Auctioneer extends Thread{
 	
 	public ArrayList<AuctionContext> getLog() {
 		return this.auctionLog;
-	}
-	
-	public void recordExcelLog(Collection<Bid> bids) {
-		this.excelLog.add(new ArrayList<Bid>(bids));
-	}
-
-	public ArrayList<Collection<Bid>> getExcelLog() {
-		return this.excelLog;
 	}
 
 	private void updateNextRoundPriceForCCA() {
