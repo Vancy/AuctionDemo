@@ -43,7 +43,7 @@ Polymer('auction-cca', {
   setData: function(data) {
     this.cca = data;
     this.updateInfomation();
-    console.log("CCA ", this.cca);
+    //console.log("CCA ", this.cca);
 
 
     // Start the ajax timer when it is the first time.
@@ -138,13 +138,14 @@ Polymer('auction-cca', {
 
   isAuctionStarted: function() {
     if ( this.round == 0 ) {
-      return false
+      return false;
     }
     return true;
   },
 
   submit: function() {
-    this.disableSubmittion();
+  //Xing: always enable bidders to bid multiple times, so needn't disableSubmittion
+    //this.disableSubmittion();
     this.data = this.collectData();
     this.$.submit.go();
   },

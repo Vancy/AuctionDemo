@@ -43,7 +43,7 @@ Polymer('auction-saa', {
   setData: function(data) {
     this.saa = data;
     this.updateInfomation();
-    console.log("SAA ", this.saa);
+    //console.log("SAA ", this.saa);
 
     // Start the ajax timer when it is the first time.
     var self = this;
@@ -118,13 +118,14 @@ Polymer('auction-saa', {
 
   isAuctionStarted: function() {
     if ( this.round == 0 ) {
-      return false
+      return false;
     }
     return true;
   },
 
   submit: function() {
-    this.disableSubmittion();
+  //Xing: always enable bidders to bid multiple times, so needn't disableSubmittion
+    //this.disableSubmittion();
     this.data = this.collectData();
     this.$.submit.go();
   },
@@ -135,7 +136,7 @@ Polymer('auction-saa', {
     data.bid.bidder = {name: this.username, ip: this.localIP};
     data.bid.itemList = this.$.table.getItems();
     return JSON.stringify(data);
-  }, 
+  },
 
   // successfully submit
   success: function(e) {

@@ -180,7 +180,7 @@ public class BidServlet extends DefaultServlet{
     			String itemName = item.get("name").getAsString();
     			int itemRequire = 0;
     			try { //if bidder doesn't bid for this, the quantity_require may not be defined
-        			itemRequire = json.get("quantity_require").getAsInt();
+        			itemRequire = item.get("quantity_required").getAsInt();
         		} catch(RuntimeException e) { // so put itemRequire as 0 
         			itemRequire = 0;
         		}

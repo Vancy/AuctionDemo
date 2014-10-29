@@ -55,7 +55,7 @@
       items: [],
 
       getItems: function() {
-        
+
         var itemList = [];
         for ( i=0; i < this.items.length; i++ ) {
           var bid = {};
@@ -71,7 +71,7 @@
         function testAndSet(self, id, price) {
           var yprice = self.$.tbody.querySelector("#yprice" + id).value;
           var re = /^[0-9]+$/;
-          if ( ! re.test(yprice)  ||  parseInt(price) > parseInt(yprice) ) {
+          if ( ! re.test(yprice)  ||  parseInt(price) >= parseInt(yprice) ) {
             return "0";
           } else {
             return yprice;
