@@ -26,21 +26,22 @@
                 <td>{{ item.name }}</td>
                 <td id="price{{item.ID}}">{{ item.price }}</td> 
                 <td id="amount{{item.ID}}">{{ item.quantity }}</td> 
-        
-                <template if="{{ item.biddingFinised || final }}">
-                  <td id="owner{{item.ID}}">
-                    <template repeat="{{ owner in owners }}">
-                      {{ owner.name }}: {{ owner.quantity }}  
-                    </template>
-                  </td> 
-                </template>
+                <td id="last{{item.ID}}">
+                  <template if="{{ item.biddingFinised || final }}">
+                    <span id="owner{{item.ID}}">
+                      <template repeat="{{ owner in item.owners }}">
+                        {{ owner.name }}: {{ owner.quantity }} 
+                      </template>
+                    </span> 
+                  </template>
 
-                <template if="{{ ! item.biddingFinised && ! final }}">
-                  <td>
-                    <input id="yamount{{item.ID}}" type="text" class="form-control" on-keyup="{{validate}}">
-                    <p id="yamount_tips{{item.ID}}" class="tips"></p>
-                  </td>
-                </template>
+                  <template if="{{ ! item.biddingFinised && ! final }}">
+                    <span id="y{{item.ID}}">
+                      <input id="yamount{{item.ID}}" type="text" class="form-control" on-keyup="{{validate}}">
+                      <p id="yamount_tips{{item.ID}}" class="tips"></p>
+                    </span>
+                  </template>
+              </td>
               </tr>
             </template>
           </tbody>
@@ -52,6 +53,7 @@
   <script>
     Polymer('auction-cca-table', {
       items: [],
+      lastItems: [],
 
       getItems: function() {
         var itemList = [];
@@ -77,9 +79,37 @@
       },
 
       update: function(newItems) {
-        for ( i=0; i < newItems.length; i++ ) {
+        for ( var i=0; i < newItems.length; i++ ) {
           var id = newItems[i].ID;
           this.$.tbody.querySelector("#price" + id).innerHTML = newItems[i].price;
+        }
+        if ( this.lastItems.length <= 0 || this.lastItems == undefined ) {
+          this.lastItems = newItems;
+          return;
+        } else {
+
+          for ( var i = 0; i <newItems.length; i++ ) {
+            if ( this.lastItems[i].biddingFinised == false
+              &&  newItems[i].biddingFinised == true ) {
+
+              console.log("CCC", newItems[i].biddingFinised, this.lastItems[i].biddingFinised);
+              var id = newItems[i].ID;
+              var old = "#y" + id;
+              var span = document.createElement("span");
+              span.id = "owner" + id;
+              var str = "";
+              for ( var j=0; j<newItems[i].owners.length; j++ ) {
+                str += newItems[i].owners[j].name + ": " + newItems[i].owners[j].quantity + " ";
+              }
+              span.innerHTML = str;
+              this.$.tbody.querySelector("#y" + id).hidden = true;
+              // this.$.tbody.querySelector("#last" + id).removeChild(old);
+              this.$.tbody.querySelector("#last" + id).appendChild(span);
+            }
+
+          }
+          this.lastItems = newItems;
+
         }
       },
 

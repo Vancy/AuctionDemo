@@ -77,7 +77,6 @@ Polymer('auction-cca', {
   updateInfomation: function() {
 
     var tmp = this.cca.itemList;
-    console.log("UI", tmp);
     /**
     * If the last round(`this.round`) is smaller than current round, then enable submit button.
     */
@@ -90,6 +89,23 @@ Polymer('auction-cca', {
     this.isFinal = this.cca.finalRound;
 
     /**
+    * Convert format of onwers
+    */
+    
+    for ( var i=0; i<tmp.length; i++ ) {
+      var m_owners = [];
+      var ks = Object.keys(tmp[i].owners);
+      for ( var j=0; j<ks.length; j++ ) {
+        var o = {};
+        o.name = ks[j];
+        o.quantity = tmp[i].owners[ks[j]];
+        m_owners.push(o);
+      }
+      tmp[i].owners = m_owners;
+    }
+
+
+    /**
      *  1. When it is the first time or last time(final round) to get data, it's fine to refresh the UI by update 
      *     the `this.items`, which is **two-way** binded with the `item` inside the 'acution-cca-table'.
      *  2. While when it is a normal update, to avoid 'flash', only `price` information needs to be updated.
@@ -97,21 +113,10 @@ Polymer('auction-cca', {
      *     call a funtion of 'acution-cca-table', which will *ONLY* modifies the UI of `price`.
     **/
     if ( this.items.length == 0 || this.isFinal ) {
-        this.items = tmp;
+      console.log("Initial or Final", tmp);
+      this.items = tmp;
     } else {
-        var flag = false;
-        for ( i=0; i<tmp.length; i++ ) {
-          if ( tmp[i].biddingFinised == true ) {
-            flag = true;
-          }
-        }
-
-        if ( flag ) {
-          this.items = tmp;
-        } else {
-          this.$.table.update(tmp);
-        }
-        
+      this.$.table.update(tmp);
     }
 
     // this.$.bid.disabled = false;
