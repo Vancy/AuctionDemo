@@ -14,6 +14,37 @@ public class Bidder {
 	private String ipAdress = "127.0.0.1";
 	private Color colorRecognition;
 	
+	private int eligibility;
+	private int activity;
+	private int activityCounter = AuctionContext.numberOfActivityRuleWaivers;
+	
+	public int getEligibility() {
+		return eligibility;
+	}
+
+	public void setEligibility(int eligibility) {
+		this.eligibility = eligibility;
+		System.err.println(this.name + "eligibility is: " + eligibility);
+	}
+
+	public int getActivity() {
+		return activity;
+	}
+
+	public void setActivity(int activity) {
+		this.activity = activity;
+		System.err.println(this.name + "actvity is: " + activity);
+	}
+	
+	public void decrementActivityCounter() {
+		System.err.println(this.name + "actvity counter decremented!");
+		activityCounter --;
+	}
+	
+	public int getActivityCounter() {
+		return activityCounter;
+	}
+	
 	public Bidder() {
 		this.name = "Unknown";
 		this.ID = -1;

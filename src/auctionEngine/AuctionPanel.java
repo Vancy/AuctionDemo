@@ -23,6 +23,7 @@ public class AuctionPanel extends JPanel {
 	public AuctionListPanel auctionListPanel;
 	private JSpinner spinner_Increment;
 	private JSpinner spinner_timeDuration;
+	private JSpinner spinner_activityRuleWaivers;
 	private JLabel lblAuctionType;
 	private JLabel lblRound;
 	private JLabel lblTimer;
@@ -48,7 +49,7 @@ public class AuctionPanel extends JPanel {
 		panel_All.add(panel_Display);
 		panel_Display.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		lblAuctionType = new JLabel("Auction");
+		lblAuctionType = new JLabel("Auction: ");
 		panel_Display.add(lblAuctionType);
 		
 		lblRound = new JLabel("Round:");
@@ -70,18 +71,27 @@ public class AuctionPanel extends JPanel {
 		spinner_Increment = new JSpinner(/*sm_minIncrement*/);
 		panel.add(spinner_Increment);
 		
-		JLabel lblTimeDuration = new JLabel("Duration Time: ");
+		JLabel lblTimeDuration = new JLabel("Round Duration: ");
 		panel.add(lblTimeDuration);
 
 		//SpinnerModel sm_timeDuration = new SpinnerNumberModel(30, 0, Integer.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
 		spinner_timeDuration = new JSpinner(/*sm_timeDuration*/);
 		panel.add(spinner_timeDuration);
 		
+		JLabel lblActivityRuleWaivers = new JLabel("No. Waivers: ");
+		panel.add(lblActivityRuleWaivers);
+		spinner_activityRuleWaivers = new JSpinner();
+		panel.add(spinner_activityRuleWaivers);
+		
 		JButton btnNewButton_Stop = new JButton("Set");
 		btnNewButton_Stop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				environment.context.setMinIncrement(Double.parseDouble(spinner_Increment.getValue().toString()));
 				environment.context.setDurationTime((int)Math.round(Double.parseDouble(spinner_timeDuration.getValue().toString())));
+				environment.context.setNumberOfActivityRuleWaivers(Integer.parseInt(spinner_activityRuleWaivers.getValue().toString()));
+				System.out.println("Minimum increment set to " + environment.context.getMinIncrement());
+				System.out.println("Round duration set to " + environment.context.getDurationTime());
+				System.out.println("Number of waivers set to " + environment.context.getNumberOfActivityRuleWaivers());
 			}
 		});
 		panel.add(btnNewButton_Stop);
@@ -124,6 +134,8 @@ public class AuctionPanel extends JPanel {
 		this.spinner_Increment.setValue(environment.context.getMinIncrement());
 		//Set time_duration to spinner
 		this.spinner_timeDuration.setValue(environment.context.getDurationTime());
+		//Set number of activity rule waivers to spinner
+		this.spinner_activityRuleWaivers.setValue(environment.context.getNumberOfActivityRuleWaivers());
 	}
 	
 	private void updateAuctionInfo() {

@@ -1,9 +1,24 @@
 package dataRepresentation;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.Timer;
+import java.util.TreeMap;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 
 
 public class Auctioneer extends Thread{
@@ -21,6 +36,7 @@ public class Auctioneer extends Thread{
 	HashMap<Integer, Bid> requestedBids;
 	AuctionEnvironment environment;
 	ArrayList<AuctionContext> auctionLog = new ArrayList<AuctionContext>();
+	ArrayList<Collection<Bid>> excelLog = new ArrayList<Collection<Bid>>();
 	Timer roundTimer = new Timer();
 	
 	public volatile boolean nextRoundNotReady = true;
@@ -72,11 +88,123 @@ public class Auctioneer extends Thread{
 			/***************Next Round Will Start**********************/
 			if (this.environment.context.isFinalRound()) {
 				System.err.println("Auction End");
+				createExcelLogSheet();
 				break; // break from while loop, terminate auctioneer
 			}
 		}
 	}
 	
+	private void createExcelLogSheet() {
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		HSSFSheet sheet = workbook.createSheet("Sample sheet");
+		
+		ArrayList<AuctionItem> items = this.environment.context.getItemList();
+		ArrayList<Bidder> bidders = this.environment.bidderList.getList();
+		
+		Collections.sort(items);
+		
+		int numberOfBidders = bidders.size();
+		int numberOfItems = items.size();
+		
+		Map<Integer, Object[]> data = new TreeMap<Integer, Object[]>();
+		Object[] itemRowHeader = new Object[numberOfItems * numberOfBidders];
+		Object[] bidderRowHeader = new Object[numberOfItems * numberOfBidders];
+		
+		itemRowHeader[0] = "";
+		bidderRowHeader[0] = "";
+		
+		int counter = 0;
+		for (int i = 0; i < numberOfItems * numberOfBidders; i++) {
+			if (i == 0) {
+				itemRowHeader[i] = items.get(counter).getName();
+				counter++;
+				continue;
+			}
+			if (i % numberOfBidders == 0) { 
+				itemRowHeader[i] = items.get(counter).getName();
+				counter++;
+			} else {
+				itemRowHeader[i] = "";
+			}
+		}
+		
+		counter = 0;
+		for (int i = 0; i < numberOfItems; i++) {
+			for (int j = 0; j < numberOfBidders; j++) {
+				bidderRowHeader[counter] = bidders.get(j).getName();
+				counter++;
+			}
+		}
+		
+		data.put(1, itemRowHeader);
+		data.put(2, bidderRowHeader);
+		
+		counter = 3;
+		Object[] entry = new Object[numberOfItems * numberOfBidders];
+		for (Collection<Bid> bids : getExcelLog()) {
+			entry = new Object[numberOfItems * numberOfBidders];
+			int currentBidder = 0;
+			for (Bid bid : bids) {
+				int pos = currentBidder;
+				for (AuctionItem ai : bid.getItemList()) {
+					entry[pos] = ai.getPrice();
+					pos += numberOfBidders;
+				}
+				currentBidder++;
+			}
+			data.put(counter, entry);
+			counter++;
+		}
+		
+		Set<Integer> keyset = data.keySet();
+		int rownum = 0;
+		int roundNumber = 1;
+		for (Integer key : keyset) {
+		    Row row = sheet.createRow(rownum);
+		    // create the round numbers column
+		    if (rownum == 1) {
+		    	row.createCell(0).setCellValue("Round");
+		    }
+		    if (rownum > 1) {
+		    	row.createCell(0).setCellValue(roundNumber);
+		    	roundNumber++;
+		    }
+		    
+		    Object [] objArr = data.get(key);
+		    int cellnum = 1;
+		    for (Object obj : objArr) {
+		        Cell cell = row.createCell(cellnum);
+		        if(obj instanceof String) {
+		            cell.setCellValue((String)obj);
+		    	} else if(obj instanceof Double) {
+		        	if (((Double) obj) == 0d) {
+		        		if (sheet.getRow(rownum-1).getCell(cellnum).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
+		        			cell.setCellValue(sheet.getRow(rownum-1).getCell(cellnum).getNumericCellValue());
+		        		} else {
+		        			cell.setCellValue((Double)obj);
+		        		}
+		        	} else {
+		        		cell.setCellValue((Double)obj);
+		        	}
+		        }
+		        cellnum++;
+		    }
+		    rownum++;
+		}
+		 
+		try {
+		    FileOutputStream out = 
+		            new FileOutputStream(new File("C:\\Users\\oodi687\\workspace\\AuctionResults.xls"));
+		    workbook.write(out);
+		    out.close();
+		    System.out.println("Excel written successfully!");
+		     
+		} catch (FileNotFoundException e) {
+		    e.printStackTrace();
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+	}
 	
 	private void setNextRoundReady() {
 		this.nextRoundNotReady = false;
@@ -114,32 +242,90 @@ public class Auctioneer extends Thread{
 		 * newBids is true when there is at least one new bid, then auction will keep going,
 		 * otherwise, newBids is false, means nobody bids, then next round is the final. 
 		 */
-		boolean newBids = false;
-		for (Bid bid: this.requestedBids.values()) {
-			for (AuctionItem bidderItem: bid.getItemList()) {
-				double originalPrice = fetchItemPrice(bidderItem.getID());
-				
-				if (bid.getBidder().getID() == fetchItemOwnerID(bidderItem.getID())) {
-					continue;
+		for (Bidder b : this.environment.bidderList.getList()) {
+			if (!this.requestedBids.containsKey(b.getID())) {
+				// this bidder did not make a bid - give him a dummy bid
+				System.err.println(b.getName() + " did not submit a bid! Assigning a dummy bid...");
+				ArrayList<AuctionItem> dummyItems = new ArrayList<AuctionItem>();
+				for (AuctionItem i : this.environment.context.getItemList()) {
+					AuctionItem dummyItem = new AuctionItem(i);
+					dummyItem.setOwner(b);
+					dummyItem.setPrice(0);
+					dummyItems.add(dummyItem);
 				}
-
-				if (originalPrice < bidderItem.getPrice()) {
-					putItemPrice(bid.getBidder(), bidderItem.getID(), bidderItem.getPrice());
+				Bid dummyAbortedBid = new Bid(b, dummyItems);
+				this.requestedBids.put(b.getID(), dummyAbortedBid);
+			}
+		}
+		
+		boolean newBids = false;
+		HashMap<Bidder, ArrayList<AuctionItem>> bidderPrices = new HashMap <Bidder, ArrayList<AuctionItem>>();
+		HashMap<Integer, Double> originalPrices = new HashMap <Integer, Double>();
+		for (Bid bid: this.requestedBids.values()) {
+			Bidder currBidder = bid.getBidder();
+			int numberOfItemsBidOn = 0;
+			int numberOfItemsLeading = 0;
+			for (AuctionItem bidderItem: bid.getItemList()) {
+				
+				double originalPrice = fetchItemPrice(bidderItem.getID());
+				originalPrices.put(bidderItem.getID(), fetchItemPrice(bidderItem.getID()));
+				if (currBidder.getID() == fetchItemOwnerID(bidderItem.getID())) {
+					numberOfItemsLeading++;
+				} 
+				if (bidderItem.getPrice() > originalPrice) {
+					ArrayList<AuctionItem> items;
+					if (bidderPrices.get(currBidder) == null) {
+						items = new ArrayList<AuctionItem>();
+					} else {
+						items = bidderPrices.get(currBidder);
+					}
+					items.add(bidderItem);
+					}
+					items.add(bidderItem);
+					bidderPrices.put(currBidder, items);
 					if (!newBids) {
 						newBids = true;
 					}
-				} else if (Math.abs(originalPrice - bidderItem.getPrice()) <= 0.001 && flipCoinWin()) {
-					//If this bidder's price is equal to current highest price, and win flip-a-coin
-					putItemPrice(bid.getBidder(), bidderItem.getID(), bidderItem.getPrice());
-					if (!newBids) {
-						newBids = true;
+					numberOfItemsBidOn++;
+				} else {
+					// bidder aborted bid for this item
+				}
+			}
+			if (this.environment.context.getRound() == 1) {
+				currBidder.setActivity(numberOfItemsBidOn);
+				currBidder.setEligibility(numberOfItemsBidOn);
+			} else {
+				// set eligibility to previous activity and calculate current activity
+				// this will determine whether the bidder has become inactive
+				currBidder.setEligibility(bid.getBidder().getActivity());
+				currBidder.setActivity(numberOfItemsBidOn + numberOfItemsLeading);
+				if (currBidder.getActivity() > currBidder.getEligibility()) {
+					currBidder.decrementActivityCounter();
+					// alert bidder of decremented activity counter
+					if (currBidder.getActivityCounter() <= 0) {
+						// kick currBidder
 					}
 				}
 			}
 		}
+		
+		// apply the item updates
+		for (Bidder bidder : bidderPrices.keySet()) {
+			for (AuctionItem item : bidderPrices.get(bidder)) {
+				double bidderPrice = item.getPrice();
+				if (bidderPrice > fetchItemPrice(item.getID())) {
+					putItemPrice(bidder, item.getID(), bidderPrice);				
+				} else if (Math.abs(bidderPrice - fetchItemPrice(item.getID())) <= 0.001 && flipCoinWin()) {
+					putItemPrice(bidder, item.getID(), bidderPrice);
+				}
+			}
+		}
+		
 		if (!newBids) {
 			this.environment.context.setFinalRound();
 		}
+		
+		recordExcelLog(this.requestedBids.values()); 
 	}
 	
 	private void processCCABids() {
@@ -151,14 +337,14 @@ public class Auctioneer extends Thread{
 			}
 		}
 		
-		//creat a temporary array to story the total number all bidders require each round
+		//create a temporary array to story the total number all bidders require each round
 		int itemNumber = this.environment.context.getItemList().size();
 		int[] thisRoundRequirment = new int[itemNumber];
 		for (int i=0; i<itemNumber; i++) {
 			thisRoundRequirment[i] = 0;
 		}
 		
-		//collect requirment of each item
+		//collect requirement of each item
 		for (Bid bid: this.requestedBids.values()) {
 			for (AuctionItem bidderItem: bid.getItemList()) {
 				thisRoundRequirment[bidderItem.getID()] += bidderItem.getRequiredQuantity();
@@ -233,6 +419,14 @@ public class Auctioneer extends Thread{
 		return this.auctionLog;
 	}
 	
+	public void recordExcelLog(Collection<Bid> bids) {
+		this.excelLog.add(new ArrayList<Bid>(bids));
+	}
+
+	public ArrayList<Collection<Bid>> getExcelLog() {
+		return this.excelLog;
+	}
+
 	private void updateNextRoundPriceForCCA() {
 		double priceTick = this.environment.context.getPriceTick() + this.environment.context.getMinIncrement();
 		this.environment.context.setPriceTick(priceTick);
@@ -258,6 +452,7 @@ public class Auctioneer extends Thread{
 	private int fetchItemOwnerID(int itemID) {
 		for (AuctionItem item: this.environment.context.getItemList()) { 
 			if (itemID == item.getID()) {
+				System.err.println(item.getOwner().getName());
 				return item.getOwner().getID();
 			}
 		}
