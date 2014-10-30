@@ -112,9 +112,9 @@ public class Auctioneer extends Thread{
 	}
 	
 	private void processSAABids() {
+		
 		/*
-		 * newBids is true when there is at least one new bid, then auction will keep going,
-		 * otherwise, newBids is false, means nobody bids, then next round is the final. 
+		 * Generate dummy bids for silent bidders
 		 */
 		for (Bidder b : this.environment.bidderList.getList()) {
 			if (!this.requestedBids.containsKey(b.getID())) {
@@ -132,7 +132,13 @@ public class Auctioneer extends Thread{
 			}
 		}
 		
+		/*
+		 * newBids is true when there is at least one new bid, then auction will keep going,
+		 * otherwise, newBids is false, means nobody bids, then next round is the final. 
+		 */
 		boolean newBids = false;
+		//bidderPrices: 
+		//originalPrices:
 		HashMap<Bidder, ArrayList<AuctionItem>> bidderPrices = new HashMap <Bidder, ArrayList<AuctionItem>>();
 		HashMap<Integer, Double> originalPrices = new HashMap <Integer, Double>();
 		for (Bid bid: this.requestedBids.values()) {
@@ -142,7 +148,7 @@ public class Auctioneer extends Thread{
 			for (AuctionItem bidderItem: bid.getItemList()) {
 				
 				double originalPrice = fetchItemPrice(bidderItem.getID());
-				originalPrices.put(bidderItem.getID(), fetchItemPrice(bidderItem.getID()));
+				originalPrices.put(bidderItem.getID(), originalPrice);
 				if (currBidder.getID() == fetchItemOwnerID(bidderItem.getID())) {
 					numberOfItemsLeading++;
 				} 
@@ -197,7 +203,7 @@ public class Auctioneer extends Thread{
 		
 		if (!newBids) {
 			this.environment.context.setFinalRound();
-			saaLogger.createExcelLogSheet(this.environment.context.getItemList(), this.environment.bidderList.getList(), "C:\\Users\\oodi687\\workspace\\AuctionResults.xls", "SAA Auction Results");
+			saaLogger.createExcelLogSheet(this.environment.context.getItemList(), this.environment.bidderList.getList(), "SAA Auction Results");
 		}
 	}
 	
@@ -302,8 +308,12 @@ public class Auctioneer extends Thread{
 			}
 		}
 	}
+	
 	/*
 	 * three helper methods: fetchItemPrice, putItemPrice, placeItemOwner
+	 */
+	/*
+	 * fetch the temporary price of an item
 	 */
 	private double fetchItemPrice(int itemID) {
 		for (AuctionItem item: this.environment.context.getItemList()) {
@@ -314,6 +324,9 @@ public class Auctioneer extends Thread{
 		return Double.MAX_VALUE;
 	}
 	
+	/*
+	 * return one item's temporary owner id
+	 */
 	private int fetchItemOwnerID(int itemID) {
 		for (AuctionItem item: this.environment.context.getItemList()) { 
 			if (itemID == item.getID()) {
@@ -324,6 +337,9 @@ public class Auctioneer extends Thread{
 		return -1;
 	}
 	
+	/*
+	 * update the highest price of certain item and update the temporary owner
+	 */
 	private void putItemPrice(Bidder bidder, int itemID, double price) {
 		for (AuctionItem item: this.environment.context.getItemList()) {
 			if (itemID == item.getID()) {

@@ -18,6 +18,8 @@ import org.apache.poi.ss.usermodel.Row;
 
 public class SAALogger {
 	
+	public static String directory = "./AuctionResults.xls"; 
+	
 	ArrayList<Collection<Bid>> excelLog;
 
 	public SAALogger() {
@@ -28,7 +30,7 @@ public class SAALogger {
 		excelLog.add(new ArrayList<Bid>(bids));
 	}
 	
-	public void createExcelLogSheet(ArrayList<AuctionItem> items, ArrayList<Bidder> bidders, String directory, String excelSheetName) {
+	public void createExcelLogSheet(ArrayList<AuctionItem> items, ArrayList<Bidder> bidders, String excelSheetName) {
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		HSSFSheet sheet = workbook.createSheet(excelSheetName);
 		
