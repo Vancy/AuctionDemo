@@ -106,9 +106,6 @@ public class Auctioneer extends Thread{
 		synchronized(this.requestedBids) {
 			requestedBids.clear();
 		}
-		//record current round log 
-		this.recordLog();
-
 	}
 	
 	private void processSAABids() {
@@ -116,21 +113,7 @@ public class Auctioneer extends Thread{
 		/*
 		 * Generate dummy bids for silent bidders
 		 */
-		for (Bidder b : this.environment.bidderList.getList()) {
-			if (!this.requestedBids.containsKey(b.getID())) {
-				// this bidder did not make a bid - give him a dummy bid
-				System.err.println(b.getName() + " did not submit a bid! Assigning a dummy bid...");
-				ArrayList<AuctionItem> dummyItems = new ArrayList<AuctionItem>();
-				for (AuctionItem i : this.environment.context.getItemList()) {
-					AuctionItem dummyItem = new AuctionItem(i);
-					dummyItem.setOwner(b);
-					dummyItem.setPrice(0);
-					dummyItems.add(dummyItem);
-				}
-				Bid dummyAbortedBid = new Bid(b, dummyItems);
-				this.requestedBids.put(b.getID(), dummyAbortedBid);
-			}
-		}
+		createSAADummyBids();
 		
 		/*
 		 * newBids is true when there is at least one new bid, then auction will keep going,
@@ -138,35 +121,42 @@ public class Auctioneer extends Thread{
 		 */
 		boolean newBids = false;
 		//bidderPrices: 
-		//originalPrices:
-		HashMap<Bidder, ArrayList<AuctionItem>> bidderPrices = new HashMap <Bidder, ArrayList<AuctionItem>>();
-		HashMap<Integer, Double> originalPrices = new HashMap <Integer, Double>();
+
+		HashMap<Bidder, ArrayList<AuctionItem>> biddersPrices = new HashMap <Bidder, ArrayList<AuctionItem>>();
+		//process each bid in requested bid list
 		for (Bid bid: this.requestedBids.values()) {
+			//currBidder: Who put this bid
 			Bidder currBidder = bid.getBidder();
 			int numberOfItemsBidOn = 0;
 			int numberOfItemsLeading = 0;
 			for (AuctionItem bidderItem: bid.getItemList()) {
-				
-				double originalPrice = fetchItemPrice(bidderItem.getID());
-				originalPrices.put(bidderItem.getID(), originalPrice);
+				//item's original price
+				double itemOriginalPrice = fetchItemPrice(bidderItem.getID());
+				//if the temporary owner of this item is currBidder, increase currBidder's leading num
 				if (currBidder.getID() == fetchItemOwnerID(bidderItem.getID())) {
 					numberOfItemsLeading++;
-				} 
-				if (bidderItem.getPrice() > originalPrice) {
+				}
+				/*if the bidder's price is higher than original price, means that this bidder bid on
+				 * this item. Then record this to biddersPrices
+				 */
+				if (bidderItem.getPrice() > itemOriginalPrice) {
 					ArrayList<AuctionItem> items;
-					if (bidderPrices.get(currBidder) == null) {
+					if (biddersPrices.get(currBidder) == null) {
 						items = new ArrayList<AuctionItem>();
 					} else {
-						items = bidderPrices.get(currBidder);
+						items = biddersPrices.get(currBidder);
 					}
 					items.add(bidderItem);
-					bidderPrices.put(currBidder, items);
+					biddersPrices.put(currBidder, items);
 					if (!newBids) {
 						newBids = true;
 					}
 					numberOfItemsBidOn++;
 				} else {
-					// bidder aborted bid for this item
+					/*bidder aborted bid for this item, for one of the following reasons:
+					 * 1> this bidder leads the price in last round
+					 * 2> this bidder gives up on this item this round
+					 */
 				}
 			}
 			if (this.environment.context.getRound() == 1) {
@@ -188,8 +178,8 @@ public class Auctioneer extends Thread{
 		}
 		
 		// apply the item updates
-		for (Bidder bidder : bidderPrices.keySet()) {
-			for (AuctionItem item : bidderPrices.get(bidder)) {
+		for (Bidder bidder : biddersPrices.keySet()) {
+			for (AuctionItem item : biddersPrices.get(bidder)) {
 				double bidderPrice = item.getPrice();
 				if (bidderPrice > fetchItemPrice(item.getID())) {
 					putItemPrice(bidder, item.getID(), bidderPrice);				
@@ -290,14 +280,6 @@ public class Auctioneer extends Thread{
 		}
 	}
 	
-	private void recordLog() {	
-		this.auctionLog.add(new AuctionContext(this.environment.context));
-	}
-	
-	public ArrayList<AuctionContext> getLog() {
-		return this.auctionLog;
-	}
-
 	private void updateNextRoundPriceForCCA() {
 		double priceTick = this.environment.context.getPriceTick() + this.environment.context.getMinIncrement();
 		this.environment.context.setPriceTick(priceTick);
@@ -353,6 +335,24 @@ public class Auctioneer extends Thread{
 		for (AuctionItem item: this.environment.context.getItemList()) {
 			if (itemID == item.getID()) {
 				item.placeOwner(name, amount);
+			}
+		}
+	}
+	
+	private void createSAADummyBids() {
+		for (Bidder b : this.environment.bidderList.getList()) {
+			if (!this.requestedBids.containsKey(b.getID())) {
+				// this bidder did not make a bid - give him a dummy bid
+				System.err.println(b.getName() + " did not submit a bid! Assigning a dummy bid...");
+				ArrayList<AuctionItem> dummyItems = new ArrayList<AuctionItem>();
+				for (AuctionItem i : this.environment.context.getItemList()) {
+					AuctionItem dummyItem = new AuctionItem(i);
+					dummyItem.setOwner(b);
+					dummyItem.setPrice(0);
+					dummyItems.add(dummyItem);
+				}
+				Bid dummyAbortedBid = new Bid(b, dummyItems);
+				this.requestedBids.put(b.getID(), dummyAbortedBid);
 			}
 		}
 	}

@@ -19,7 +19,7 @@ hs_err_pid*
 # temp file
 *.*~
 # metadata
-.metadata
+/.metadata/
 *.DS_Store
 
 /bin
