@@ -106,6 +106,9 @@ public class Auctioneer extends Thread{
 		synchronized(this.requestedBids) {
 			requestedBids.clear();
 		}
+		
+		//record current round log 
+		this.recordLog();
 	}
 	
 	private void processSAABids() {
@@ -229,6 +232,14 @@ public class Auctioneer extends Thread{
 			}
 		}
 		
+	}
+	
+	private void recordLog() {	
+		this.auctionLog.add(new AuctionContext(this.environment.context));
+	}
+	
+	public ArrayList<AuctionContext> getLog() {
+		return this.auctionLog;
 	}
 	
 	private void updateNextRoundContext() {
