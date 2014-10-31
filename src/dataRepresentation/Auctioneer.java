@@ -163,7 +163,7 @@ public class Auctioneer extends Thread{
 			} else {
 				// set eligibility to previous activity and calculate current activity
 				// this will determine whether the bidder has become inactive
-				currBidder.setEligibility(bid.getBidder().getActivity());
+				currBidder.setEligibility(currBidder.getActivity());
 				currBidder.setActivity(numberOfItemsBidOn + numberOfItemsLeading);
 				currBidder.auctionRuleVerify();
 			}

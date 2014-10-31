@@ -43,10 +43,11 @@ public class Bidder {
 	
 	public void decrementActivityCounter() {
 		System.err.println(this.name + " actvity counter decremented!");
-		activityCounter --;
-		this.warningMessage = "WARN: You are inactive last round, and lost a waiver here.";
-		if (0 >= activityCounter) {
-			this.warningMessage = "WARN: You lost all waivers, and you are kicked out by auctioneer.";
+		activityCounter--;
+		this.warningMessage = "WARNING! You were inactive last round and have lost a waiver.";
+		if (activityCounter < 0) {
+			System.err.println(this.name + " kicked from auction!");
+			this.warningMessage = "ATTENTION! Your inactivity has exceeded this auction's limit and the auctioneer has kicked you out.";
 		}
 	}
 	
