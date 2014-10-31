@@ -41,13 +41,16 @@ public class AuctionContext {
 	public int roundTimeRemain = 0;
 	public boolean bidsProcessingFinished = false;
 	
-	public AuctionContext() {
+	private BidderList bidderList;
+	
+	public AuctionContext(BidderList bidderList) {
 		this.type = AuctionType.SAA;
 		this.round = 0;
 		this.duration_Sec = 30;
 		this.itemList = new ArrayList<AuctionItem>();
 		this.minIncreament = 0;
 		this.finalRound = false;
+		this.bidderList = bidderList;
 	}
 	
 	//Copy Constructor
@@ -63,6 +66,7 @@ public class AuctionContext {
 		for (AuctionItem item: ac.itemList) {
 			this.itemList.add(new AuctionItem(item));
 		}
+		this.bidderList = ac.bidderList;
 	}
 	
 	public AuctionContext(AuctionType type, int time, double min, ArrayList<AuctionItem> list) {

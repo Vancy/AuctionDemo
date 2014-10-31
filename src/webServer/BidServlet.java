@@ -61,80 +61,77 @@ public class BidServlet extends DefaultServlet{
 		Bid myBid = placeBid(doc);
 		System.err.println(myBid.getBidder().getName()+"**********Get bid request*********");
 		
-		
-
-		AuctionContext context_updated  =  this.auctionEnvironment.auctioneer.nextRound();
-		//Respond latest AuctionContext
+		//Respond needn't be read by clients 
 		PrintWriter out = response.getWriter();
-		out.println(context_updated.generateXml());
+		out.println(this.auctionEnvironment.context.generateJson());
 		System.err.println(myBid.getBidder().getName()+"***********Response sent************");
 	}
 	
-    private static Document convertStringToDocument(String xmlStr) {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); 
-        DocumentBuilder builder; 
-        try 
-        { 
-            builder = factory.newDocumentBuilder(); 
-            Document doc = builder.parse( new InputSource( new StringReader( xmlStr ) ) );
-            return doc;
-        } catch (Exception e) { 
-            e.printStackTrace(); 
-        }
-        return null;
-    }
+//    private static Document convertStringToDocument(String xmlStr) {
+//        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); 
+//        DocumentBuilder builder; 
+//        try 
+//        { 
+//            builder = factory.newDocumentBuilder(); 
+//            Document doc = builder.parse( new InputSource( new StringReader( xmlStr ) ) );
+//            return doc;
+//        } catch (Exception e) { 
+//            e.printStackTrace(); 
+//        }
+//        return null;
+//    }
 
-    private Bid placeBid(Document doc) {
-    	NodeList bidderNode = doc.getElementsByTagName("bidder");
-    	Element bidderInfo = (Element) (bidderNode.item(0));
-    	String name = bidderInfo.getAttribute("name");
-    	String ip = bidderInfo.getAttribute("ip");
-    	
-    	Bidder bidder = this.auctionEnvironment.bidderList.getBidder(name, ip);
-    	if (null == bidder) {
-    		try {
-				throw new Exception("BidServlet: Cannot find bidder inside bidderlist");
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
-    	}
-    	
-    	List<AuctionItem> bidderItemList = new ArrayList<AuctionItem>();
-    	NodeList itemList = doc.getElementsByTagName("item");
-    	/*
-    	 * Check current auction type, SAA or CCA.
-    	 */
-    	if  (this.auctionEnvironment.context.getType() == AuctionContext.AuctionType.SAA) {
-        	for (int i=0; i<itemList.getLength(); i++) {
-        		Node currentNode = itemList.item(i);
-        		Element element = (Element) currentNode;
-        		String itemName = element.getAttribute("name");
-        		double itemPrice = Double.parseDouble(element.getAttribute("price"));
-        		int id = Integer.parseInt(element.getAttribute("id"));
-        		bidderItemList.add(new AuctionItem(id, itemName, itemPrice));
-        	}
-    	} else  if (this.auctionEnvironment.context.getType() == AuctionContext.AuctionType.CCA) {
-        	for (int i=0; i<itemList.getLength(); i++) {
-        		Node currentNode = itemList.item(i);
-        		Element element = (Element) currentNode;
-        		String itemName = element.getAttribute("name");
-        		int itemRequire = 0;
-        		try { //if bidder doesn't bid for this, the quantity_require may not be defined
-        			itemRequire = Integer.parseInt(element.getAttribute("quantity_require"));
-        		} catch(RuntimeException e) { // so put itemRequire as 0 
-        			itemRequire = 0;
-        		}
-        		int id = Integer.parseInt(element.getAttribute("id"));
-        		bidderItemList.add(new AuctionItem(id, itemName, itemRequire));
-        	}
-    	}
-
-
-    	Bid bid = new Bid(bidder, bidderItemList);
-    	bidder.placeBid(this.auctionEnvironment, bid);
-    	return bid;
-    }
+//    private Bid placeBid(Document doc) {
+//    	NodeList bidderNode = doc.getElementsByTagName("bidder");
+//    	Element bidderInfo = (Element) (bidderNode.item(0));
+//    	String name = bidderInfo.getAttribute("name");
+//    	String ip = bidderInfo.getAttribute("ip");
+//    	
+//    	Bidder bidder = this.auctionEnvironment.bidderList.getBidder(name, ip);
+//    	if (null == bidder) {
+//    		try {
+//				throw new Exception("BidServlet: Cannot find bidder inside bidderlist");
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//				return null;
+//			}
+//    	}
+//    	
+//    	List<AuctionItem> bidderItemList = new ArrayList<AuctionItem>();
+//    	NodeList itemList = doc.getElementsByTagName("item");
+//    	/*
+//    	 * Check current auction type, SAA or CCA.
+//    	 */
+//    	if  (this.auctionEnvironment.context.getType() == AuctionContext.AuctionType.SAA) {
+//        	for (int i=0; i<itemList.getLength(); i++) {
+//        		Node currentNode = itemList.item(i);
+//        		Element element = (Element) currentNode;
+//        		String itemName = element.getAttribute("name");
+//        		double itemPrice = Double.parseDouble(element.getAttribute("price"));
+//        		int id = Integer.parseInt(element.getAttribute("id"));
+//        		bidderItemList.add(new AuctionItem(id, itemName, itemPrice));
+//        	}
+//    	} else  if (this.auctionEnvironment.context.getType() == AuctionContext.AuctionType.CCA) {
+//        	for (int i=0; i<itemList.getLength(); i++) {
+//        		Node currentNode = itemList.item(i);
+//        		Element element = (Element) currentNode;
+//        		String itemName = element.getAttribute("name");
+//        		int itemRequire = 0;
+//        		try { //if bidder doesn't bid for this, the quantity_require may not be defined
+//        			itemRequire = Integer.parseInt(element.getAttribute("quantity_require"));
+//        		} catch(RuntimeException e) { // so put itemRequire as 0 
+//        			itemRequire = 0;
+//        		}
+//        		int id = Integer.parseInt(element.getAttribute("id"));
+//        		bidderItemList.add(new AuctionItem(id, itemName, itemRequire));
+//        	}
+//    	}
+//
+//
+//    	Bid bid = new Bid(bidder, bidderItemList);
+//    	bidder.placeBid(this.auctionEnvironment, bid);
+//    	return bid;
+//    }
     
     private static JsonObject convertStringToJson(String jsonStr) {
     	JsonParser parser = new JsonParser();

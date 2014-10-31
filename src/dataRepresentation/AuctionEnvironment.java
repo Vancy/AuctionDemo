@@ -11,12 +11,12 @@ public class AuctionEnvironment {
 	
 	public AuctionEnvironment() {
 		bidderList = new BidderList();
-		context = new AuctionContext();
+		context = new AuctionContext(bidderList);
 		auctioneer = new Auctioneer(this);
 	}
 	public AuctionEnvironment(BidderList list, AuctionContext c) {
 		this.context = c;
 		this.bidderList = list;
 	}
-	
+		
 }

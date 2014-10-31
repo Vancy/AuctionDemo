@@ -87,12 +87,7 @@ public class Auctioneer extends Thread{
 	private void setNextRoundNotReady() {
 		this.nextRoundNotReady = true;
 	}
-	
-	public AuctionContext nextRound() {
-		//this method is invoked by BidServlet, to get the latest auctionContext
-		return this.environment.context;
-	}
-	
+		
 	private void processBids() {
 		
 		//Xing at 2014.7.31: Process current bids, update auction context;
