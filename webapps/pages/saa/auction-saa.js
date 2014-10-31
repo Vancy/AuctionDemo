@@ -114,7 +114,29 @@ Polymer('auction-saa', {
         this.disableSubmittion();
       }
     }
+    /*Xing added following code to display activity rules:
+     * 2014.10.31
+     */
+    var bidderListInfo = this.saa.bidderList.list;
+    this.displayAuctionRuleInfo(bidderListInfo);
   },
+
+ displayAuctionRuleInfo: function(bidderListInfo) {
+     for ( var i = 0; i <bidderListInfo.length; i++ ) {
+	if (bidderListInfo[i].name == this.username && bidderListInfo[i].ipAddress == this.localIP) {
+	  var warnMsg = bidderListInfo[i].warningMessage;
+	  var activityCounter = parseInt(bidderListInfo[i].activityCounter);
+	  if ("" != warnMsg) {
+	     console.log("You got a warn:"+ warnMsg);
+	  }
+	  this.$.warning.innerHTML = '<font color="red">'+warnMsg+'</font>';
+	  if (activityCounter <= 0) {
+	     console.log("You break enough times of rules, kick you off");
+             this.disableSubmittion();
+	  }	
+	}
+     }
+  },	
 
   isAuctionStarted: function() {
     if ( this.round == 0 ) {

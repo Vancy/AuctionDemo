@@ -11,12 +11,17 @@ public class Bidder {
     
 	private int ID;
 	private String name = "";
-	private String ipAdress = "127.0.0.1";
+	private String ipAddress = "127.0.0.1";
 	private Color colorRecognition;
 	
 	private int eligibility;
 	private int activity;
 	private int activityCounter = AuctionContext.numberOfActivityRuleWaivers;
+	
+	/*this field store the warning message auctioneer gives to this bidder, if any.
+	 * this message will be sent to client side, then human bidder can read this message.
+	 */
+	private String warningMessage = "";
 	
 	public int getEligibility() {
 		return eligibility;
@@ -24,7 +29,7 @@ public class Bidder {
 
 	public void setEligibility(int eligibility) {
 		this.eligibility = eligibility;
-		System.err.println(this.name + "eligibility is: " + eligibility);
+		System.out.println(this.name + " eligibility is: " + eligibility);
 	}
 
 	public int getActivity() {
@@ -33,12 +38,25 @@ public class Bidder {
 
 	public void setActivity(int activity) {
 		this.activity = activity;
-		System.err.println(this.name + "actvity is: " + activity);
+		System.out.println(this.name + " actvity is: " + activity);
 	}
 	
 	public void decrementActivityCounter() {
-		System.err.println(this.name + "actvity counter decremented!");
+		System.err.println(this.name + " actvity counter decremented!");
 		activityCounter --;
+		this.warningMessage = "WARN: You are inactive last round, and lost a waiver here.";
+		if (0 >= activityCounter) {
+			this.warningMessage = "WARN: You lost all waivers, and you are kicked out by auctioneer.";
+		}
+	}
+	
+	public void auctionRuleVerify() {
+		if (this.getActivity() > this.getEligibility()) {
+			this.decrementActivityCounter();
+		} else {
+			//clear warning message
+			this.warningMessage = "";
+		}
 	}
 	
 	public int getActivityCounter() {
@@ -48,21 +66,21 @@ public class Bidder {
 	public Bidder() {
 		this.name = "Unknown";
 		this.ID = -1;
-		this.ipAdress = "Invalid";
+		this.ipAddress = "Invalid";
 	}
 	
 	//copy constructor
 	public Bidder(Bidder bidder) {
 		this.ID = bidder.ID;
 		this.name = bidder.name;
-		this.ipAdress = bidder.ipAdress;
+		this.ipAddress = bidder.ipAddress;
 		this.colorRecognition = bidder.colorRecognition;
 	}
 	
 	public Bidder(String name, String ip) {
 		this.ID = ++BidderNumber;
 		this.name = name;
-		this.ipAdress  = ip;
+		this.ipAddress  = ip;
 		this.colorRecognition = autoGenerateColor();
 	}
 	
@@ -70,7 +88,7 @@ public class Bidder {
 		return ID;
 	}
 	public String getIP() {
-		return this.ipAdress;
+		return this.ipAddress;
 	}
 	
 	public String getName() {

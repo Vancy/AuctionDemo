@@ -165,13 +165,7 @@ public class Auctioneer extends Thread{
 				// this will determine whether the bidder has become inactive
 				currBidder.setEligibility(bid.getBidder().getActivity());
 				currBidder.setActivity(numberOfItemsBidOn + numberOfItemsLeading);
-				if (currBidder.getActivity() > currBidder.getEligibility()) {
-					currBidder.decrementActivityCounter();
-					// WARN THE BIDDER THAT THEY WERE INACTIVE AND LOST A WAIVER HERE.
-					if (currBidder.getActivityCounter() <= 0) {
-						// ALERT THE BIDDER THAT THEY GOT KICKED HERE.
-					}
-				}
+				currBidder.auctionRuleVerify();
 			}
 		}
 		
