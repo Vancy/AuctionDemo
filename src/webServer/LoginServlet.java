@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.servlet.DefaultServlet;
 
 import dataRepresentation.AuctionEnvironment;
-import dataRepresentation.Bidder;
+import dataRepresentation.HumanBidder;
 
 public class LoginServlet extends DefaultServlet{
 
@@ -37,7 +37,7 @@ public class LoginServlet extends DefaultServlet{
 		System.out.println("RequesterIP:"+userip);
 		
 		//add user's info to bidder list
-		auctionEnvironment.bidderList.addBidder(new Bidder(username, userip));
+		auctionEnvironment.bidderList.addBidder(new HumanBidder(username, userip));
 		
 		//send cookie if cookie is null
 		if( !hasCookie(request.getCookies()) ) {

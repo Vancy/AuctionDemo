@@ -96,6 +96,10 @@ public class Bidder {
 		return name;
 	}
 	
+	public String getWarnMsg() {
+		return this.warningMessage;
+	}
+	
 	public Color getColor() {
 		return this.colorRecognition;
 	}

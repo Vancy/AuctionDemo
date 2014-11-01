@@ -312,7 +312,6 @@ public class Auctioneer extends Thread{
 	private int fetchItemOwnerID(int itemID) {
 		for (AuctionItem item: this.environment.context.getItemList()) { 
 			if (itemID == item.getID()) {
-				System.err.println(item.getOwner().getName());
 				return item.getOwner().getID();
 			}
 		}

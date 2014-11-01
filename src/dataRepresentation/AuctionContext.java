@@ -16,6 +16,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -263,8 +265,12 @@ public class AuctionContext {
     }
 		
 	public String generateJson() {
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder()
+		.registerTypeAdapter(Bidder.class, new JsonBidderAdapter())
+		.create();
+
 		String jsonData = gson.toJson(this);
+
 		return jsonData;
 	}
 }
