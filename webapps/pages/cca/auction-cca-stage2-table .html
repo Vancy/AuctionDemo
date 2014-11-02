@@ -1,0 +1,30 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<polymer-element name="auction-cca-table" attributes="items final">
+  <template>
+    <link rel="stylesheet" href="./auction-cca-table.css" />
+
+    <div class="panel panel-default">
+        <table id="stage2-bidTable" class="table table-hover">
+          <thead id="theader">   
+          </thead>
+
+          <tbody id="tbody">
+          </tbody>
+        </table>
+    </div>
+
+  </template>
+
+  <script>
+    Polymer('auction-cca-table', {
+      items: [],
+      table_init: function() {
+      },
+      validate: function() {
+      }    
+
+
+    });
+  </script>
+</polymer-element>

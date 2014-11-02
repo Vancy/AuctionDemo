@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/core-ajax/core-ajax.html">
 <link rel="import" href="./auction-cca-table.html">
+<link rel="import" href="./auction-cca-stage2-table.html">
 <link rel="import" href="../utils/native-post.html">
 
 <polymer-element name="auction-cca">
@@ -15,6 +16,7 @@
         <p id="time"></p>
         <div>
           <auction-cca-table id="table" items="{{ items }}" final="{{ isFinal }}"></auction-cca-table>
+	  <auction-cca-stage2-table id="stage2-table" items="{{ items }}" hidden></auction-cca-stage2-table>
         </div>
         <div id="div-btn-submit" class="btn-group">
           <button id="bid" on-click="{{submit}}" type="button" class="btn btn-default">Bid</button>
