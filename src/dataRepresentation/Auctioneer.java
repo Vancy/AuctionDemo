@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Timer;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class Auctioneer extends Thread{
@@ -18,7 +19,7 @@ public class Auctioneer extends Thread{
 	 * 5> set flag, bidServlet checks this flag, send response.
 	 */
 	
-	HashMap<Integer, Bid> requestedBids;
+	ConcurrentHashMap<Integer, Bid> requestedBids;
 	AuctionEnvironment environment;
 	ArrayList<AuctionContext> auctionLog = new ArrayList<AuctionContext>();
 	Timer roundTimer = new Timer();
@@ -29,7 +30,7 @@ public class Auctioneer extends Thread{
 	
 	public Auctioneer(AuctionEnvironment e) {
 		this.environment = e;
-		this.requestedBids = new HashMap<Integer, Bid>();
+		this.requestedBids = new ConcurrentHashMap<Integer, Bid>();
 		saaLogger = new SAALogger();
 	}
 	
