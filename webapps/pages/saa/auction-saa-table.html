@@ -88,7 +88,7 @@
             this.$.tbody.querySelector("#price" + id).innerHTML = "<font color='green'>"+newItems[i].price+"</font>";
 	  } 
 	  else {
-	    this.$.tbody.querySelector("#price" + id).innerHTML = newItems[i].price;
+	    this.$.tbody.querySelector("#price" + id).innerHTML = "<font color='red'>"+newItems[i].price+"</font>";
 	  }
         }
       },
