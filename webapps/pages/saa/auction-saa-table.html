@@ -51,7 +51,8 @@
   </template>
 
   <script>
-    Polymer('auction-saa-table', {
+    Polymer('auction-saa-table', { 
+      username: "",
       items: [],
 
       getItems: function() {
@@ -82,7 +83,14 @@
       update: function(newItems) {
         for ( i=0; i < newItems.length; i++ ) {
           var id = newItems[i].ID;
-          this.$.tbody.querySelector("#price" + id).innerHTML = newItems[i].price;
+
+	  //Xing: if this item's temp owner is me, highlight it
+	  if (newItems[i].owner == this.username) {
+            this.$.tbody.querySelector("#price" + id).innerHTML = "<b>"+newItems[i].price+"</b>";
+	  } 
+	  else {
+	    this.$.tbody.querySelector("#price" + id).innerHTML = newItems[i].price;
+	  }
         }
       },
 
