@@ -182,6 +182,18 @@ public class Auctioneer extends Thread{
 			}
 		}
 		
+		for (Bidder bidder : this.environment.bidderList.getList()) {
+			bidder.leadingItemsMessage = "";
+			for (AuctionItem item: this.environment.context.getItemList()) {
+				if (fetchItemOwnerID(item.getID()) == bidder.getID()) {
+					bidder.leadingItemsMessage += item.getName() + " ";
+				}
+			}
+			if (!bidder.leadingItemsMessage.equals("")) {
+				bidder.leadingItemsMessage = "You are currently leading the following items: " + bidder.leadingItemsMessage;
+			}
+		}
+		
 		saaLogger.addToExcelLog(this.requestedBids.values());
 		
 		if (!newBids) {

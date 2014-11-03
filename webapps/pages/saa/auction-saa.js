@@ -119,6 +119,7 @@ Polymer('auction-saa', {
      */
     var bidderListInfo = this.saa.bidderList.list;
     this.displayAuctionRuleInfo(bidderListInfo);
+    this.displayLeadingItemInfo(bidderListInfo);
   },
 
  displayAuctionRuleInfo: function(bidderListInfo) {
@@ -136,6 +137,15 @@ Polymer('auction-saa', {
 	  }	
 	}
      }
+  },
+  
+  displayLeadingItemInfo: function(bidderListInfo) {
+  	for ( var i = 0; i <bidderListInfo.length; i++ ) {
+  		if (bidderListInfo[i].name == this.username && bidderListInfo[i].ipAddress == this.localIP) {
+  			var leadingItemsMessage = bidderListInfo[i].leadingItemsMessage;
+  			this.$.leadingitems.innerHTML = '<font color="green">' + leadingItemsMessage + '</font>';
+  		}
+  	}
   },	
 
   isAuctionStarted: function() {

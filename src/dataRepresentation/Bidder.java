@@ -23,6 +23,8 @@ public class Bidder {
 	 */
 	private String warningMessage = "";
 	
+	protected String leadingItemsMessage = "";
+	
 	public int getEligibility() {
 		return eligibility;
 	}
@@ -98,6 +100,10 @@ public class Bidder {
 	
 	public String getWarnMsg() {
 		return this.warningMessage;
+	}
+	
+	public String getLeadingItemsMsg() {
+		return this.leadingItemsMessage;
 	}
 	
 	public Color getColor() {
