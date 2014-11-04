@@ -10,6 +10,7 @@ Polymer('auction-saa', {
   isFinal: false,
   data: "",
   isTimerStarted: false,
+  activityRuleStarted: false,
 
   updateUrl: "",
   timer: undefined,
@@ -85,6 +86,7 @@ Polymer('auction-saa', {
     this.timeRemain = this.saa.roundTimeRemain;
     this.minimumIncreament = this.saa.minIncreament;
     this.isFinal = this.saa.finalRound;
+    this.activityRuleStarted = this.saa.activityRuleStarted;
 
     /**
      *  1. When it is the first time to get data or last time(final round), it's fine to refresh the UI by update 
@@ -106,7 +108,7 @@ Polymer('auction-saa', {
       // not stated yet
     } else {
      if ( ! this.isFinal  ) {
-        this.$.time.innerHTML = "Time remain: " + this.timeRemain + "s";
+        this.$.time.innerHTML = "Time remaining: " + this.timeRemain + "s";
       } else {
         // final
         clearInterval(this.timer);
@@ -117,9 +119,13 @@ Polymer('auction-saa', {
     /*Xing added following code to display activity rules:
      * 2014.10.31
      */
+     
     var bidderListInfo = this.saa.bidderList.list;
     this.displayAuctionRuleInfo(bidderListInfo);
     this.displayLeadingItemInfo(bidderListInfo);
+    if ( this.isAuctionStarted() && this.activityRuleStarted && !this.isFinal) {
+    	this.displayActivityAndEligibilityInfo(bidderListInfo);
+    }
   },
 
  displayAuctionRuleInfo: function(bidderListInfo) {
@@ -144,6 +150,15 @@ Polymer('auction-saa', {
   		if (bidderListInfo[i].name == this.username && bidderListInfo[i].ipAddress == this.localIP) {
   			var leadingItemsMessage = bidderListInfo[i].leadingItemsMessage;
   			this.$.leadingitems.innerHTML = '<font color="green">' + leadingItemsMessage + '</font>';
+  		}
+  	}
+  },
+  
+  displayActivityAndEligibilityInfo: function(bidderListInfo) {
+  	for ( var i = 0; i <bidderListInfo.length; i++ ) {
+  		if (bidderListInfo[i].name == this.username && bidderListInfo[i].ipAddress == this.localIP) {
+  			var activityAndEligibilityMessage = bidderListInfo[i].activityAndEligibilityMessage;
+  			this.$.activityandeligibility.innerHTML = '<font color="blue">' + activityAndEligibilityMessage + '</font>';
   		}
   	}
   },	

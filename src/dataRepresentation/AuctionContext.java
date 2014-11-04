@@ -33,8 +33,8 @@ public class AuctionContext {
 	//priceTick is used in CCA auction, keep track of current price for all items
 	private double priceTick = 0;
 	private boolean finalRound;
-	static int numberOfActivityRuleWaivers = 2;
-	static boolean activityRuleStarted = false;
+	public static int numberOfActivityRuleWaivers = 2;
+	public static boolean activityRuleStarted = true;
 	
 	
 	/* bidsProcessingFinished flag, to decide current round data processing is finished
@@ -87,6 +87,7 @@ public class AuctionContext {
 		this.itemList = list;
 		this.minIncreament = min;
 		this.finalRound = false;
+		//AuctionContext.activityRuleStarted = activityRuleStarted;
 	}
 	
 	public void setType(String typeName) {
@@ -131,7 +132,7 @@ public class AuctionContext {
 		AuctionContext.numberOfActivityRuleWaivers = numberOfActivityRuleWaivers;
 	}
 	public int getNumberOfActivityRuleWaivers() {
-		return AuctionContext.numberOfActivityRuleWaivers;
+		return numberOfActivityRuleWaivers;
 	}
 	public ArrayList<AuctionItem> getItemList() {
 		return this.itemList;
@@ -210,6 +211,9 @@ public class AuctionContext {
 	    root.appendChild(child);
 	    child = doc.createElement("minimum_increament");
 	    child.setAttribute("value", Double.toString(this.minIncreament));
+	    root.appendChild(child);
+	    child = doc.createElement("activityRuleStarted");
+	    child.setAttribute("value", Boolean.toString(AuctionContext.activityRuleStarted));
 	    root.appendChild(child);
 	    
 	    int len = itemList.size();

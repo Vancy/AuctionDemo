@@ -5,8 +5,6 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.JButton;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.Timer;
 
 import java.awt.FlowLayout;
@@ -82,6 +80,19 @@ public class AuctionPanel extends JPanel {
 		panel.add(lblActivityRuleWaivers);
 		spinner_activityRuleWaivers = new JSpinner();
 		panel.add(spinner_activityRuleWaivers);
+		
+		/*JButton btnNewButton_Stop = new JButton("Initiate");
+		btnNewButton_Stop.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				environment.context.setMinIncrement(Double.parseDouble(spinner_Increment.getValue().toString()));
+				environment.context.setDurationTime((int)Math.round(Double.parseDouble(spinner_timeDuration.getValue().toString())));
+				environment.context.setNumberOfActivityRuleWaivers(Integer.parseInt(spinner_activityRuleWaivers.getValue().toString()));
+				System.out.println("Minimum increment set to " + environment.context.getMinIncrement());
+				System.out.println("Round duration set to " + environment.context.getDurationTime());
+				System.out.println("Number of waivers set to " + environment.context.getNumberOfActivityRuleWaivers());
+			}
+		});
+		panel.add(btnNewButton_Stop);*/
 		
 		JButton btnNewButton_Stop = new JButton("Set");
 		btnNewButton_Stop.addActionListener(new ActionListener() {

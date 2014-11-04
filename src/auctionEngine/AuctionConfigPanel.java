@@ -1,6 +1,7 @@
 package auctionEngine;
 
 
+import dataRepresentation.AuctionContext;
 import dataRepresentation.AuctionEnvironment;
 import dataRepresentation.AuctionItem;
 
@@ -16,11 +17,14 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+
 import java.awt.CardLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
+
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;

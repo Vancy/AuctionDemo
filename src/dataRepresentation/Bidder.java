@@ -25,12 +25,17 @@ public class Bidder {
 	
 	protected String leadingItemsMessage = "";
 	
+	protected final String activityString = "Your current activity: ";
+	protected final String eligibilityString = " Your current eligibility: ";
+	protected String activityAndEligibilityMessage = activityString + this.activity + eligibilityString + this.eligibility;
+	
 	public int getEligibility() {
 		return eligibility;
 	}
 
 	public void setEligibility(int eligibility) {
 		this.eligibility = eligibility;
+		activityAndEligibilityMessage = activityString + this.activity + eligibilityString + this.eligibility;
 		System.out.println(this.name + " eligibility is: " + eligibility);
 	}
 
@@ -40,6 +45,7 @@ public class Bidder {
 
 	public void setActivity(int activity) {
 		this.activity = activity;
+		activityAndEligibilityMessage = activityString + this.activity + eligibilityString + this.eligibility;
 		System.out.println(this.name + " actvity is: " + activity);
 	}
 	
@@ -104,6 +110,10 @@ public class Bidder {
 	
 	public String getLeadingItemsMsg() {
 		return this.leadingItemsMessage;
+	}
+	
+	public String getActivityAndEligibilityMsg() {
+		return this.activityAndEligibilityMessage;
 	}
 	
 	public Color getColor() {
