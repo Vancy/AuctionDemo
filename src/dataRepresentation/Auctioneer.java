@@ -150,7 +150,9 @@ public class Auctioneer extends Thread{
 					if (!newBids) {
 						newBids = true;
 					}
-					numberOfItemsBidOn++;
+					if (fetchItemOwnerID(bidderItem.getID()) != currBidder.getID()) {
+						numberOfItemsBidOn++;
+					}
 				} else {
 					/*bidder aborted bid for this item, for one of the following reasons:
 					 * 1> this bidder leads the price in last round
@@ -166,7 +168,9 @@ public class Auctioneer extends Thread{
 				// this will determine whether the bidder has become inactive
 				currBidder.setEligibility(currBidder.getActivity());
 				currBidder.setActivity(numberOfItemsBidOn + numberOfItemsLeading);
-				currBidder.auctionRuleVerify();
+				if (AuctionContext.activityRuleStarted) {
+					currBidder.auctionRuleVerify();
+				}
 			}
 		}
 		

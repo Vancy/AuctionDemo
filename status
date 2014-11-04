@@ -1,0 +1,1150 @@
+[33mcommit 695d1c0bc52b426231e502dc02c9519645506cf1[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Mon Nov 3 11:28:33 2014 +1300
+
+    display minimum increment
+
+[33mcommit 4da05b3d51fbaee87579c87011945f5e68c43237[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Mon Nov 3 09:49:14 2014 +1300
+
+    change requestedBid to concurrentHashMap
+
+[33mcommit 2b62a43fb26b648a64ffc7b1586ff2c53e389df1[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Sat Nov 1 23:28:16 2014 +1300
+
+    disable bid button, when bidder is kicked out
+
+[33mcommit d3d96c820d054dc504f96e275f2536c5253a6663[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Sat Nov 1 23:15:17 2014 +1300
+
+    fix bidder json polymorphism bug
+
+[33mcommit 7348243c6f9d922dfaf7ad6c65ef3050fce7ef2c[m
+Author: ogenodisho <ogenodisho@gmail.com>
+Date:   Fri Oct 31 23:38:41 2014 +1300
+
+    minor bug fix
+
+[33mcommit c8db8c08d08a1600f81fd32d38863d6492bb4294[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Fri Oct 31 19:07:09 2014 +1300
+
+    finish GUI display of warning
+
+[33mcommit 9c01ad0c388ff9bbeda011aa13ef15738f68ecd2[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Fri Oct 31 17:25:49 2014 +1300
+
+    give link of bidderList inside auctionContext
+
+[33mcommit 6732bc2983bf8d5e3a102809fe79a22d30adfbd6[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Fri Oct 31 16:03:25 2014 +1300
+
+    fix minor legacy bug
+
+[33mcommit 0142cc2e88748df18cb2f5617795d024cc2aba21[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Fri Oct 31 15:52:03 2014 +1300
+
+    revise Ogen's code
+
+[33mcommit a23c8eeab49d5fc0b31da8665e00140d32400dcd[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Thu Oct 30 18:01:21 2014 +1300
+
+    minor change of logger, put path as static fiels
+
+[33mcommit b45d135445b00b164db34987c28a93fb4e73e2e5[m
+Author: ogenodisho <ogenodisho@gmail.com>
+Date:   Wed Oct 29 22:12:33 2014 +1300
+
+    encapsulated saa logging into one class
+
+[33mcommit 9b33345aaa0f02e42962c304ad94042146dd8e3f[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Wed Oct 29 19:46:38 2014 +1300
+
+    fix minor conflicts, and remove useless libs
+
+[33mcommit 696cb1cc82fc97f9d36496344a34ac4afa3974d4[m
+Merge: 8e73532 de51048
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Wed Oct 29 19:41:10 2014 +1300
+
+    merge from Ogen's logging branch
+
+[33mcommit 8e73532e235f4997f29b62637df10e9d19b62cb1[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Wed Oct 29 17:42:05 2014 +1300
+
+    fix minor bugs with GUI
+
+[33mcommit c6366410ca8ee6b8749d3bdff9938dfb19377a71[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Wed Oct 29 03:07:54 2014 +0100
+
+    cca: updated
+
+[33mcommit 4bdaae5e886f3df9684d5e6dfa36e98b45f567e4[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Wed Oct 29 00:23:21 2014 +0100
+
+    cca: fix
+
+[33mcommit e0bcee0e099a09d0b65b1c67f8bc157922fc69b8[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Tue Oct 28 22:51:33 2014 +0100
+
+    add cca: problem:server cannot resolve data
+
+[33mcommit cb386b6bcaed728fc92485dee8e775138c719330[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Fri Oct 24 11:41:15 2014 +0200
+
+    saa:table: minor css changes
+
+[33mcommit dc23f1e9f03153837a5c91d3708c166fb0a2d813[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Fri Oct 24 09:12:36 2014 +0200
+
+    delete bin/.gitignore
+
+[33mcommit 4d9e37683d84e86a229a11cbe2c9d59c6a83700f[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Fri Oct 24 09:11:41 2014 +0200
+
+    saa: update UI
+
+[33mcommit 6dd5e304f3758cfd00394927cd8e0aa4d95e8252[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Thu Oct 23 15:52:49 2014 +0200
+
+    saa: fix bug of showing onwer
+
+[33mcommit ca6a5b9e90229f7c47492d08dacbdafc4ce0b384[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Wed Oct 22 21:39:45 2014 +0200
+
+    saa: UI updated
+
+[33mcommit adbb88be76f5e76ff8fffe98051310ddbe279241[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Wed Oct 22 16:08:36 2014 +0200
+
+    saa: fix bug of updating price in client side
+
+[33mcommit a7e5a423c2c6d73b6a76800a2c761c8d0b138e9c[m
+Merge: e4cd6e2 3336254
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Wed Oct 22 10:07:27 2014 +0200
+
+    Merge branch 'polymer' of https://github.com/Vancy/AuctionDemo into polymer
+    Server bugs fixed by Vancy.
+
+[33mcommit 33362540757ea59c313625398ad9b1e9f00b2e2d[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Wed Oct 22 21:04:15 2014 +0000
+
+    fix bidServlet json parsing bugs
+
+[33mcommit e4cd6e2b773e36040af03284516fcf2519f4ef8a[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Wed Oct 22 10:07:20 2014 +0200
+
+    correct small typos
+
+[33mcommit 3d5303bd10a44deb20cb1b300ad21b423c185a23[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Wed Oct 22 09:18:17 2014 +0200
+
+    saa: debugging
+
+[33mcommit 2d9e342327167407d74156841af05e3e9a758010[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Wed Oct 22 01:21:04 2014 +0200
+
+    saa: minor changes
+
+[33mcommit e9b85805855aa5818c0f4d184c491069849c1a76[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Wed Oct 22 01:06:33 2014 +0200
+
+    saa: logic validation
+
+[33mcommit b93f6bec4791bcaf15dc4b32c2d45a2bd191df53[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Wed Oct 22 00:18:16 2014 +0200
+
+    saa: add validation
+
+[33mcommit 67f51672c210d1b5ceb11381fb15f184a64f9c55[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Tue Oct 21 22:43:17 2014 +0200
+
+    polymer: receive/send json but server cannot receive correctlly 2
+
+[33mcommit f00be8b6e190da151c41356b7daaa74872230482[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Tue Oct 21 22:42:50 2014 +0200
+
+    polymer: receive/send json but server cannot receive correctlly
+
+[33mcommit de51048d29c1e197c933d5645d029a60351ac37a[m
+Author: ogenodisho <ogenodisho@gmail.com>
+Date:   Wed Oct 22 04:02:56 2014 +1300
+
+    Added activity rule spinner to auction screen
+
+[33mcommit 348052c6b887bef7e1f3729a5a1ffdb207f6913f[m
+Merge: 27deae3 93b593d
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Tue Oct 21 12:20:29 2014 +0200
+
+    Merge polymer-json-xml' into polymer
+
+[33mcommit 27deae3af9b4aff3e6bcf75172e2a491a2392704[m
+Merge: 2cbda3c d64e557
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Tue Oct 21 12:12:00 2014 +0200
+
+    idn
+    Merge branch 'polymer' of https://github.com/Vancy/AuctionDemo into polymer
+
+[33mcommit 93b593d2290462ad4d2e69bb72b9c442e8a48f4b[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Mon Oct 20 10:12:42 2014 +0200
+
+    saa: minor comments
+
+[33mcommit d64e5570519ae8dc85173fe933d5be076fccb170[m
+Merge: 098a655 2fe37af
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Sun Oct 19 21:06:00 2014 +0000
+
+    Merge branch 'polymer' of http://github.com/Vancy/AuctionDemo into polymer
+
+[33mcommit 098a655d7a2093870ea7cec9d7cfbb83e8e26b8e[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Sun Oct 19 21:05:21 2014 +0000
+
+    server uses json to communicate
+
+[33mcommit 2cbda3c1bd23b544ecb647c66a3cef70fbd5b659[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Sun Oct 19 22:23:24 2014 +0200
+
+    saa: works!(without validation...)
+
+[33mcommit 8de8456df6298dba0a13a5f22af380ed7b891a2a[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Sun Oct 19 21:38:46 2014 +0200
+
+    saa: before try post
+
+[33mcommit db8ce1f03ee4e6dbe10df6cd37b91485a7813299[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Sun Oct 19 21:04:45 2014 +0200
+
+    saa: add key event and handle failure
+
+[33mcommit 99333dfed70145c8a73b24a7c3fc5c5164389b8b[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Sun Oct 19 20:46:45 2014 +0200
+
+    saa: now it can update every 1s succeddfully
+
+[33mcommit 2fe37af9bf1119896698dc7008cd02838a08749d[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Sun Oct 19 05:17:33 2014 +0200
+
+    add timer but flash
+
+[33mcommit 74d549c104fffaf02f6a633a2351512f67609fd4[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Sun Oct 19 03:57:15 2014 +0200
+
+    tmp: rm bower_components from .gitigore
+
+[33mcommit 766b21f87dcabff5c4a6aa05cfad1dac65f817be[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Sun Oct 19 03:54:12 2014 +0200
+
+    add post but faild
+
+[33mcommit b4fd32ed37743a1e984f0893e905f7694fa0981c[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Sun Oct 19 00:37:12 2014 +0200
+
+    saa: modify style
+
+[33mcommit 6e88b528ce6968afc83e25c5fa83d5e08698946f[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Sat Oct 18 23:29:57 2014 +0200
+
+    saa: can show data
+
+[33mcommit fab642d50e4ddd97cc0b4cfac85ada4fd48a1d35[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Sat Oct 18 22:09:06 2014 +0200
+
+    saa: add saa but not tesed
+
+[33mcommit b061bbb6a28370a85d9b38b6f84b36114a3f8bbb[m
+Author: Zhenfei <youyis2fox@gmail.com>
+Date:   Sat Oct 18 19:27:04 2014 +0200
+
+    json added
+
+[33mcommit 03d200efbd77e742b118c443fef897159fab0751[m
+Author: Zhenfei <youyis2fox@gmail.com>
+Date:   Sat Oct 18 16:07:05 2014 +0200
+
+    DS_Store: deleted
+
+[33mcommit 54a89a71c9c6d451051f973ad3f8d39f67a8af79[m
+Author: ogenodisho <ogenodisho@gmail.com>
+Date:   Sun Oct 19 02:08:04 2014 +1300
+
+    Dummy bids will now be generated if the bid button is not pressed
+
+[33mcommit 5b1ce925834f1ef3e9700e3a8a441e0a188042b6[m
+Author: Zhenfei <youyis2fox@gmail.com>
+Date:   Sat Oct 18 01:06:47 2014 +0200
+
+    only login
+
+[33mcommit 0d3b85bd8585f9c7498b9ea9e3622d32e6f30205[m
+Author: Zhenfei <youyis2fox@gmail.com>
+Date:   Fri Oct 17 22:19:04 2014 +0200
+
+    add login screen with polymer and xml2json
+
+[33mcommit 44c33ee6e4ccb0241f0b4421e5791c8ae1bbf744[m
+Author: Zhenfei <youyis2fox@gmail.com>
+Date:   Fri Oct 17 17:04:00 2014 +0200
+
+    gitignore: DS_Store
+
+[33mcommit fd2c2b450d53bc5fc4342c5b7201243f4e6a6d1d[m
+Author: Zhenfei <youyis2fox@gmail.com>
+Date:   Fri Oct 17 17:01:26 2014 +0200
+
+    Branch: polymer: add polymer
+
+[33mcommit 9ca2af07073100636d39ba8e7e2c68dfaa267e08[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Fri Oct 17 20:14:05 2014 +0000
+
+    ignore price check when bidder leads the price for certain item
+
+[33mcommit 97ea0a2ce4af37a0ed8af13a39bec24921ca2807[m
+Author: ogenodisho <ogenodisho@gmail.com>
+Date:   Fri Oct 17 23:21:15 2014 +1300
+
+    restructured SAA bid processing, finished activity rule
+
+[33mcommit 2b87b03dc34def3d67bd2e2c4eb7d371b2307373[m
+Author: ogenodisho <ogenodisho@gmail.com>
+Date:   Thu Oct 16 23:01:15 2014 +1300
+
+    started implementing activity tule
+
+[33mcommit 2334f63e0bf604970e63b57c3a74d906e3992ae6[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Wed Oct 15 18:12:23 2014 +0000
+
+    add gui for time duration setting
+
+[33mcommit 7107341c9d051e5d682393be487427edea869307[m
+Author: ogenodisho <ogenodisho@gmail.com>
+Date:   Thu Oct 16 02:07:10 2014 +1300
+
+    Implemented excel logging
+
+[33mcommit 6fb2dea852ef313250b6d31df965ca38823dc7e3[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Tue Oct 14 23:08:58 2014 +0000
+
+    fix multibid problem
+
+[33mcommit 552177ee9eec5491560792493ec9457d54b3e48d[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Tue Oct 14 22:29:32 2014 +0000
+
+    update latest javascript
+
+[33mcommit 7618198c1ecbe2223cba62592658e593fe93cd8c[m
+Merge: 76e1b90 64363cf
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Tue Oct 14 22:27:50 2014 +0000
+
+    merge nowait
+
+[33mcommit 64363cf9feaefb2cb8bb341efc0cbe80d649045b[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Sat Oct 11 17:31:42 2014 +1300
+
+    Null check when setting value
+
+[33mcommit cd6519365a4ec4de2f77154f4576fb7ad75b0e00[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Sat Oct 11 17:30:45 2014 +1300
+
+    More descriptive message to user
+
+[33mcommit 514954c41e52997ffe838bcd59829c6725462667[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Wed Oct 8 22:02:44 2014 +0000
+
+    fix null string bug at client side
+
+[33mcommit 54b69ce3c50afe06a5fd69ef959c0be3e1b50f67[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Mon Oct 6 00:03:34 2014 +0200
+
+    add 'disabled button' and 'wait label'
+
+[33mcommit 67d5e6ee8e884ced3fdf1c4df6bf53e5c233318c[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Sun Oct 5 23:17:43 2014 +0200
+
+    FrontEnd SAA V2.1
+
+[33mcommit 91d6000c7d26f0f104890122d0c866897704d1e4[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Sun Oct 5 11:19:24 2014 +0200
+
+    ghouan
+
+[33mcommit cdbd818dad36c5e0ab4c815e972bd818d756c586[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Sun Oct 5 10:57:54 2014 +0200
+
+    fix keyboard
+
+[33mcommit 0093d06edcae4dd724f7c2840eb31bfbc9bc9eb7[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Sun Oct 5 10:51:54 2014 +0200
+
+    test2
+
+[33mcommit 0050b8647958afb05a979762493825f856d279f2[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Sun Oct 5 10:49:38 2014 +0200
+
+    test
+
+[33mcommit f4a1e7d8a1d125b4de12c3ee4d35e97532bc0473[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Sun Oct 5 05:40:55 2014 +0000
+
+    add youyix code to this branch
+
+[33mcommit 76e1b90387f000105444f617738f1888e6352cdd[m
+Author: ZhenfeiNie <zhenfei.nie@gmail.com>
+Date:   Sun Oct 5 01:11:57 2014 +0200
+
+    new version of FE, v0.1
+
+[33mcommit 2b3e3e284f72a1555bd1b3b92db7d0a7bb918c27[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Tue Sep 30 16:12:18 2014 +1300
+
+    create branch nowait, try new type of communication between clients and server
+
+[33mcommit 5f109df4f004ef7d0f3577923b12987054da17cc[m
+Author: ogenodisho <ogenodisho@gmail.com>
+Date:   Fri Sep 26 00:08:35 2014 +1200
+
+    Improved error messages. Changed item starting prices and clock defaults
+
+[33mcommit 814be6fb9b987f3b3bd38e007a66a5fe70b0216d[m
+Author: ogenodisho <ogenodisho@gmail.com>
+Date:   Mon Sep 22 21:14:34 2014 +1200
+
+    fixed payoff calculation and layout
+
+[33mcommit 8ebb0b27a095881cbe3eb65047a1a3f7224f4881[m
+Author: ogenodisho <ogenodisho@gmail.com>
+Date:   Mon Sep 22 18:04:53 2014 +1200
+
+    Fixed payoffs
+
+[33mcommit 544d3e7183cb1c63bcb1bcbdcbb5dbf3aa058b9d[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Thu Sep 18 16:52:10 2014 +1200
+
+    add CCAtestingAgents.xml
+
+[33mcommit b2ce0cd7af4c1ee4772a8ae6e8e1d40bd911803c[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Wed Sep 17 19:38:02 2014 +1200
+
+    fix minor bug in AuctionListPanel
+
+[33mcommit f0036d6f3f057ce12fdcae47750990e16b540b7b[m
+Merge: de791da 35ea0a1
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Wed Sep 17 19:27:57 2014 +1200
+
+    Merge branch 'master' of https://github.com/Vancy/AuctionDemo
+
+[33mcommit de791daca4f83ea4689e7c15a8fe71e379431768[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Wed Sep 17 19:27:23 2014 +1200
+
+    give ability to parse CCA agent
+
+[33mcommit 06d44271a5d72243e7aa52533030c2576fd76b38[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Wed Sep 17 17:12:41 2014 +1200
+
+    add CCAAgent
+
+[33mcommit 35ea0a1bdd09524fb7778a3670d8b70c8027b6c6[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Sun Sep 7 21:08:13 2014 +1200
+
+    calculatePayoff returns double instead of String
+
+[33mcommit 9ef41695d814ab5861c71a57d690c85362f56170[m
+Author: unknown <oodi687@ISOMRSPRD01.com.auckland.ac.nz>
+Date:   Thu Sep 4 22:06:02 2014 +1200
+
+    auction ends after two inactive rounds and payoffs are displayed
+
+[33mcommit 29da53775df222170de27daa9d587217c3ca8013[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Thu Sep 4 16:21:53 2014 +1200
+
+    start bidder id from 1
+
+[33mcommit 3c3dfeed36f54ac5657c8780954dfa3658b480c4[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Thu Sep 4 14:55:14 2014 +1200
+
+    Revert "Please enter the commit message for your changes. Lines starting"
+    To revamp the regression, revert the commit to Youyi's latest commit.
+    This reverts commit e853cefbb838ca419ba169ddfd3cb037a54bcb9d.
+
+[33mcommit c1c1f7dd83f056ca703d5623c9d2f05499e02aba[m
+Author: unknown <oodi687@ISOMRSPRD01.com.auckland.ac.nz>
+Date:   Wed Sep 3 21:25:55 2014 +1200
+
+    SAA auction ends correctly and then the payoffs are displayed
+
+[33mcommit e853cefbb838ca419ba169ddfd3cb037a54bcb9d[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Thu Aug 28 22:24:53 2014 +0200
+
+    Please enter the commit message for your changes. Lines starting
+    
+    Modified keypress to keyup.
+    Update UI.
+    Fix validating procedure.
+
+[33mcommit 5601a1e61ee5a80465463fa5e08fffda6ca52f3e[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Thu Aug 28 12:47:37 2014 +0200
+
+    Add NOINPUT
+
+[33mcommit f92124dcf83d7a00fe3ac19b6a71d59cf5e29c42[m
+Merge: a70d4a7 6009478
+Author: youyix <youyis2fox@gmail.com>
+Date:   Thu Aug 28 12:24:40 2014 +0200
+
+    Merge branch 'master' of https://github.com/Vancy/AuctionDemo
+    
+    JS bug fixed.
+
+[33mcommit a70d4a7bdf193c5dd24600f09fe1e5111f0b6d82[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Thu Aug 28 12:24:35 2014 +0200
+
+    JS bug fixed.
+
+[33mcommit 6009478ededf711338e6a4174486d82a5b429cf6[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Thu Aug 28 22:21:28 2014 +1200
+
+    fix server config
+
+[33mcommit e1c844cd432928ba4df2fb33d8d5eee30dcd6a67[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Thu Aug 28 22:19:10 2014 +1200
+
+    fix server config
+
+[33mcommit e7e9a068e166469d80321a8764649db7947debf4[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Thu Aug 28 20:56:13 2014 +1200
+
+    be able to add multiple agents using one config file, fix bug in Auctioneer class
+
+[33mcommit 1d0065fa1b18141533577b9c3bc7160eb9c31842[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Thu Aug 28 12:26:49 2014 +1200
+
+    fix some servlet bugs
+
+[33mcommit cc8e7db2d5d9b323168d0a5fce9313be8c151857[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Wed Aug 27 18:04:36 2014 +1200
+
+    half change CCA auction control flow
+
+[33mcommit 8960cd28cc277d443d4adc352757c2169b2f01c9[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Mon Aug 25 11:30:49 2014 +1200
+
+    adapt to web change
+
+[33mcommit 9a4bcc9105b0b9b3da9f61aaa13437fc824a9e94[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Sun Aug 24 16:05:25 2014 +0200
+
+    Minor updates.
+
+[33mcommit 4097838d767dff99af3724e441bad37c2498cfb4[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Sun Aug 24 15:43:16 2014 +0200
+
+    Update UI with BID title. Add final state for every item in CCA.
+
+[33mcommit 11363b7f797f14754da5e1a3175005bdca5c4a43[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Sat Aug 23 19:06:09 2014 +1200
+
+    Agent doesnt take negative surpluses into account
+
+[33mcommit a484d5df6d4c13def407e3b82d9cb201ec9a1dda[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Sat Aug 23 17:04:06 2014 +1200
+
+    Fixed perceived price total bug
+
+[33mcommit c72124f34778cd3dd032d1d89aac48ad4921cfd8[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Fri Aug 22 18:52:44 2014 +1200
+
+    add cca auction framework
+
+[33mcommit 72f3684faebe35fc0d78599e1b0031924447425a[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Thu Aug 21 21:21:17 2014 +1200
+
+    refactor AuctionConfig panel
+
+[33mcommit fe808592ff75d6b188ac90a781377dcf154fc3c1[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Wed Aug 20 19:43:49 2014 +1200
+
+    roll back to c0e55 first, then restruct GUI code for different type of auction
+
+[33mcommit f110272fa5180450646433d8a00b1ece6d9e5610[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Mon Aug 18 14:53:40 2014 +1200
+
+    updated item list at every iteration
+
+[33mcommit c0e55714c46add77e522db2397b8620338481bfe[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Mon Aug 18 12:20:28 2014 +1200
+
+    reset AuctionPanel layout
+
+[33mcommit 0c0bc40ae9941fadd71dd8e5bd9714d1337baadf[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Sun Aug 17 16:47:16 2014 +1200
+
+    refactor code to branch auction type
+
+[33mcommit 16f39a9a20e97e1d8579b728f3cafee7abe686c4[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Mon Aug 11 11:59:15 2014 +1200
+
+    make agent works
+
+[33mcommit 9c68403af001a8261efda0d8c04286e75b95cba8[m
+Merge: 98112e3 3e5c966
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Sun Aug 10 17:21:52 2014 +1200
+
+    should not be any confilcts
+    Merge branch 'master' of http://github.com/Vancy/AuctionDemo
+
+[33mcommit 98112e3bc8dd82f0947b87901767a00dec1db8eb[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Sun Aug 10 17:21:04 2014 +1200
+
+    bug fixing
+
+[33mcommit 3e5c9668bd4f9d880df1b7d99bcc522039da0209[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Sat Aug 9 15:28:17 2014 +0200
+
+    Test bugs. Update UI.
+
+[33mcommit a7419137320a5a7b3640d850194c860944a6df97[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Sat Aug 9 19:26:21 2014 +1200
+
+    give dynamic round time
+
+[33mcommit 6f2f14a5fef557dbd75aebad39ece4d0059be41c[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Fri Aug 8 17:08:29 2014 +1200
+
+    updated agent constructor and methods
+
+[33mcommit 71904289292a02c93af934acf099e815c79b38da[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Fri Aug 8 13:25:00 2014 +1200
+
+    resolve agent conflict
+
+[33mcommit fe5ac876d21da35021894bd6393571bebb7bbe14[m
+Merge: 221ed05 7a001ad
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Thu Aug 7 20:45:56 2014 +1200
+
+    updated agent code
+
+[33mcommit 7a001ad127b31b0d3edfd0ae15e1cbe1479e99d0[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Thu Aug 7 09:02:49 2014 +0200
+
+    Update UI of frontend
+
+[33mcommit 33a534ad6b8876f1b5df3fbe828630122e78ba32[m
+Merge: 6fcd9d6 4f16722
+Author: youyix <youyis2fox@gmail.com>
+Date:   Thu Aug 7 09:00:37 2014 +0200
+
+    Merge branch 'master' of https://github.com/Vancy/AuctionDemo
+    
+    merge in 7 Aug by youyix
+
+[33mcommit 6fcd9d6a63eccf1380a9f144b456c8cd1c5e0e68[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Thu Aug 7 09:00:23 2014 +0200
+
+    Update UI(table) of front_end.
+
+[33mcommit 81eac87ab6b79f472148244acc60262807556ef6[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Thu Aug 7 08:11:43 2014 +0200
+
+    Fix bugs in CCA. UI is not good.
+
+[33mcommit 8b561443ace586aa84ed4f8cde3c7b938a95ebbd[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Wed Aug 6 15:42:17 2014 +0200
+
+    Display username when logged on. Fix bugs.
+
+[33mcommit b909546ac810e798835159baf9d9cbb6c1a90f2b[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Wed Aug 6 15:00:24 2014 +0200
+
+    Update logic: put lockscreen in 'state_change' function
+
+[33mcommit 1004992d8ed9847c35c4592b85d9e772d6b6ef0b[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Wed Aug 6 14:50:45 2014 +0200
+
+    Lock keyboard when locking screen. Update UI in final round. Add state machine.
+
+[33mcommit 221ed059d88db073f5851a3dc63e5146e9bb0f00[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Wed Aug 6 20:43:56 2014 +1200
+
+    updated agent code to work with config file
+
+[33mcommit 4f167221fb86ddfe8aa72fdb2a73d2f795ccc39d[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Wed Aug 6 18:22:53 2014 +1200
+
+    create add agent dialog
+
+[33mcommit b11de7dbf19179627f2ece620fffd8a62ff33f7a[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Wed Aug 6 01:09:00 2014 +1200
+
+    agent class with auctionResponse method
+
+[33mcommit 40ce375f025287846900c347a3d518fd74ad4663[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Tue Aug 5 19:23:14 2014 +1200
+
+    add agent adding dialog
+
+[33mcommit 5217abd5a028b070b8ece0368b6b7fd10d8be055[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Tue Aug 5 16:01:39 2014 +1200
+
+    add several helper classes to data structure
+
+[33mcommit 441ee2f8512a6d822052a33728747c017f3b4077[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Sat Aug 2 21:37:21 2014 +1200
+
+    add table render to auction list
+
+[33mcommit 5b0255f0826514bca02814f4ed7de3ed00b037e9[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Sat Aug 2 10:23:49 2014 +0200
+
+    Add login lockscreen. Add id for bid.xml
+
+[33mcommit 4f21ee5564095c64baa55559ec64590ea48376e4[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Sat Aug 2 19:07:35 2014 +1200
+
+    prepare color mode to gui
+
+[33mcommit 636cc4a117cc7aa580df7063e65feef817115c53[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Sat Aug 2 15:54:23 2014 +1200
+
+    change back some code in Auctioneer
+
+[33mcommit ee42e0b2aa828602bf13d8b99ab35c7cfaefa62e[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Fri Aug 1 21:27:26 2014 +0200
+
+    Update final UI #1
+
+[33mcommit a784fa52150d07c7c4879049e4c96690580cb5e6[m
+Merge: ae7dd11 a54c433
+Author: youyix <youyis2fox@gmail.com>
+Date:   Fri Aug 1 21:12:18 2014 +0200
+
+    Merge branch 'master' of https://github.com/Vancy/AuctionDemo
+    
+    Fix bugs and logic. SAA is partly fine.
+
+[33mcommit ae7dd1150513da1103c0aff9c8abf71ad557aa67[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Fri Aug 1 21:12:12 2014 +0200
+
+    Fix bugs and logic. SAA is partly fine.
+
+[33mcommit a54c433e224b59ec11652255fa3ec81e5c7e848f[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Fri Aug 1 23:06:52 2014 +1200
+
+    changed auctioneer and agent class to work with IDs rather than names
+
+[33mcommit 541857a350ba7da97f722d6fb26beda7602985b7[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Fri Aug 1 20:18:35 2014 +1200
+
+    change auction list form
+
+[33mcommit 77d187606da079cc6c0a9eab8e4eee0ed80f768e[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Fri Aug 1 19:11:40 2014 +1200
+
+    add color mode to gui
+
+[33mcommit 050bdf6d7923e6a04eec7b780546e204199335a9[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Fri Aug 1 01:44:06 2014 +0200
+
+    Change ajax code. Error: dataRepresentation.AuctionContext@xxxxxxx
+
+[33mcommit 106077841deac7b981ff1400ee24de7700fa297e[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Fri Aug 1 01:04:02 2014 +0200
+
+    fix minor bugs
+
+[33mcommit 3e6cd2b424837bcd67e0d73a6e5b5e45e070e76d[m
+Merge: ef84778 8e13c3d
+Author: youyix <youyis2fox@gmail.com>
+Date:   Thu Jul 31 12:05:16 2014 +0200
+
+    Merge branch 'master' of https://github.com/Vancy/AuctionDemo
+
+[33mcommit ef84778fd983e5a0f23de592f67a3345bd85e17b[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Thu Jul 31 12:05:12 2014 +0200
+
+    Temp
+
+[33mcommit 8e13c3dbfbf9c3cf02b9e903e6ebd1b98259dddf[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Thu Jul 31 17:55:30 2014 +1200
+
+    intermediate web connection update
+
+[33mcommit b854f00611959770fd9243ed1cb12d86ed26e4ee[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Wed Jul 30 17:32:13 2014 +0200
+
+    Delete temp files after refactoring UI codes. #2.
+
+[33mcommit d9dd204faf6b96b65250ce41ac540e3b880f760e[m
+Merge: 86039cf f78bb91
+Author: youyix <youyis2fox@gmail.com>
+Date:   Wed Jul 30 17:28:14 2014 +0200
+
+    Merge branch 'master' of https://github.com/Vancy/AuctionDemo
+    
+    Merge with github after refactoring UI code. Wed Jul 30.
+
+[33mcommit 86039cfa5bdeb8d587373eaed0623e8fcfb6f460[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Wed Jul 30 17:28:05 2014 +0200
+
+    Delete temp files after refactory UI code.
+
+[33mcommit a46800131ebfd6aeabb3c8dab5faa803a5f726f8[m
+Merge: 56696ff ec5f349
+Author: youyix <youyis2fox@gmail.com>
+Date:   Wed Jul 30 17:18:17 2014 +0200
+
+    Merge branch 'master' into HEAD
+    
+    Date: Wed Jul 30 2014
+    Author: youyix
+    Title: CCA
+
+[33mcommit 56696ff964ae5e503cec8e0a7b2f005cec91b5f6[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Wed Jul 30 17:09:04 2014 +0200
+
+    Refactory code. Add CCA and 'final' state
+
+[33mcommit f78bb91dcf8d8ef78ced4f0a377a7f6c7c3a10b3[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Wed Jul 30 21:11:41 2014 +1200
+
+    changed agent code, need to fill in commented parts
+
+[33mcommit ec5f349a178c669d9d79d4882648f5c9179eee78[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Tue Jul 29 01:39:01 2014 +1200
+
+    improved agent class
+
+[33mcommit 42b77cec2b334b0148a9798ab4eb1dafd7690119[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Tue Jul 29 01:12:30 2014 +1200
+
+    moved infinite while loop to nextRound()
+
+[33mcommit 15060771ab33bece72c28f286dedddea06323d5f[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Mon Jul 28 12:53:13 2014 +1200
+
+    ui update
+
+[33mcommit cca527abf3dc94cb6bdb509cdf57301d9baa4804[m
+Merge: 3844260 0c84654
+Author: youyix <youyis2fox@gmail.com>
+Date:   Mon Jul 28 02:31:21 2014 +0200
+
+    Merge branch 'master' of https://github.com/Vancy/AuctionDemo
+
+[33mcommit 0c84654a333c94eee6bd303d8900c823ca66c0b2[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Mon Jul 28 12:14:05 2014 +1200
+
+    ui update
+
+[33mcommit 38442606dbefab2465557f62efff82ffbd8be023[m
+Merge: 680b7ba 26996a4
+Author: youyix <youyis2fox@gmail.com>
+Date:   Mon Jul 28 00:22:26 2014 +0200
+
+    Merge branch 'master' of https://github.com/Vancy/AuctionDemo
+
+[33mcommit 680b7ba0dd61c362720d36d1685e4cd597f28e3c[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Mon Jul 28 00:22:10 2014 +0200
+
+    update UI
+
+[33mcommit 26996a4b455366600f0a463280734dcd87adb57a[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Mon Jul 28 09:37:31 2014 +1200
+
+    minor change on javacript
+
+[33mcommit 0b21dbbecfcfc3e0f01814ecd71032b6f04ac8d9[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Sun Jul 27 20:54:45 2014 +1200
+
+    added to bid flow
+
+[33mcommit 4009e5d9295686fb24787a66edb4d54a04691663[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Sun Jul 27 18:15:52 2014 +1200
+
+    Xing: restructure, develop gui, gui to master
+
+[33mcommit 26326e97926a89edfc45c8fea37384afc37012de[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Sat Jul 26 23:14:14 2014 +0200
+
+    Add locking screen
+
+[33mcommit a40f1d77b2dbf0e557047d1dcdcf47a34cff76dd[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Sat Jul 26 17:17:23 2014 +0200
+
+    update UI
+
+[33mcommit 5734e1d5a260a8fc0ae61e3be4bbdaa370a8777d[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Sat Jul 26 12:23:04 2014 +0200
+
+    ignore *.*~ file
+
+[33mcommit 028f7fafb5477bb606dc0b28419169669c7e5ba2[m
+Author: youyix <youyis2fox@gmail.com>
+Date:   Sat Jul 26 12:17:38 2014 +0200
+
+    newui
+
+[33mcommit 47206b3ac9ac2892a63fa30154e16fb5e764b755[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Sat Jul 26 19:47:01 2014 +1200
+
+    improved agent class
+
+[33mcommit 84e3f12893fad49fe79d272ee45201606329817e[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Sat Jul 26 17:31:08 2014 +1200
+
+    improved agent bidder interaction
+
+[33mcommit 22f57bdee61a64cc5e162635275252361109c1b2[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Fri Jul 25 23:15:47 2014 +1200
+
+    deleted old java files
+
+[33mcommit 26e55f0968c5d05bcac3428c3e291c0dc3806ed5[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Fri Jul 25 23:13:53 2014 +1200
+
+    deleted auctioneer bidder communication
+
+[33mcommit cf54bb26e80c313409eb62ee70b43b37844db874[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Fri Jul 25 20:24:21 2014 +1200
+
+    Ogens third commit. Added Agent class and improved repo structure
+
+[33mcommit e9d7d372c13e64d24674975525480c9973d94fb4[m
+Merge: e7268ae dcea7b6
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Fri Jul 25 01:11:13 2014 +1200
+
+    Merge branch 'master' of https://github.com/Vancy/AuctionDemo
+
+[33mcommit e7268ae17657a03482d52367cde055524c747548[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Fri Jul 25 00:58:38 2014 +1200
+
+    Ogens second commit, improved commandline code
+
+[33mcommit dcea7b6d9d6fd225a2f3be10ac19f292166abbf7[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Thu Jul 24 18:56:35 2014 +1200
+
+    change some code in javascript
+
+[33mcommit d7348e49c6d6f1d4995819e316e126824b3189b8[m
+Author: zhenfei <youyis2fox@gmail.com>
+Date:   Wed Jul 23 23:21:23 2014 +0200
+
+    Create style.css
+
+[33mcommit ae0548fa1ce43df46118eb3d0046894c9fd7c70d[m
+Author: zhenfei <youyis2fox@gmail.com>
+Date:   Wed Jul 23 23:20:53 2014 +0200
+
+    Update index.html
+
+[33mcommit b4144a78da96e355d8794a766030238bf3e45a70[m
+Author: zhenfei <youyis2fox@gmail.com>
+Date:   Wed Jul 23 23:19:59 2014 +0200
+
+    Create script.js
+
+[33mcommit 705a7d182b68c546a67a204dd556487a873b5039[m
+Merge: b62c4d3 04cab0f
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Tue Jul 22 17:13:05 2014 +1200
+
+    Merge branch 'master' of http://github.com/Vancy/AuctionDemo
+
+[33mcommit b62c4d34c3a6e842c803597e77c6f758363fb80d[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Tue Jul 22 17:11:54 2014 +1200
+
+    refine structure
+
+[33mcommit 04cab0f5084e51306de8882c57095090d1b5352d[m
+Merge: 7d49dcd 7ee87ec
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Mon Jul 21 19:44:01 2014 +1200
+
+    Merge branch 'master' of http://github.com/Vancy/AuctionDemo
+
+[33mcommit 7ee87ec1841d2d5956c383d68c2961c367202b64[m
+Author: Xing <x.fan.cn@gmail.com>
+Date:   Mon Jul 21 19:21:25 2014 +1200
+
+    remove redundant
+
+[33mcommit 7d49dcd69d7844b02ce5d97e47f603cdc1694200[m
+Author: ogenodisho <oodi687@aucklanduni.ac.nz>
+Date:   Mon Jul 21 18:29:41 2014 +1200
+
+    Ogen first commit
+
+[33mcommit 3a97983e38c3b964c703809805ef54e290466b1c[m
+Author: xing <x.fan.cn@gmail.com>
+Date:   Mon Jul 21 15:48:10 2014 +1200
+
+    add lib
+
+[33mcommit 5f61711e62fb97d81e0e7af1ccd83b888cee2b0b[m
+Author: xing <x.fan.cn@gmail.com>
+Date:   Mon Jul 21 15:43:15 2014 +1200
+
+    second commit
+
+[33mcommit 6e842fd0c7b1186396905de42fa6230d4cecb0f4[m
+Author: xing <x.fan.cn@gmail.com>
+Date:   Mon Jul 21 15:42:52 2014 +1200
+
+    second commit
+
+[33mcommit 0f9470e217ff20a29f997bd7f7a8e1de54c50529[m
+Author: xing <x.fan.cn@gmail.com>
+Date:   Mon Jul 21 15:32:16 2014 +1200
+
+    second commit
+
+[33mcommit dc39821387230bec978385c2516c516ddb0b5519[m
+Author: xing <x.fan.cn@gmail.com>
+Date:   Mon Jul 21 15:22:11 2014 +1200
+
+    first commit
+
+[33mcommit d663095fa3b3bd260cee4d05f605f9d01a85682a[m
+Author: Xing Fan <x.fan.cn@gmail.com>
+Date:   Mon Jul 21 13:43:22 2014 +1200
+
+    Initial commit

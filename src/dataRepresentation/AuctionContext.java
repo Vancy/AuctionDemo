@@ -34,6 +34,7 @@ public class AuctionContext {
 	private double priceTick = 0;
 	private boolean finalRound;
 	static int numberOfActivityRuleWaivers = 2;
+	static boolean activityRuleStarted = false;
 	
 	
 	/* bidsProcessingFinished flag, to decide current round data processing is finished
