@@ -34,7 +34,8 @@ public class AuctionContext {
 	private double priceTick = 0;
 	private boolean finalRound;
 	public static int numberOfActivityRuleWaivers = 2;
-	public static boolean activityRuleStarted = true;
+	private boolean activityRuleAnnounced = false;
+	private int activityRuleStartRound = -1;
 	
 	
 	/* bidsProcessingFinished flag, to decide current round data processing is finished
@@ -87,7 +88,7 @@ public class AuctionContext {
 		this.itemList = list;
 		this.minIncreament = min;
 		this.finalRound = false;
-		//AuctionContext.activityRuleStarted = activityRuleStarted;
+		//AuctionContext.activityRuleAnnounced = activityRuleAnnounced;
 	}
 	
 	public void setType(String typeName) {
@@ -134,6 +135,22 @@ public class AuctionContext {
 	public int getNumberOfActivityRuleWaivers() {
 		return numberOfActivityRuleWaivers;
 	}
+	public boolean isActivityRuleAnnounced() {
+		return activityRuleAnnounced;
+	}
+
+	public void setActivityRuleAnnounced(boolean activityRuleAnnounced) {
+		this.activityRuleAnnounced = activityRuleAnnounced;
+	}
+
+	public int getActivityRuleStartRound() {
+		return activityRuleStartRound;
+	}
+
+	public void setActivityRuleStartRound(int activityRuleStartRound) {
+		this.activityRuleStartRound = activityRuleStartRound;
+	}
+
 	public ArrayList<AuctionItem> getItemList() {
 		return this.itemList;
 	}
@@ -212,8 +229,11 @@ public class AuctionContext {
 	    child = doc.createElement("minimum_increament");
 	    child.setAttribute("value", Double.toString(this.minIncreament));
 	    root.appendChild(child);
-	    child = doc.createElement("activityRuleStarted");
-	    child.setAttribute("value", Boolean.toString(AuctionContext.activityRuleStarted));
+	    child = doc.createElement("activityRuleAnnounced");
+	    child.setAttribute("value", Boolean.toString(this.activityRuleAnnounced));
+	    root.appendChild(child);
+	    child = doc.createElement("activityRuleStartRound");
+	    child.setAttribute("value", Integer.toString(this.activityRuleStartRound));
 	    root.appendChild(child);
 	    
 	    int len = itemList.size();

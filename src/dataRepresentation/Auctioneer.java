@@ -160,17 +160,20 @@ public class Auctioneer extends Thread{
 					 */
 				}
 			}
-			if (this.environment.context.getRound() == 1) {
+			if (this.environment.context.getRound() == 1 ) {
 				currBidder.setActivity(numberOfItemsBidOn);
 				currBidder.setEligibility(numberOfItemsBidOn);
+			} else if (this.environment.context.getRound() == this.environment.context.getActivityRuleStartRound()) {
+				currBidder.setActivity(numberOfItemsBidOn + numberOfItemsLeading);
+				currBidder.setEligibility(this.environment.context.getItemList().size());
 			} else {
 				// set eligibility to previous activity and calculate current activity
 				// this will determine whether the bidder has become inactive
 				currBidder.setEligibility(currBidder.getActivity());
 				currBidder.setActivity(numberOfItemsBidOn + numberOfItemsLeading);
-				if (AuctionContext.activityRuleStarted) {
-					currBidder.auctionRuleVerify();
-				}
+			}
+			if (this.environment.context.getRound() > this.environment.context.getActivityRuleStartRound()) {
+				currBidder.auctionRuleVerify();
 			}
 		}
 		

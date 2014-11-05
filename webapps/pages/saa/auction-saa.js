@@ -10,7 +10,8 @@ Polymer('auction-saa', {
   isFinal: false,
   data: "",
   isTimerStarted: false,
-  activityRuleStarted: false,
+  activityRuleAnnounced: false,
+  activityRuleStartRound: -1,
 
   updateUrl: "",
   timer: undefined,
@@ -86,7 +87,8 @@ Polymer('auction-saa', {
     this.timeRemain = this.saa.roundTimeRemain;
     this.minimumIncreament = this.saa.minIncreament;
     this.isFinal = this.saa.finalRound;
-    this.activityRuleStarted = this.saa.activityRuleStarted;
+    this.activityRuleAnnounced = this.saa.activityRuleAnnounced;
+    this.activityRuleStartRound = this.saa.activityRuleStartRound;
 
     /**
      *  1. When it is the first time to get data or last time(final round), it's fine to refresh the UI by update 
@@ -123,7 +125,10 @@ Polymer('auction-saa', {
     var bidderListInfo = this.saa.bidderList.list;
     this.displayAuctionRuleInfo(bidderListInfo);
     this.displayLeadingItemInfo(bidderListInfo);
-    if ( this.isAuctionStarted() && this.activityRuleStarted && !this.isFinal) {
+    if (this.activityRuleAnnounced && this.round <= this.activityRuleStartRound) {
+    	displayActivityRuleAnnouncedAndStartedInfo(bidderListInfo);
+    }
+    if (this.round >= this.activityRuleStartRound) {
     	this.displayActivityAndEligibilityInfo(bidderListInfo);
     }
   },
@@ -161,7 +166,20 @@ Polymer('auction-saa', {
   			this.$.activityandeligibility.innerHTML = '<font color="blue">' + activityAndEligibilityMessage + '</font>';
   		}
   	}
-  },	
+  },
+  
+  displayActivityRuleAnnouncedAndStartedInfo: function(bidderListInfo) {
+  	for ( var i = 0; i <bidderListInfo.length; i++ ) {
+  		if (bidderListInfo[i].name == this.username && bidderListInfo[i].ipAddress == this.localIP) {
+  			if (this.round < this.activityRuleStartRound) {
+  				this.$.activityruleannouncement.innerHTML = '<font color="orange">' + "NOTICE: The activity rule will be in effect starting in round " + this.activityRuleStartRound + '</font>';
+  			} else { 
+  				//round must be equal to activity start round
+  				this.$.activityruleannouncement.innerHTML = '<font color="orange">' + "NOTICE: The activity rule is now in effect! + '</font>';
+  			}
+  		}
+  	}
+  },
 
   isAuctionStarted: function() {
     if ( this.round == 0 ) {
