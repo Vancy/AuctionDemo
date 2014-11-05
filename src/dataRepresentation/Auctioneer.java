@@ -163,7 +163,7 @@ public class Auctioneer extends Thread{
 			if (this.environment.context.getRound() == 1 ) {
 				currBidder.setActivity(numberOfItemsBidOn);
 				currBidder.setEligibility(numberOfItemsBidOn);
-			} else if (this.environment.context.getRound() == this.environment.context.getActivityRuleStartRound()) {
+			} else if (this.environment.context.getRound() == this.environment.context.getActivityRuleStartRound() - 1) {
 				currBidder.setActivity(numberOfItemsBidOn + numberOfItemsLeading);
 				currBidder.setEligibility(this.environment.context.getItemList().size());
 			} else {
@@ -172,7 +172,7 @@ public class Auctioneer extends Thread{
 				currBidder.setEligibility(currBidder.getActivity());
 				currBidder.setActivity(numberOfItemsBidOn + numberOfItemsLeading);
 			}
-			if (this.environment.context.getRound() > this.environment.context.getActivityRuleStartRound()) {
+			if (this.environment.context.getRound() >= this.environment.context.getActivityRuleStartRound()) {
 				currBidder.auctionRuleVerify();
 			}
 		}

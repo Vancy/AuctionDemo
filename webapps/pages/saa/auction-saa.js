@@ -125,10 +125,10 @@ Polymer('auction-saa', {
     var bidderListInfo = this.saa.bidderList.list;
     this.displayAuctionRuleInfo(bidderListInfo);
     this.displayLeadingItemInfo(bidderListInfo);
-    if (this.activityRuleAnnounced && this.round <= this.activityRuleStartRound) {
-    	displayActivityRuleAnnouncedAndStartedInfo(bidderListInfo);
+    if (this.activityRuleAnnounced) {
+    	this.displayActivityRuleAnnouncedAndStartedInfo(bidderListInfo);
     }
-    if (this.round >= this.activityRuleStartRound) {
+    if (this.round >= this.activityRuleStartRound && this.activityRuleStartRound != -1) {
     	this.displayActivityAndEligibilityInfo(bidderListInfo);
     }
   },
@@ -142,7 +142,7 @@ Polymer('auction-saa', {
 	     console.log("You got a warn:"+ warnMsg);
 	  }
 	  this.$.warning.innerHTML = '<font color="red">'+warnMsg+'</font>';
-	  if (activityCounter <= 0) {
+	  if (activityCounter < 0) {
 	     console.log("You break enough times of rules, kick you off");
              this.disableSubmittion();
 	  }	
@@ -172,10 +172,11 @@ Polymer('auction-saa', {
   	for ( var i = 0; i <bidderListInfo.length; i++ ) {
   		if (bidderListInfo[i].name == this.username && bidderListInfo[i].ipAddress == this.localIP) {
   			if (this.round < this.activityRuleStartRound) {
-  				this.$.activityruleannouncement.innerHTML = '<font color="orange">' + "NOTICE: The activity rule will be in effect starting in round " + this.activityRuleStartRound + '</font>';
-  			} else { 
-  				//round must be equal to activity start round
-  				this.$.activityruleannouncement.innerHTML = '<font color="orange">' + "NOTICE: The activity rule is now in effect! + '</font>';
+  				this.$.activityruleannouncement.innerHTML = '<font color="orange">' + "NOTICE: The Activity Rule will be in effect starting in round " + this.activityRuleStartRound + '</font>';
+  			} else if (this.round == this.activityRuleStartRound){
+  				this.$.activityruleannouncement.innerHTML = '<font color="red">' + "NOTICE: The Activity Rule is now in effect!" + '</font>';
+  			} else {
+  				this.$.activityruleannouncement.innerHTML = "";
   			}
   		}
   	}

@@ -107,7 +107,7 @@ public class AuctionPanel extends JPanel {
 				}
 				environment.context.setActivityRuleAnnounced(true);
 				environment.context.setActivityRuleStartRound(spinnerValue);
-				System.out.println("Activity Rule announced in round " + currentRound + ". It beings in round " + spinnerValue);
+				System.out.println("Activity Rule announced in round " + currentRound + ". It begins in round " + spinnerValue);
 				
 				// destroy button and spinner
 				panel.remove(btnNewButton_StartActivityRule);
