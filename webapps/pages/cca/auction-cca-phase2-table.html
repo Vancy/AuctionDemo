@@ -33,9 +33,6 @@
     </div>
   </template>
 
-<!--   <input id="yamount{{item.ID}}" type="text" class="form-control" on-keyup="{{validate}}">
-                      <p id="yamount_tips{{item.ID}}" class="tips"></p>
- -->
   <script>
     Polymer('auction-cca-phase2-table',{
       numOfPackages: 0,
@@ -49,12 +46,12 @@
         for ( var i=0; i<this.items.length; i++ ) {
           var td = document.createElement("td");
           var id = "amount_" + this.numOfPackages + "_" + i;
-          td.innerHTML = "<input id=" + id + " type='text' class='form-control' on-keyup='{{validate}}'><p id= " + id + "tip" +" class='tips'></p>";
+          td.innerHTML = "<input id=" + id + " type='text' class='form-control' on-keyup='{{validate}}'><p id= " + id + "_tip" +" class='tips'></p>";
           tr.appendChild(td);
         }
         var tdx = document.createElement("td");
 	var tdxid = "price_" + this.numOfPackages;
-        tdx.innerHTML = "<input id=" + tdxid + " type='text' class='form-control' on-keyup='{{validate}}'><p id= " + tdxid + "tip" +" class='tips'></p>";
+        tdx.innerHTML = "<input id=" + tdxid + " type='text' class='form-control' on-keyup='{{validate}}'><p id= " + tdxid + "_tip" +" class='tips'></p>";
         tr.appendChild(tdx);
         this.$.tbody.appendChild(tr);
         this.numOfPackages++;
@@ -100,37 +97,30 @@
       },
 
       validate: function() {
+		console.log("ddss");
+        for ( var i=0; i < this.numOfPackages; i++ ) {
+          for ( var j=0; j< this.items.length; j++ ) {
+            var idTag = "amount_" + i + "_" + j;
+            var itemAmount = this.items[j].quantity;
+            var bidderAmount = this.$.tbody.querySelector("#" + idTag).value;
+            var tips = this.$.tbody.querySelector("#" + idTag + "_tip");
+	
+	console.log("package"+i+"item"+j+"bidderAmout:"+bidderAmount+" provide:"+itemAmount);
 
-        // for ( var i=0; i < this.numOfPackages; i++ ) {
-        //   var package = [];
-        //   for ( var j=0; j< this.items.length ) {
-        //     var it = {};
-        //     var id = "amount_" + i + "_" + j;
-        //     it.amount = testAndSet(this, id, this.items[j].quantity);
-        //     package.push(it);
-        //   }
-        //   packageList.push(package);
+
+ 	    hideTips(tips);
+            if ( N2S(bidderAmount).length != 0 ) {
+              var re = /^[0-9]+$/;
+              if ( ! re.test(bidderAmount) ) {
+                showTips(tips, "please enter a positive number");
+              }
+              if ( S2N(itemAmount) < S2N(bidderAmount) ) {
+                showTips(tips, "too much");
+              }
+            }
+          }
+        }
          
-        // }
-
-        // for ( i=0; i < this.items.length; i++ ) {
-        //   id = this.items[i].ID;
-        //   amount = this.items[i].quantity;
-        //   yamount = this.$.tbody.querySelector("#yamount" + id).value;
-        //   tips = this.$.tbody.querySelector("#yamount_tips" + id);
-
-        //   hideTips(tips);
-        //   if ( N2S(yamount).length != 0 ) {
-        //     var re = /^[0-9]+$/;
-        //     if ( ! re.test(yamount) ) {
-        //       showTips(tips, "please enter a positive number");
-        //     }
-        //     if ( S2N(amount) < S2N(yamount) ) {
-        //       showTips(tips, "too much");
-        //     }
-        //   }
-        // } 
-
         // helper functions
         function S2N(str) {
           return parseInt(str);
