@@ -54,7 +54,7 @@
         }
         var tdx = document.createElement("td");
 	var tdxid = "price_" + this.numOfPackages;
-        tdx.innerHTML = "<input id=" + id + " type='text' class='form-control' on-keyup='{{validate}}'><p id= " + tdxid + "tip" +" class='tips'></p>";
+        tdx.innerHTML = "<input id=" + tdxid + " type='text' class='form-control' on-keyup='{{validate}}'><p id= " + tdxid + "tip" +" class='tips'></p>";
         tr.appendChild(tdx);
         this.$.tbody.appendChild(tr);
         this.numOfPackages++;
@@ -64,22 +64,25 @@
 
         var packageList = [];
         for ( var i=0; i < this.numOfPackages; i++ ) {
-          var curr_package = [];
+          var curr_package = {};
+	  curr_package.combination = [];
           for ( var j=0; j< this.items.length; j++ ) {
             var it = {};
             var id = "amount_" + i + "_" + j;
             it.ID = this.items[j].ID;
             it.name = this.items[j].name;
-            it.amount = testAndSet(this, id, this.items[j].quantity);
-            curr_package.push(it);
+            it.amount = amountTestAndSet(this, id, this.items[j].quantity);
+            curr_package.combination.push(it);
           }
+	  var priceId = "price_" + i;
+	  curr_package.price = priceTestAndSet(this, priceId);
           packageList.push(curr_package);
          
         }
         console.log("Packages", packageList);
         return packageList;
 
-        function testAndSet(self, id, quantity) {
+        function amountTestAndSet(self, id, quantity) {
           console.log(id);
           var amount = self.$.tbody.querySelector("#" + id).value;
           var re = /^[0-9]+$/;
@@ -89,6 +92,11 @@
             return amount;
           }
         }
+	
+	function priceTestAndSet(self, id) {
+	  var pkgPrice = self.$.tbody.querySelector("#" + id).value;
+	  return pkgPrice;
+	}
       },
 
       validate: function() {

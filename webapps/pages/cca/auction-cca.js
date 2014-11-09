@@ -128,6 +128,7 @@ Polymer('auction-cca', {
 	stage2table.hidden = false; // display phase2 table
 	stage1table.hidden = true; // hidden phase1 table
 	clearInterval(this.timer);  // stop timer update
+	this.$.time.innerHTML = "<b>Supplementary Round</b>";
     }
 
     // this.$.bid.disabled = false;
@@ -138,11 +139,6 @@ Polymer('auction-cca', {
     } else {
      if ( ! this.isFinal  ) {
         this.$.time.innerHTML = "Time remain: " + this.timeRemain + "s";
-      } else {
-        // final
-        clearInterval(this.timer);
-        this.$.time.innerHTML = "<b>Final</b>";
-        this.disableSubmittion();
       }
     }
   },
@@ -165,7 +161,11 @@ Polymer('auction-cca', {
     var data = {};
     data.bid = {};
     data.bid.bidder = {name: this.username, ip: this.localIP};
-    data.bid.itemList = this.$.table.getItems();
+    if (! this.isFinal) {
+	data.bid.itemList = this.$.table.getItems();
+    } else if (this.isFinal) {
+	data.bid.packageList = this.$.supplymentarytable.getPackages();
+    }	
     return JSON.stringify(data);
   }, 
 
