@@ -13,18 +13,18 @@
           <thead>
             <th></th>
             <template repeat="{{ item in items }}" >
-              <th>{{item.name}}({{item.quantity}})</th>
+              <th>{{item.name}}({{item.price}}/each)</th>
             </template>
             <th>Price</th>
           </thead>
 
           <tbody id="tbody">
             <tr>
-            <td>Price</td>
+            <td>Quantity</td>
             <template repeat="{{ item in items }}"> 
-                <td>{{item.price}}</td>
+                <td>{{item.quantity}}</td>
             </template>
-            <td>placeholder</td>
+            <td>N/A</td>
             </tr>
 
           </tbody>

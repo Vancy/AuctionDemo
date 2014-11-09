@@ -119,6 +119,17 @@ Polymer('auction-cca', {
       this.$.table.update(tmp);
     }
 
+    /* Xing: if isFinal is true, means clock round is end, so move to supplymentary round.
+     *       change auction-cca-table to auction-cca-phase2-table, and stop periodical update.
+    **/ 
+    if (this.isFinal) {
+	var stage1table = this.$.table;
+	var stage2table = this.$.supplymentarytable;
+	stage2table.hidden = false; // display phase2 table
+	stage1table.hidden = true; // hidden phase1 table
+	clearInterval(this.timer);  // stop timer update
+    }
+
     // this.$.bid.disabled = false;
     if ( ! this.isAuctionStarted() ) {
       this.$.time.innerHTML = "Please wait, auction hasn't started yet.";

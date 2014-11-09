@@ -165,6 +165,17 @@ public class AuctionContext {
 		return null;
 	}
 	
+	public boolean allCCAItemBddingFinished() {
+		for (AuctionItem item: this.itemList) {
+			if (item.biddingFinised) {
+				continue;
+			} else {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	public String generateXml() {  
 	    Document doc = null;  
 	    Element root = null;  

@@ -221,6 +221,10 @@ public class Auctioneer extends Thread{
 			}
 		}
 		
+		if (this.environment.context.allCCAItemBddingFinished()) {
+			// if all cca items are finished, set context finishTag as true
+			this.environment.context.setFinalRound();
+		}
 	}
 	
 	private void recordLog() {	
