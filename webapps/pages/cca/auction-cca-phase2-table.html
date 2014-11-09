@@ -13,7 +13,7 @@
           <thead>
             <th></th>
             <template repeat="{{ item in items }}" >
-              <th>{{item.name}}({{item.price}}/each)</th>
+              <th>{{item.name}}({{item.price}})</th>
             </template>
             <th>Price</th>
           </thead>
@@ -43,7 +43,7 @@
       addPackage: function () {
         var tr = document.createElement("tr");
         var td1 = document.createElement("td");
-        td1.innerHTML = "package" + this.numOfPackages;
+        td1.innerHTML = "package " + this.numOfPackages;
         
         tr.appendChild(td1);
         for ( var i=0; i<this.items.length; i++ ) {
@@ -53,7 +53,8 @@
           tr.appendChild(td);
         }
         var tdx = document.createElement("td");
-        tdx.innerHTML = "0";
+	var tdxid = "price_" + this.numOfPackages;
+        tdx.innerHTML = "<input id=" + id + " type='text' class='form-control' on-keyup='{{validate}}'><p id= " + tdxid + "tip" +" class='tips'></p>";
         tr.appendChild(tdx);
         this.$.tbody.appendChild(tr);
         this.numOfPackages++;
@@ -63,16 +64,16 @@
 
         var packageList = [];
         for ( var i=0; i < this.numOfPackages; i++ ) {
-          var package = [];
+          var curr_package = [];
           for ( var j=0; j< this.items.length; j++ ) {
             var it = {};
             var id = "amount_" + i + "_" + j;
             it.ID = this.items[j].ID;
             it.name = this.items[j].name;
             it.amount = testAndSet(this, id, this.items[j].quantity);
-            package.push(it);
+            curr_package.push(it);
           }
-          packageList.push(package);
+          packageList.push(curr_package);
          
         }
         console.log("Packages", packageList);

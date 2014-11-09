@@ -1,6 +1,6 @@
 #auction-cca {
     margin: auto;
-    width: 500px;
+    width: 700px;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
     box-shadow: 5px 5px 5px #d0d0d0;    
@@ -8,8 +8,9 @@
 }
 
 #table {
-    margin: auto;
-    width: 500px;
+    margin-right: 10px;
+    margin-left: 10px;
+    width: 700px;
     
 }
 
