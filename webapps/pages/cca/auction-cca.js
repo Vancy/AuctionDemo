@@ -131,6 +131,7 @@ Polymer('auction-cca', {
       this.items = tmp;
     	clearInterval(this.timer);  // stop timer update
     	this.$.time.innerHTML = "<b>Supplementary Round</b>";
+      this.$.title.innerHTML = "<p>CCA - Supplementary Round</p>"
     }
 
     // this.$.bid.disabled = false;
@@ -153,7 +154,7 @@ Polymer('auction-cca', {
   },
 
   submit: function() {
-  //Xing: always enable bidders to bid multiple times, so needn't disableSubmittion
+    //Xing: always enable bidders to bid multiple times, so needn't disableSubmittion
     //this.disableSubmittion();
     this.data = this.collectData();
     this.$.submit.go();
@@ -164,9 +165,9 @@ Polymer('auction-cca', {
     data.bid = {};
     data.bid.bidder = {name: this.username, ip: this.localIP};
     if (! this.isFinal) {
-	data.bid.itemList = this.$.table.getItems();
+      data.bid.itemList = this.$.table.getItems();
     } else if (this.isFinal) {
-	data.bid.packageList = this.$.supplymentarytable.getPackages();
+      data.bid.packageList = this.$.supplymentarytable.getPackages();
     }	
     return JSON.stringify(data);
   }, 
