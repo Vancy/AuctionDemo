@@ -23,12 +23,19 @@ public class Bidder {
 	 */
 	private String warningMessage = "";
 	
+	protected String leadingItemsMessage = "";
+	
+	protected final String activityString = "Your current activity: ";
+	protected final String eligibilityString = " Your current eligibility: ";
+	protected String activityAndEligibilityMessage = activityString + this.activity + eligibilityString + this.eligibility;
+	
 	public int getEligibility() {
 		return eligibility;
 	}
 
 	public void setEligibility(int eligibility) {
 		this.eligibility = eligibility;
+		activityAndEligibilityMessage = activityString + this.activity + eligibilityString + this.eligibility;
 		System.out.println(this.name + " eligibility is: " + eligibility);
 	}
 
@@ -38,13 +45,14 @@ public class Bidder {
 
 	public void setActivity(int activity) {
 		this.activity = activity;
+		activityAndEligibilityMessage = activityString + this.activity + eligibilityString + this.eligibility;
 		System.out.println(this.name + " actvity is: " + activity);
 	}
 	
 	public void decrementActivityCounter() {
 		System.err.println(this.name + " actvity counter decremented!");
 		activityCounter--;
-		this.warningMessage = "WARNING! You were inactive last round and have lost a waiver.";
+		this.warningMessage = "WARNING! Your activity exceeded your eligibility so you have lost a waiver.";
 		if (activityCounter < 0) {
 			System.err.println(this.name + " kicked from auction!");
 			this.warningMessage = "ATTENTION! Your inactivity has exceeded this auction's limit and the auctioneer has kicked you out.";
@@ -98,6 +106,14 @@ public class Bidder {
 	
 	public String getWarnMsg() {
 		return this.warningMessage;
+	}
+	
+	public String getLeadingItemsMsg() {
+		return this.leadingItemsMessage;
+	}
+	
+	public String getActivityAndEligibilityMsg() {
+		return this.activityAndEligibilityMessage;
 	}
 	
 	public Color getColor() {

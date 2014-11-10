@@ -7,9 +7,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -79,7 +81,9 @@ public class SAALogger {
 			int currentBidder = 0;
 			for (Bid bid : bids) {
 				int pos = currentBidder;
-				for (AuctionItem ai : bid.getItemList()) {
+				List<AuctionItem> itemz = bid.getItemList();
+				Collections.sort(itemz);
+				for (AuctionItem ai : itemz) {
 					entry[pos] = ai.getPrice();
 					pos += numberOfBidders;
 				}

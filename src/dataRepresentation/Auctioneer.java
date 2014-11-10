@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Timer;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class Auctioneer extends Thread{
@@ -18,7 +19,7 @@ public class Auctioneer extends Thread{
 	 * 5> set flag, bidServlet checks this flag, send response.
 	 */
 	
-	HashMap<Integer, Bid> requestedBids;
+	ConcurrentHashMap<Integer, Bid> requestedBids;
 	AuctionEnvironment environment;
 	ArrayList<AuctionContext> auctionLog = new ArrayList<AuctionContext>();
 	Timer roundTimer = new Timer();
@@ -29,7 +30,7 @@ public class Auctioneer extends Thread{
 	
 	public Auctioneer(AuctionEnvironment e) {
 		this.environment = e;
-		this.requestedBids = new HashMap<Integer, Bid>();
+		this.requestedBids = new ConcurrentHashMap<Integer, Bid>();
 		saaLogger = new SAALogger();
 	}
 	
@@ -149,7 +150,9 @@ public class Auctioneer extends Thread{
 					if (!newBids) {
 						newBids = true;
 					}
-					numberOfItemsBidOn++;
+					if (fetchItemOwnerID(bidderItem.getID()) != currBidder.getID()) {
+						numberOfItemsBidOn++;
+					}
 				} else {
 					/*bidder aborted bid for this item, for one of the following reasons:
 					 * 1> this bidder leads the price in last round
@@ -157,14 +160,19 @@ public class Auctioneer extends Thread{
 					 */
 				}
 			}
-			if (this.environment.context.getRound() == 1) {
+			if (this.environment.context.getRound() == 1 ) {
 				currBidder.setActivity(numberOfItemsBidOn);
 				currBidder.setEligibility(numberOfItemsBidOn);
+			} else if (this.environment.context.getRound() == this.environment.context.getActivityRuleStartRound() - 1) {
+				currBidder.setActivity(numberOfItemsBidOn + numberOfItemsLeading);
+				currBidder.setEligibility(this.environment.context.getItemList().size());
 			} else {
 				// set eligibility to previous activity and calculate current activity
 				// this will determine whether the bidder has become inactive
 				currBidder.setEligibility(currBidder.getActivity());
 				currBidder.setActivity(numberOfItemsBidOn + numberOfItemsLeading);
+			}
+			if (this.environment.context.getRound() >= this.environment.context.getActivityRuleStartRound()) {
 				currBidder.auctionRuleVerify();
 			}
 		}
@@ -178,6 +186,18 @@ public class Auctioneer extends Thread{
 				} else if (Math.abs(bidderPrice - fetchItemPrice(item.getID())) <= 0.001 && flipCoinWin()) {
 					putItemPrice(bidder, item.getID(), bidderPrice);
 				}
+			}
+		}
+		
+		for (Bidder bidder : this.environment.bidderList.getList()) {
+			bidder.leadingItemsMessage = "";
+			for (AuctionItem item: this.environment.context.getItemList()) {
+				if (fetchItemOwnerID(item.getID()) == bidder.getID()) {
+					bidder.leadingItemsMessage += item.getName() + " ";
+				}
+			}
+			if (!bidder.leadingItemsMessage.equals("")) {
+				bidder.leadingItemsMessage = "You are currently leading the following items: " + bidder.leadingItemsMessage;
 			}
 		}
 		

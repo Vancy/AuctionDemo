@@ -1,6 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
-<polymer-element name="auction-saa-table" attributes="items final">
+<polymer-element name="auction-saa-table" attributes="items final username">
   <template>
     <link rel="stylesheet" href="./auction-saa-table.css" />
 
@@ -16,7 +16,7 @@
 
             <template if="{{ ! final }}">
               <th>Your Price</th>
-            </template>           
+            </template>
           </thead>
 
           <tbody id="tbody">
@@ -51,7 +51,8 @@
   </template>
 
   <script>
-    Polymer('auction-saa-table', {
+    Polymer('auction-saa-table', { 
+      username: "",
       items: [],
 
       getItems: function() {
@@ -82,7 +83,13 @@
       update: function(newItems) {
         for ( i=0; i < newItems.length; i++ ) {
           var id = newItems[i].ID;
-          this.$.tbody.querySelector("#price" + id).innerHTML = newItems[i].price;
+	  //Xing: if this item's temp owner is me, highlight it
+	  if (newItems[i].owner != undefined && newItems[i].owner.name == this.username) {
+            this.$.tbody.querySelector("#price" + id).innerHTML = "<font color='green'>"+newItems[i].price+"</font>";
+	  } 
+	  else {
+	    this.$.tbody.querySelector("#price" + id).innerHTML = "<font color='red'>"+newItems[i].price+"</font>";
+	  }
         }
       },
 

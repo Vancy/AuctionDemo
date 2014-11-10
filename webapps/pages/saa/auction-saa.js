@@ -10,6 +10,8 @@ Polymer('auction-saa', {
   isFinal: false,
   data: "",
   isTimerStarted: false,
+  activityRuleAnnounced: false,
+  activityRuleStartRound: -1,
 
   updateUrl: "",
   timer: undefined,
@@ -85,6 +87,8 @@ Polymer('auction-saa', {
     this.timeRemain = this.saa.roundTimeRemain;
     this.minimumIncreament = this.saa.minIncreament;
     this.isFinal = this.saa.finalRound;
+    this.activityRuleAnnounced = this.saa.activityRuleAnnounced;
+    this.activityRuleStartRound = this.saa.activityRuleStartRound;
 
     /**
      *  1. When it is the first time to get data or last time(final round), it's fine to refresh the UI by update 
@@ -106,7 +110,7 @@ Polymer('auction-saa', {
       // not stated yet
     } else {
      if ( ! this.isFinal  ) {
-        this.$.time.innerHTML = "Time remain: " + this.timeRemain + "s";
+        this.$.time.innerHTML = "Time remaining: " + this.timeRemain + "s";
       } else {
         // final
         clearInterval(this.timer);
@@ -117,8 +121,16 @@ Polymer('auction-saa', {
     /*Xing added following code to display activity rules:
      * 2014.10.31
      */
+     
     var bidderListInfo = this.saa.bidderList.list;
     this.displayAuctionRuleInfo(bidderListInfo);
+    this.displayLeadingItemInfo(bidderListInfo);
+    if (this.activityRuleAnnounced) {
+    	this.displayActivityRuleAnnouncedAndStartedInfo(bidderListInfo);
+    }
+    if (this.round >= this.activityRuleStartRound && this.activityRuleStartRound != -1) {
+    	this.displayActivityAndEligibilityInfo(bidderListInfo);
+    }
   },
 
  displayAuctionRuleInfo: function(bidderListInfo) {
@@ -130,13 +142,45 @@ Polymer('auction-saa', {
 	     console.log("You got a warn:"+ warnMsg);
 	  }
 	  this.$.warning.innerHTML = '<font color="red">'+warnMsg+'</font>';
-	  if (activityCounter <= 0) {
+	  if (activityCounter < 0) {
 	     console.log("You break enough times of rules, kick you off");
              this.disableSubmittion();
 	  }	
 	}
      }
-  },	
+  },
+  
+  displayLeadingItemInfo: function(bidderListInfo) {
+  	for ( var i = 0; i <bidderListInfo.length; i++ ) {
+  		if (bidderListInfo[i].name == this.username && bidderListInfo[i].ipAddress == this.localIP) {
+  			var leadingItemsMessage = bidderListInfo[i].leadingItemsMessage;
+  			this.$.leadingitems.innerHTML = '<font color="green">' + leadingItemsMessage + '</font>';
+  		}
+  	}
+  },
+  
+  displayActivityAndEligibilityInfo: function(bidderListInfo) {
+  	for ( var i = 0; i <bidderListInfo.length; i++ ) {
+  		if (bidderListInfo[i].name == this.username && bidderListInfo[i].ipAddress == this.localIP) {
+  			var activityAndEligibilityMessage = bidderListInfo[i].activityAndEligibilityMessage;
+  			this.$.activityandeligibility.innerHTML = '<font color="blue">' + activityAndEligibilityMessage + '</font>';
+  		}
+  	}
+  },
+  
+  displayActivityRuleAnnouncedAndStartedInfo: function(bidderListInfo) {
+  	for ( var i = 0; i <bidderListInfo.length; i++ ) {
+  		if (bidderListInfo[i].name == this.username && bidderListInfo[i].ipAddress == this.localIP) {
+  			if (this.round < this.activityRuleStartRound) {
+  				this.$.activityruleannouncement.innerHTML = '<font color="orange">' + "NOTICE: The Activity Rule will be in effect starting in round " + this.activityRuleStartRound + '</font>';
+  			} else if (this.round == this.activityRuleStartRound){
+  				this.$.activityruleannouncement.innerHTML = '<font color="red">' + "NOTICE: The Activity Rule is now in effect!" + '</font>';
+  			} else {
+  				this.$.activityruleannouncement.innerHTML = "";
+  			}
+  		}
+  	}
+  },
 
   isAuctionStarted: function() {
     if ( this.round == 0 ) {
