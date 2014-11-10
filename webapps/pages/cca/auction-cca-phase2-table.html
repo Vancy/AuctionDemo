@@ -41,28 +41,65 @@
         var tr = document.createElement("tr");
         var td1 = document.createElement("td");
         td1.innerHTML = "package " + this.numOfPackages;
-        
+    
         tr.appendChild(td1);
         for ( var i=0; i<this.items.length; i++ ) {
           var td = document.createElement("td");
           var id = "amount_" + this.numOfPackages + "_" + i;
-          td.innerHTML = "<input id=" + id + " type='text' class='form-control' on-keyup='{{validate}}'><p id= " + id + "_tip" +" class='tips'></p>";
+          var input = createAnElement("input", id, {
+            "class": 'form-control',
+            "type": "text"
+          });
+          input.addEventListener("keyup", this.validate.bind(this));
+          td.appendChild(input);
+
+          var tipId = id + "_tip";
+          var tip = createAnElement("p", tipId, {"class": 'tips'});
+          td.appendChild(tip);
+
           tr.appendChild(td);
         }
-        var tdx = document.createElement("td");
-	var tdxid = "price_" + this.numOfPackages;
-        tdx.innerHTML = "<input id=" + tdxid + " type='text' class='form-control' on-keyup='{{validate}}'><p id= " + tdxid + "_tip" +" class='tips'></p>";
-        tr.appendChild(tdx);
+        var td = document.createElement("td");
+        var id = "price_" + this.numOfPackages;
+        var priceInput = createAnElement("input", id, {"class": "form-control", "type": "text"});
+        var tip = createAnElement("p", id+"_tip", {"class": 'tips'});
+
+        td.appendChild(priceInput);
+        td.appendChild(tip);
+
+        tr.appendChild(td);
         this.$.tbody.appendChild(tr);
         this.numOfPackages++;
+
+
+        /**
+        * * Create an element. Note: cannot bind event. Use `addEventListener` instead.
+        * * Important: please bind this to the event handler. Like `this.validate.bind(this)`.
+        */
+        function createAnElement(name, id, attributes) {
+          var elem = document.createElement(name);
+          if ( elem != null && elem != undefined ) {
+            elem.setAttribute("id", id);
+            if ( attributes != null && attributes != undefined ) {
+              var keys = Object.keys(attributes);
+              for ( var i=0; i<keys.length; i++ ) {
+                var k = keys[i];
+                elem.setAttribute(k, attributes[k]);
+              }
+            }
+            return elem;
+          }
+          return undefined;
+        }
       },
+
 
       getPackages: function() {
 
         var packageList = [];
         for ( var i=0; i < this.numOfPackages; i++ ) {
           var curr_package = {};
-	  curr_package.combination = [];
+          curr_package.combination = [];
           for ( var j=0; j< this.items.length; j++ ) {
             var it = {};
             var id = "amount_" + i + "_" + j;
@@ -71,8 +108,8 @@
             it.amount = amountTestAndSet(this, id, this.items[j].quantity);
             curr_package.combination.push(it);
           }
-	  var priceId = "price_" + i;
-	  curr_package.price = priceTestAndSet(this, priceId);
+          var priceId = "price_" + i;
+          curr_package.price = priceTestAndSet(this, priceId);
           packageList.push(curr_package);
          
         }
@@ -90,35 +127,39 @@
           }
         }
 	
-	function priceTestAndSet(self, id) {
-	  var pkgPrice = self.$.tbody.querySelector("#" + id).value;
-	  return pkgPrice;
-	}
+      	function priceTestAndSet(self, id) {
+      	  var pkgPrice = self.$.tbody.querySelector("#" + id).value;
+      	  return pkgPrice;
+      	}
       },
 
-      validate: function() {
-		console.log("ddss");
-        for ( var i=0; i < this.numOfPackages; i++ ) {
-          for ( var j=0; j< this.items.length; j++ ) {
+      validate: function(e) {
+
+        for ( var i=0; i<this.numOfPackages; i++ ) {
+          for ( var j=0; j<this.items.length; j++ ) {
             var idTag = "amount_" + i + "_" + j;
+
             var itemAmount = this.items[j].quantity;
             var bidderAmount = this.$.tbody.querySelector("#" + idTag).value;
-            var tips = this.$.tbody.querySelector("#" + idTag + "_tip");
-	
-	console.log("package"+i+"item"+j+"bidderAmout:"+bidderAmount+" provide:"+itemAmount);
+            var tip = this.$.tbody.querySelector("#" + idTag + "_tip");
 
+            console.log("package"+i+"item"+j+"bidderAmout:"+bidderAmount+" provide:"+itemAmount);
 
- 	    hideTips(tips);
+            hideTip(tip);
             if ( N2S(bidderAmount).length != 0 ) {
               var re = /^[0-9]+$/;
               if ( ! re.test(bidderAmount) ) {
-                showTips(tips, "please enter a positive number");
-              }
-              if ( S2N(itemAmount) < S2N(bidderAmount) ) {
-                showTips(tips, "too much");
+                showTip(tip, "positive number please");
+              } else if ( S2N(itemAmount) < S2N(bidderAmount) ) {
+                showTip(tip, "too much");
               }
             }
           }
+        }
+
+        //TODO: Zhenfei: is it necessary to validate `price` input?
+        for ( var i=0; i<this.numOfPackages; i++) {
+          //...
         }
          
         // helper functions
@@ -133,13 +174,13 @@
           return number;
         }
 
-        function showTips(tip, str) {
+        function showTip(tip, str) {
           tip.innerHTML = str;
           tip.style.display = "block";
           
         }
 
-        function hideTips(tip) {
+        function hideTip(tip) {
           tip.style.display = "none";
           
         }

@@ -123,12 +123,14 @@ Polymer('auction-cca', {
      *       change auction-cca-table to auction-cca-phase2-table, and stop periodical update.
     **/ 
     if (this.isFinal) {
-	var stage1table = this.$.table;
-	var stage2table = this.$.supplymentarytable;
-	stage2table.hidden = false; // display phase2 table
-	stage1table.hidden = true; // hidden phase1 table
-	clearInterval(this.timer);  // stop timer update
-	this.$.time.innerHTML = "<b>Supplementary Round</b>";
+    	var stage1table = this.$.table;
+    	var stage2table = this.$.supplymentarytable;
+
+    	stage2table.hidden = false; // display phase2 table
+    	stage1table.hidden = true; // hidden phase1 table
+      this.items = tmp;
+    	clearInterval(this.timer);  // stop timer update
+    	this.$.time.innerHTML = "<b>Supplementary Round</b>";
     }
 
     // this.$.bid.disabled = false;
