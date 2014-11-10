@@ -30,6 +30,8 @@ public class AuctionPanel extends JPanel {
 	private JLabel lblRound;
 	private JLabel lblTimer;
 	
+	private JPanel panel;
+	
 	private Timer displayTimer; 
 	private JPanel panel_ForList;
 	
@@ -61,7 +63,7 @@ public class AuctionPanel extends JPanel {
 		lblTimer = new JLabel("");;
 		panel_Display.add(lblTimer);
 				
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 		panel.setBounds(0, 529, 571, 535);
 		panel_All.add(panel);
 		
