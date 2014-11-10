@@ -1,12 +1,13 @@
 .panel {
   /*width: inherit;*/
   margin: auto;
-  width: 425px;
+  width: auto;
   height: inherit;
   text-align: center;
+  display: inline-block;
 }
 .table {
-  width: inherit;
+  width: auto;
   margin-bottom: 0.5em;
 }
 .tips {
@@ -16,7 +17,7 @@
 }
 
 #bidTable {
-  width: 100%;
+  /*width: 100%;*/
 /*font-size: 1em;*/
 }
 
@@ -43,7 +44,7 @@
 }
 
 input[type=text] {
-  width: 90%;
+  width: 70px;
   height: 24px;
   line-height: 22px;
   font-size: 18px;

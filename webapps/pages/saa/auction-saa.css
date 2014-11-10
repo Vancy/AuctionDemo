@@ -1,15 +1,15 @@
 #auction-saa {
     margin: auto;
-    width: 500px;
+    width: auto;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
     box-shadow: 5px 5px 5px #d0d0d0;    
-
+    display: inline-block; 
 }
 
 #table {
-    margin: auto;
-    width: 500px;
+    /*margin: auto;
+    width: 500px;*/
     
 }
 

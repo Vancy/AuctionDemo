@@ -1,22 +1,23 @@
 .panel {
   /*width: inherit;*/
   margin: auto;
-  width: 425px;
+  width: auto;
   height: inherit;
   text-align: center;
+  display: inline-block;
 }
 .table {
-  width: inherit;
+  width: auto;
   margin-bottom: 0.5em;
 }
 .tips {
   display: none;
   color: red;
-  font-size: smaller
+  font-size: smaller;
 }
 
 #bidTable {
-  width: 100%;
+  /*width: 100%;*/
 /*font-size: 1em;*/
 }
 
@@ -62,6 +63,7 @@ input[type=text] {
 
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   font-weight: normal;
+  text-align: center;
 }
 
 .normal {
