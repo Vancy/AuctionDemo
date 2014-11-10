@@ -29,8 +29,10 @@ public class AuctionPanel extends JPanel {
 	private JLabel lblAuctionType;
 	private JLabel lblRound;
 	private JLabel lblTimer;
+	private JLabel lblActivityRuleStartRound;
 	
 	private JPanel panel;
+	private JButton btnNewButton_StartActivityRule;
 	
 	private Timer displayTimer; 
 	private JPanel panel_ForList;
@@ -60,7 +62,7 @@ public class AuctionPanel extends JPanel {
 		lblRound = new JLabel("");
 		panel_Display.add(lblRound);
 		
-		lblTimer = new JLabel("");;
+		lblTimer = new JLabel("");
 		panel_Display.add(lblTimer);
 				
 		panel = new JPanel();
@@ -88,13 +90,13 @@ public class AuctionPanel extends JPanel {
 		spinner_activityRuleWaivers = new JSpinner();
 		panel.add(spinner_activityRuleWaivers);
 		
-		JLabel lblActivityRuleStartRound = new JLabel("Act rule start rnd: ");
+		lblActivityRuleStartRound = new JLabel("Act rule start rnd: ");
 		panel.add(lblActivityRuleStartRound);
 		
 		spinner_activityRuleStartRound = new JSpinner();
 		panel.add(spinner_activityRuleStartRound);
 		
-		JButton btnNewButton_StartActivityRule = new JButton("Start Activity Rule");
+		btnNewButton_StartActivityRule = new JButton("Start Activity Rule");
 		btnNewButton_StartActivityRule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int spinnerValue = (int)Double.parseDouble(spinner_activityRuleStartRound.getValue().toString());
