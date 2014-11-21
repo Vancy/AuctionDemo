@@ -20,7 +20,7 @@ public class ModGenerator {
 	public void generateFile() {
 		generateContent();
 		File file = new File("./wdp.mod");
-		writeToFile(file, this.content);
+		FileParser.writeToFile(file, this.content);
 	}
 	private void generateContent() {
 		content += printSetOfBidders();
@@ -35,16 +35,7 @@ public class ModGenerator {
 		content += printSubjectAtMostOne();
 		content += printSubjectItemUnitLimitations();
 	}
-	private static void writeToFile(File file, String contents) {
-        try {
-        	Writer output = null;
-            output = new BufferedWriter(new FileWriter(file));
-			output.write(contents);
-	        output.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-    }
+
 	/////////////////////////////////////////////////////////////
 	private String printSetOfBidders() {
 		return "set N;\n";

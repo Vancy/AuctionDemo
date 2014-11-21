@@ -1,8 +1,12 @@
 package wdp;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 
 public class FileParser {
 	private String readFile( String file ) throws IOException {
@@ -18,4 +22,14 @@ public class FileParser {
 
 	    return stringBuilder.toString();
 	}
+	public static void writeToFile(File file, String contents) {
+        try {
+        	Writer output = null;
+            output = new BufferedWriter(new FileWriter(file));
+			output.write(contents);
+	        output.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 }
