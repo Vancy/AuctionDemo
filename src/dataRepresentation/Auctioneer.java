@@ -2,9 +2,13 @@ package dataRepresentation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
+
+import wdp.DatGenerator;
+import wdp.ModGenerator;
 
 
 public class Auctioneer extends Thread{
@@ -20,10 +24,12 @@ public class Auctioneer extends Thread{
 	 */
 	
 	ConcurrentHashMap<Integer, Bid> requestedBids;
+	ConcurrentHashMap<Integer, ArrayList<CCABiddingPackage>> CCASupplementaryBids;
+	
 	AuctionEnvironment environment;
 	ArrayList<AuctionContext> auctionLog = new ArrayList<AuctionContext>();
 	Timer roundTimer = new Timer();
-	
+
 	SAALogger saaLogger;
 	
 	public volatile boolean nextRoundNotReady = true;
@@ -31,6 +37,7 @@ public class Auctioneer extends Thread{
 	public Auctioneer(AuctionEnvironment e) {
 		this.environment = e;
 		this.requestedBids = new ConcurrentHashMap<Integer, Bid>();
+		this.CCASupplementaryBids = new ConcurrentHashMap<Integer, ArrayList<CCABiddingPackage>>();
 		saaLogger = new SAALogger();
 	}
 	
@@ -41,7 +48,13 @@ public class Auctioneer extends Thread{
 			this.requestedBids.put(bidderID, bid);
 			System.err.println("get bidder " + bidderName + "'s new bid");
 		}
-		
+	}
+	
+	public void getSupplementaryRoundBid(Bidder bidder, ArrayList<CCABiddingPackage> bids) {
+			this.CCASupplementaryBids.put(bidder.getID(), bids);
+			if (this.CCASupplementaryBids.size() == this.environment.bidderList.size()) {
+				processCcaSupplementaryRoundBids();
+			}
 	}
 	
 	private boolean removeBids() {
@@ -75,8 +88,14 @@ public class Auctioneer extends Thread{
 			updateNextRoundContext();
 			/***************Next Round Will Start**********************/
 			if (this.environment.context.isFinalRound()) {
-				System.err.println("Auction End");
-				break; // break from while loop, terminate auctioneer
+				if (this.environment.context.getType() == AuctionContext.AuctionType.SAA) {
+					System.err.println("SAA Auction End");
+					break; // break from while loop, terminate auctioneer
+				}
+				else if (this.environment.context.getType() == AuctionContext.AuctionType.CCA) {
+					//process CCA supplementary round
+					
+				}
 			}
 		}
 	}
@@ -249,6 +268,27 @@ public class Auctioneer extends Thread{
 	
 	private void recordLog() {	
 		this.auctionLog.add(new AuctionContext(this.environment.context));
+	}
+	
+	private void processCcaSupplementaryRoundBids() {
+		// collect all bids to an array
+		List<CCABiddingPackage> totalBiddingPakages = new ArrayList<CCABiddingPackage>();
+		for (int i: this.CCASupplementaryBids.keySet()) {
+			totalBiddingPakages.addAll(this.CCASupplementaryBids.get(i));
+		}
+		
+		/*
+		 * Gnerating .mod file for AMPL
+		 */
+		
+		ModGenerator modGenerator = new ModGenerator(this.environment.context.getItemList());
+		modGenerator.generateFile();
+		
+		/*
+		 * Gnerating .dat file for AMPL
+		 */
+		DatGenerator datGenerator = new DatGenerator(this.environment.bidderList.getList(), totalBiddingPakages, this.environment.context.getItemList());
+		datGenerator.generateFile();
 	}
 	
 	public ArrayList<AuctionContext> getLog() {

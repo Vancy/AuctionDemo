@@ -1,22 +1,20 @@
 package wdp;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-
 import dataRepresentation.AuctionItem;
 import dataRepresentation.Bidder;
-import dataRepresentation.CCABiddlingPackage;
+import dataRepresentation.CCABiddingPackage;
 
 public class DatGenerator {
 	private String content = new String();
 	private List<Bidder> bidderList;
-	private List<CCABiddlingPackage> packageList;
+	private List<CCABiddingPackage> packageList;
 	private List<AuctionItem> itemList;
 	private List<String> itemSymbols;
 
 	/////////////////////////////////////////////////////////////
-	public DatGenerator(List<Bidder> bidderList, List<CCABiddlingPackage> packageList, List<AuctionItem> itemList) {
+	public DatGenerator(List<Bidder> bidderList, List<CCABiddingPackage> packageList, List<AuctionItem> itemList) {
 		this.bidderList = bidderList;
 		this.packageList = packageList;
 		this.itemList = itemList;
@@ -26,10 +24,19 @@ public class DatGenerator {
 	}
 	
 	public void generateFile() {
-		//generateContent();
+		generateContent();
 		File file = new File("./wdp.dat");
 		FileParser.writeToFile(file, this.content);
 	}
+	
+	private void generateContent() {
+		content += printBidderSet();
+		content += printItemNumSets();
+		content += printParamItemNum();
+		content += printParamCombinations();
+		content += printParamLimitations();
+	}
+	
 	
 	private String printBidderSet() {
 		String ret = "set N:= ";
@@ -70,7 +77,7 @@ public class DatGenerator {
 	
 	private String printParamCombinations() {
 		String ret = "param: Combinations: bid :=\n";
-		for(CCABiddlingPackage pkg: this.packageList){
+		for(CCABiddingPackage pkg: this.packageList){
 			ret += printSinglePackage(pkg);
 		}
 		ret += ";\n";
@@ -84,10 +91,10 @@ public class DatGenerator {
 		}
 		return ret;
 	}
-	
+	///////////////////////////////////////////////////////////////////////////////////////
 	private String printParamLimitation(int itemID) {
 		String ret = "param: Limit_"+ itemID + ": number_of_bid_units_of_item_" + itemID + ":=\n";
-		for(CCABiddlingPackage pkg: this.packageList){
+		for(CCABiddingPackage pkg: this.packageList){
 			ret += printSinglePackage(pkg);
 			String reqPkg = getRequiredQuantityOfItemID(pkg, itemID);
 			ret += " " + reqPkg;
@@ -96,7 +103,7 @@ public class DatGenerator {
 		return ret;
 	}
 	
-	private String printSinglePackage(CCABiddlingPackage pkg) {
+	private String printSinglePackage(CCABiddingPackage pkg) {
 		String BidderID = "B" + pkg.getBidder().getID() + " ";
 		String s = BidderID;
 		String pkgPrice = "" + pkg.getPrice();
@@ -107,7 +114,7 @@ public class DatGenerator {
 		return s;
 	}
 	
-	private String getRequiredQuantityOfItemID(CCABiddlingPackage pkg, int itemID) {
+	private String getRequiredQuantityOfItemID(CCABiddingPackage pkg, int itemID) {
 		int reqOfThisPkg = 0;
 		for(AuctionItem item: pkg.getItemList()) {
 			if (item.getID() == itemID) {

@@ -29,6 +29,7 @@ import dataRepresentation.AuctionEnvironment;
 import dataRepresentation.AuctionItem;
 import dataRepresentation.Bid;
 import dataRepresentation.Bidder;
+import dataRepresentation.CCABiddingPackage;
 
 public class BidServlet extends DefaultServlet{
 
@@ -157,6 +158,17 @@ public class BidServlet extends DefaultServlet{
 			}
     	}
     	
+    	/*
+    	 * If this bid contain key words "packageList", this bid is
+    	 * supplymentary round of CCA, so process it as CCA supplymentary round bid.
+    	 */
+    	if (null != jsonBid.get("packageList").getAsJsonArray()) {
+    		
+    		this.auctionEnvironment.auctioneer.getSupplementaryRoundBid(bidder, getCcaPackageBid(jsonBid, bidder));
+    	}
+    	/*
+    	 * else this bid is first stage bidding, so process it as first stage bidding(SAA or CCA)
+    	 */
     	List<AuctionItem> bidderItemList = new ArrayList<AuctionItem>();
     	JsonArray itemList = jsonBid.get("itemList").getAsJsonArray();
     	/*
@@ -193,5 +205,25 @@ public class BidServlet extends DefaultServlet{
     
 	public void destroy() {
 		// do nothing.
+	}
+	
+	private ArrayList<CCABiddingPackage> getCcaPackageBid(JsonObject jsonBid, Bidder bidder) {
+		JsonArray packageList = jsonBid.get("packageList").getAsJsonArray();
+		ArrayList<CCABiddingPackage> packages= new ArrayList<CCABiddingPackage>();
+		for (int i=0; i<packageList.size(); i++) {
+			JsonArray combination = packageList.get(i).getAsJsonObject().get("combination").getAsJsonArray();
+			double price = packageList.get(i).getAsJsonObject().get("price").getAsDouble();
+			ArrayList<AuctionItem> itemList = new ArrayList<AuctionItem>();
+			for (int j=0; j<combination.size(); j++) {
+				int id = combination.get(j).getAsJsonObject().get("ID").getAsInt();
+				String name = combination.get(j).getAsJsonObject().get("name").getAsString();
+				int require = combination.get(j).getAsJsonObject().get("amount").getAsInt();
+				AuctionItem item = new AuctionItem(id, name, require);
+				itemList.add(item);
+			}
+			CCABiddingPackage thisPkg = new CCABiddingPackage(bidder, price, itemList);
+			packages.add(thisPkg);
+		}
+		return packages;
 	}
 }

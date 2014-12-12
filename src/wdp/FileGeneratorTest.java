@@ -3,8 +3,17 @@ package wdp;
 public class FileGeneratorTest {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		/*
+		 * Gnerating .mod file for AMPL
+		 */
+		
+		//ModGenerator modGenerator = new ModGenerator(this.environment.context.getItemList());
+		//modGenerator.generateFile();
+		
+		/*
+		 * Gnerating .dat file for AMPL
+		 */
+		
 	}
 
 }

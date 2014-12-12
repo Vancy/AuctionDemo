@@ -337,13 +337,6 @@ public class AuctionConfigPanel extends JPanel {
 		this.environment.context.setData(time_duration, min_increment, list);
 		System.out.println(this.environment.context.generateXml());
 		
-		/*
-		 * Gnerating .mod file for AMPL
-		 */
-		
-		ModGenerator modGenerator = new ModGenerator(this.environment.context.getItemList());
-		modGenerator.generateFile();
-		
 	}
 	
 	private void startUlaAuction() {
