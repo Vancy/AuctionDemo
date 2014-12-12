@@ -25,6 +25,9 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 
+import wdp.DatGenerator;
+import wdp.ModGenerator;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -333,7 +336,14 @@ public class AuctionConfigPanel extends JPanel {
 		}
 		this.environment.context.setData(time_duration, min_increment, list);
 		System.out.println(this.environment.context.generateXml());
-
+		
+		/*
+		 * Gnerating .mod file for AMPL
+		 */
+		
+		ModGenerator modGenerator = new ModGenerator(this.environment.context.getItemList());
+		modGenerator.generateFile();
+		
 	}
 	
 	private void startUlaAuction() {

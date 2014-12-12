@@ -1,0 +1,6 @@
+model wdp.mod;
+data wdp.dat;
+option solver cplex;
+solve;
+display revenue > wdp.ans;
+display x > wdp.ans;

@@ -1,0 +1,59 @@
+set N:= B1 B2 B3 B4;
+
+set A1:= 0 1;
+set A2:= 0 1 2;
+set A3:= 0 1 2;
+set A4:= 0 1 2;
+
+
+param sizeA1 := 1;
+param sizeA2 := 2;
+param sizeA3 := 2;
+param sizeA4 := 2;
+
+param: Combinations: bid :=
+	B1  1 1 1 0 	27
+	B1  0 0 0 1 	12
+	B2  0 2 0 2 	63
+	B2  1 0 2 0 	31
+	B3  1 2 2 2 	62
+	B4  0 1 1 1 	21
+	B4  0 0 2 2 	32;
+
+param: Limit_1: number_of_bid_units_of_item_1 :=
+	B1  1 1 1 0 	1
+	B1  0 0 0 1 	0
+	B2  0 2 0 2 	0
+	B2  1 0 2 0 	1
+	B3  1 2 2 2 	1
+	B4  0 1 1 1 	0
+	B4  0 0 2 2 	0;
+
+param: Limit_2: number_of_bid_units_of_item_2 :=
+	B1  1 1 1 0 	1
+	B1  0 0 0 1 	0
+	B2  0 2 0 2 	2
+	B2  1 0 2 0 	0
+	B3  1 2 2 2 	2
+	B4  0 1 1 1 	1
+	B4  0 0 2 2 	0;
+
+param: Limit_3: number_of_bid_units_of_item_3 :=
+	B1  1 1 1 0 	1
+	B1  0 0 0 1 	0
+	B2  0 2 0 2 	0
+	B2  1 0 2 0 	2
+	B3  1 2 2 2 	2
+	B4  0 1 1 1 	1
+	B4  0 0 2 2 	2;
+
+param: Limit_4: number_of_bid_units_of_item_4 :=
+	B1  1 1 1 0 	0
+	B1  0 0 0 1 	1
+	B2  0 2 0 2 	2
+	B2  1 0 2 0 	0
+	B3  1 2 2 2 	2
+	B4  0 1 1 1 	1
+	B4  0 0 2 2 	2;
+
+
