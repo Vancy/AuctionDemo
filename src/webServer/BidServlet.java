@@ -60,12 +60,12 @@ public class BidServlet extends DefaultServlet{
 		System.out.println(doc.toString());
 		//place a bid to environment, auctioneer will handle this bid
 		Bid myBid = placeBid(doc);
-		System.err.println(myBid.getBidder().getName()+"**********Get bid request*********");
-		
+		if (null != myBid) {
+			System.err.println(myBid.getBidder().getName()+"**********Get bid request*********");
+		}		
 		//Respond needn't be read by clients 
 		PrintWriter out = response.getWriter();
 		out.println(this.auctionEnvironment.context.generateJson());
-		System.err.println(myBid.getBidder().getName()+"***********Response sent************");
 	}
 	
 //    private static Document convertStringToDocument(String xmlStr) {
@@ -162,9 +162,10 @@ public class BidServlet extends DefaultServlet{
     	 * If this bid contain key words "packageList", this bid is
     	 * supplymentary round of CCA, so process it as CCA supplymentary round bid.
     	 */
-    	if (null != jsonBid.get("packageList").getAsJsonArray()) {
+    	if (null != jsonBid.get("packageList")) {
     		
     		this.auctionEnvironment.auctioneer.getSupplementaryRoundBid(bidder, getCcaPackageBid(jsonBid, bidder));
+    		return null;
     	}
     	/*
     	 * else this bid is first stage bidding, so process it as first stage bidding(SAA or CCA)
