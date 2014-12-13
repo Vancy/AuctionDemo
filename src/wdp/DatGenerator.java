@@ -1,7 +1,9 @@
 package wdp;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+
 import dataRepresentation.AuctionItem;
 import dataRepresentation.Bidder;
 import dataRepresentation.CCABiddingPackage;
@@ -15,6 +17,7 @@ public class DatGenerator {
 
 	/////////////////////////////////////////////////////////////
 	public DatGenerator(List<Bidder> bidderList, List<CCABiddingPackage> packageList, List<AuctionItem> itemList) {
+		this.itemSymbols = new ArrayList<String>();
 		this.bidderList = bidderList;
 		this.packageList = packageList;
 		this.itemList = itemList;
@@ -54,12 +57,12 @@ public class DatGenerator {
 			String itemName = item.getName();
 			String s = "set " + itemName + ":= ";
 			for(int i=0; i<=item.getQuantity(); i++) {
-				s += "" + i;
+				s += " " + i;
 			}
 			s += ";\n";
 			ret += s;
 		}
-		ret += ";\n";
+		ret += "\n";
 		return ret;
 	}
 	
@@ -78,7 +81,8 @@ public class DatGenerator {
 	private String printParamCombinations() {
 		String ret = "param: Combinations: bid :=\n";
 		for(CCABiddingPackage pkg: this.packageList){
-			ret += printSinglePackage(pkg);
+			ret += "\t" + printSinglePackage(pkg);
+			ret += "\n";
 		}
 		ret += ";\n";
 		return ret;
@@ -97,7 +101,7 @@ public class DatGenerator {
 		for(CCABiddingPackage pkg: this.packageList){
 			ret += printSinglePackage(pkg);
 			String reqPkg = getRequiredQuantityOfItemID(pkg, itemID);
-			ret += " " + reqPkg;
+			ret += " " + reqPkg + "\n";
 		}
 		ret += ";\n";
 		return ret;
@@ -110,7 +114,7 @@ public class DatGenerator {
 		for (AuctionItem item: pkg.getItemList()) {
 			s += item.getRequiredQuantity() + " ";
 		}
-		s += pkgPrice + "\n";
+		s += pkgPrice;
 		return s;
 	}
 	

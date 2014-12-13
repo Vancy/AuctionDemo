@@ -1,0 +1,29 @@
+set N:= B1 B2 ;
+set ItemA:=  0 1 2 3 4 5;
+set ItemB:=  0 1 2 3 4 5 6 7 8 9 10;
+set ItemC:=  0 1 2 3 4 5 6 7 8;
+
+param size_ItemA:= 5;
+param size_ItemB:= 10;
+param size_ItemC:= 8;
+
+param: Combinations: bid :=
+B2 1 1 1 33.0
+B2 2 2 2 44.0
+B1 5 6 7 88.0
+;
+param: Limit_0: number_of_bid_units_of_item_0:=
+B2 1 1 1 33.0 1
+B2 2 2 2 44.0 2
+B1 5 6 7 88.0 5
+;
+param: Limit_1: number_of_bid_units_of_item_1:=
+B2 1 1 1 33.0 1
+B2 2 2 2 44.0 2
+B1 5 6 7 88.0 6
+;
+param: Limit_2: number_of_bid_units_of_item_2:=
+B2 1 1 1 33.0 1
+B2 2 2 2 44.0 2
+B1 5 6 7 88.0 7
+;
