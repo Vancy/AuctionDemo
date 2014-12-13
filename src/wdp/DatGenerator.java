@@ -81,7 +81,7 @@ public class DatGenerator {
 	private String printParamCombinations() {
 		String ret = "param: Combinations: bid :=\n";
 		for(CCABiddingPackage pkg: this.packageList){
-			ret += "\t" + printSinglePackage(pkg);
+			ret += "\t" + printSinglePackage(pkg, true);
 			ret += "\n";
 		}
 		ret += ";\n";
@@ -99,7 +99,7 @@ public class DatGenerator {
 	private String printParamLimitation(int itemID) {
 		String ret = "param: Limit_"+ itemID + ": number_of_bid_units_of_item_" + itemID + ":=\n";
 		for(CCABiddingPackage pkg: this.packageList){
-			ret += printSinglePackage(pkg);
+			ret += "\t" + printSinglePackage(pkg, false);
 			String reqPkg = getRequiredQuantityOfItemID(pkg, itemID);
 			ret += " " + reqPkg + "\n";
 		}
@@ -107,14 +107,16 @@ public class DatGenerator {
 		return ret;
 	}
 	
-	private String printSinglePackage(CCABiddingPackage pkg) {
+	private String printSinglePackage(CCABiddingPackage pkg, boolean withPrice) {
 		String BidderID = "B" + pkg.getBidder().getID() + " ";
 		String s = BidderID;
 		String pkgPrice = "" + pkg.getPrice();
 		for (AuctionItem item: pkg.getItemList()) {
 			s += item.getRequiredQuantity() + " ";
 		}
-		s += pkgPrice;
+		if (withPrice) {
+			s += pkgPrice;
+		}
 		return s;
 	}
 	

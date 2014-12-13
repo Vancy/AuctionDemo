@@ -48,7 +48,7 @@ public class ModGenerator {
 		return ret+"\n";
 	}
 	private String printCombinations() {
-		String ret = "set Combinations within {N, " + itemSetsStr() + "\n";
+		String ret = "set Combinations within {N, " + itemSetsStr() + ";\n";
 		return ret;
 		
 	}
@@ -56,7 +56,7 @@ public class ModGenerator {
 		
 		String ret = "";
 		for (int i=0; i<this.itemSymbols.size(); i++) {
-			ret += "set Limit_" + i + " within {N, " + itemSetsStr() + "\n";
+			ret += "set Limit_" + i + " within {N, " + itemSetsStr() + ";\n";
 		}
 		return ret+"\n";
 	}
@@ -80,11 +80,10 @@ public class ModGenerator {
 	}
 	private String printVarX() {
 		String varStr = "var x {N, " + itemSetsStr();
-		varStr.substring(0,varStr.length()-1); // delete last ";"
 		return varStr + " binary;\n";
 	}
 	private String printRevenue() {
-		String ret = "maximize revenue:\n\t\t";
+		String ret = "maximize revenue:\n\t";
 		ret += "sum{(j," + itemSetsVar() + 
 				") in Combinations}  bid[j," + 
 				itemSetsVar() + "] * x[j," +
@@ -92,7 +91,7 @@ public class ModGenerator {
 		return ret+"\n";
 	}
 	private String printSubjectAtMostOne() {
-		String ret = "subject to at_most_one_package {j in N}:\n\t\t";
+		String ret = "subject to at_most_one_package {j in N}:\n\t";
 		ret += "sum{(j, " + itemSetsVar() + 
 				") in Combinations}  x[j, " + 
 				itemSetsVar() + "] <=1;";
@@ -120,7 +119,7 @@ public class ModGenerator {
 				itemSetsStr += ", ";
 			}
 			else {
-				itemSetsStr += "};";
+				itemSetsStr += "}";
 			}
 		}
 		return itemSetsStr;
