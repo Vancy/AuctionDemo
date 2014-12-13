@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
  
 public class ExecuteAMPLComand {
 	
+	private static String coreCmd = "ampl.exe";
 	public static String amplFolderPath = "C:\\AMPL\\";
 	public static String wdpRunFile = "wdp.run";
  
@@ -16,8 +17,8 @@ public class ExecuteAMPLComand {
 	public static File getAnsFile() {
 		deleteOldFiles();
 		File ansFile;
-		String command = amplFolderPath + " " + wdpRunFile;
-		executeCommand(command);
+		String command = amplFolderPath+coreCmd + " " + amplFolderPath+wdpRunFile;
+		System.out.println(executeCommand(command));
 		ansFile = new File(amplFolderPath + "wdp.ans");
 		return ansFile;
 	}
