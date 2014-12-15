@@ -17,7 +17,8 @@ public class ExecuteAMPLComand {
 	public static File getAnsFile() {
 		deleteOldFiles();
 		File ansFile;
-		String command = amplFolderPath+coreCmd + " " + amplFolderPath+wdpRunFile;
+		String command = "cd " + amplFolderPath + " ; " + " .\\" + coreCmd + " " + wdpRunFile;
+		System.out.println(command);
 		System.out.println(executeCommand(command));
 		ansFile = new File(amplFolderPath + "wdp.ans");
 		return ansFile;

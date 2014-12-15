@@ -14,6 +14,10 @@ public class FileGeneratorTest {
 		 * Gnerating .dat file for AMPL
 		 */
 		
+		String s = "abcdef";
+		//System.out.println(s.substring(6, 7));
+		System.out.println(s.length());
+		
 	}
 
 }
