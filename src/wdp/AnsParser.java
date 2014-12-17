@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
+import java.util.StringTokenizer;
 
 import dataRepresentation.AuctionItem;
 
@@ -21,6 +21,8 @@ public class AnsParser {
 	private int parseCursor = 0;
 	private int tokenizerState = 0;
 	
+	private ArrayList<String> results = new ArrayList<String>();
+	
 	public AnsParser(ArrayList<AuctionItem> itemlist) {
 		this.items = itemlist;
 	}
@@ -35,7 +37,7 @@ public class AnsParser {
 	}
 	
 	private void parse() {
-		
+		tokenize();
 	}
 	
 	private static String readFile(String fileName) throws IOException {
@@ -54,83 +56,50 @@ public class AnsParser {
 	        br.close();
 	    }
 	}
-	
-	private Token nextToken() {
-
-		int streamLength = this.content.length();
-		this.tokenBuf = "";
-		this.tokenizerState = 0;
 		
-		Pattern abcPattern = Pattern.compile("[A-Za-z]");
-		Pattern bidderNamePattern = Pattern.compile("[0-9]");
+	private void tokenize() {
 		
-		
-		while(this.parseCursor != streamLength) {
-			String nextChar = this.content.substring(this.parseCursor, this.parseCursor+1);
-			this.parseCursor++;
-//			if (nextChar.equals(" ") || nextChar.equals("\n") || nextChar.equals("\t")) {
-//				continue;
-//			}
-						
-			if (0 == tokenizerState) {
-				if (nextChar.equals("=")) {
-					return new Token(Token.equal, Token.equalToken); 
-				} else if (nextChar.equals(",")) {
-					return new Token(Token.comma, Token.commaToken); 
-				} else if (nextChar.equals("*")) {
-					return new Token(Token.star, Token.starToken); 
-				} else if (nextChar.equals("[")) {
-					return new Token(Token.leftB, Token.leftBToken); 
-				} else if (nextChar.equals("]")) {
-					return new Token(Token.rightB, Token.rightBToken); 
-				} else if (nextChar.equals("x")) {
-					return new Token(Token.x, Token.xToken); 
-				} 
-				
-				////
-				
-				else if (nextChar.equals(":")) {
-					tokenizerState = 1;
-					//this.tokenBuf += nextChar;
-				}
-				else if (nextChar.equals("r")) {
-					tokenizerState = 3;
-					//this.tokenBuf += nextChar;
-				}
-				
-				////
-				
-			}
-			
-			if (1 == tokenizerState) {
-				if (nextChar.equals("=")) {
-					return new Token(Token.assign, Token.assignToken); 
-				} else {
-					tokenizerState = 0;
-					this.tokenBuf += nextChar;
-					return new Token(Token.colon, Token.colonToken); 
-				}
-			}
-			
-			if (3 == tokenizerState) {
-				if (nextChar.equals("e")) {
-					tokenizerState = 4;
-				} else {
-					tokenizerState = 11;
-					this.tokenBuf += nextChar;
-					return new Token(Token.colon, Token.colonToken); 
-				}
-			}
-			
-
-			
-			tokenizerState = 1;
-			
-			
-
-
+		//substitute all line breakers and tabs to normal spaces
+		this.content = this.content.replaceAll("\n", " ");
+		this.content = this.content.replaceAll("\t", " ");
+		StringTokenizer st = new StringTokenizer(this.content, " ");
+		ArrayList<String> tokenList = new ArrayList<String>();
+		while (st.hasMoreTokens()) {
+			tokenList.add(st.nextToken());
 		}
-		return null;
+		// logic processing
+		double revenue = Double.parseDouble(tokenList.get(2));
+	    // get winning packages
+		int index = 4; //first patternVector from 4th
+		while(index < tokenList.size() && !tokenList.get(index).equals(Token.semicolon)) {
+			if(! tokenList.get(index).startsWith(Token.leftB)) {
+				throw new AnsParsingException("Get error when parsing ans file, expect [");
+			} else {
+				String patternVector = tokenList.get(index++);
+				//System.out.println("pattern"+patternVector);
+				ArrayList<String> secondStarVector = new ArrayList<String>();
+				index++; // skip next ":"
+				while (!tokenList.get(index).equals(Token.assign) && index < tokenList.size()) {
+					secondStarVector.add(tokenList.get(index));
+					//System.out.println("add second Token:"+ tokenList.get(index));
+					index++;
+				}
+				index++; // skip next :=
+				while (!tokenList.get(index).startsWith(Token.leftB) && !tokenList.get(index).equals(Token.semicolon) && index < tokenList.size()) {
+					String firstStarToken = tokenList.get(index++);
+					//System.out.println("firstToken:"+ firstStarToken);
+					for (int i=0; i<secondStarVector.size(); i++) {
+						String secondStarToken = secondStarVector.get(i);
+						if (tokenList.get(index+i).equals(Token.one)) {
+							String result = patternVector.replaceFirst("\\*", firstStarToken).replaceFirst("\\*", secondStarToken);
+							System.out.println(result + "  first:" + firstStarToken + " sec:" + secondStarToken);
+							this.results.add(result);
+						}
+					}
+					index += secondStarVector.size();
+				}
+			}
+		}
 	}
 	
 	class Token {
@@ -142,27 +111,24 @@ public class AnsParser {
 		public static final String rightB = "]";
 		public static final String star = "*";
 		public static final String comma = ",";
+		public static final String semicolon = ";";
 		public static final String colon = ":";
 		public static final String assign = ":=";
-		
-		public static final int revenueToken = 11;
-		public static final int equalToken = 12;
-		public static final int xToken = 13;
-		public static final int leftBToken = 14;
-		public static final int rightBToken = 15;
-		public static final int starToken = 16;
-		public static final int commaToken = 17;
-		public static final int colonToken = 18;
-		public static final int assignToken = 19;
-		public static final int digitToken = 1;
-		public static final int biddernameToken = 2;
-		
+		public static final String one = "1";
+		public static final String zero = "0";
+				
 		public String name;
 		public int info;
 		
 		Token(String name, int seq) {
 			this.name = name;
 			this.info =  seq;
+		}
+	}
+	
+	class AnsParsingException extends RuntimeException {
+		public AnsParsingException(String s) {
+			super(s);
 		}
 	}
 }
