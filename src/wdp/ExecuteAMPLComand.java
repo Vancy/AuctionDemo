@@ -10,18 +10,13 @@ public class ExecuteAMPLComand {
 	public static String amplFolderPath = "C:\\AMPL\\";
 	public static String wdpRunFile = "wdp.run";
  
-	public static void main(String[] args) {
-		getAnsFile();
-	}
-	
-	public static File getAnsFile() {
+
+	public static void getAnsFile() {
 		deleteOldFiles();
-		File ansFile;
 		String command = "cd " + amplFolderPath + " ; " + " .\\" + coreCmd + " " + wdpRunFile;
 		System.out.println(command);
 		System.out.println(executeCommand(command));
-		ansFile = new File(amplFolderPath + "wdp.ans");
-		return ansFile;
+
 	}
 	
 	private static void deleteOldFiles() {

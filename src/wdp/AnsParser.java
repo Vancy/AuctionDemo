@@ -6,38 +6,38 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import dataRepresentation.AuctionItem;
-
-
 public class AnsParser {
+	
+	public static void main(String[] args) {
+		ExecuteAMPLComand.getAnsFile();
+		AnsParser ansParser = new AnsParser();
+		System.out.println("Max revenue:" + ansParser.getResult());
+		
+	}
 	
 	public static String ansFilePath = "C:\\AMPL\\";
 	public static String ansFileName = "wdp.ans";
 		
-	private ArrayList<AuctionItem> items;
 	private String content;
 	
-	private String tokenBuf = "";
-	private int parseCursor = 0;
-	private int tokenizerState = 0;
-	
 	private ArrayList<String> results = new ArrayList<String>();
+	private double revenue = 0;
 	
-	public AnsParser(ArrayList<AuctionItem> itemlist) {
-		this.items = itemlist;
+	public AnsParser() {
 	}
 	
-	public void getResult() {
+	public double getResult() {
 		try {
 			content = readFile(ansFilePath + ansFileName);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		parse();
+		return this.revenue;
 	}
 	
-	private void parse() {
-		tokenize();
+	public ArrayList<String> getWinningBids() {
+		return this.results;
 	}
 	
 	private static String readFile(String fileName) throws IOException {
@@ -57,7 +57,7 @@ public class AnsParser {
 	    }
 	}
 		
-	private void tokenize() {
+	private void parse() {
 		
 		//substitute all line breakers and tabs to normal spaces
 		this.content = this.content.replaceAll("\n", " ");
@@ -68,7 +68,7 @@ public class AnsParser {
 			tokenList.add(st.nextToken());
 		}
 		// logic processing
-		double revenue = Double.parseDouble(tokenList.get(2));
+		this.revenue = Double.parseDouble(tokenList.get(2));
 	    // get winning packages
 		int index = 4; //first patternVector from 4th
 		while(index < tokenList.size() && !tokenList.get(index).equals(Token.semicolon)) {
@@ -116,17 +116,11 @@ public class AnsParser {
 		public static final String assign = ":=";
 		public static final String one = "1";
 		public static final String zero = "0";
-				
-		public String name;
-		public int info;
-		
-		Token(String name, int seq) {
-			this.name = name;
-			this.info =  seq;
-		}
+
 	}
 	
 	class AnsParsingException extends RuntimeException {
+		private static final long serialVersionUID = -638645498146454664L;
 		public AnsParsingException(String s) {
 			super(s);
 		}
