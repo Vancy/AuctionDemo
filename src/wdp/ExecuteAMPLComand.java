@@ -29,9 +29,9 @@ public class ExecuteAMPLComand {
     	}
 	}
  
-	private static void executeCommand(String directory, String command) {
+	private static void executeCommand(final String directory, String command) {
  
-		String[] cmds = new String[] {"cmd", "/c", command};
+		final String[] cmds = new String[] {"cmd", "/c", command};
 		Thread execThread = new Thread("executing thread") {
 			public void run(){
 				try {
