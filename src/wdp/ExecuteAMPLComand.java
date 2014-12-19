@@ -1,8 +1,8 @@
 package wdp;
- 
-import java.io.BufferedReader;
+
 import java.io.File;
-import java.io.InputStreamReader;
+import java.io.IOException;
+
  
 public class ExecuteAMPLComand {
 	
@@ -13,10 +13,10 @@ public class ExecuteAMPLComand {
 
 	public static void getAnsFile() {
 		deleteOldFiles();
-		String command = "cd " + amplFolderPath + " ; " + " .\\" + coreCmd + " " + wdpRunFile;
-		System.out.println(command);
-		System.out.println(executeCommand(command));
-
+		String command = ".\\" + coreCmd + " " + wdpRunFile;
+		String directory = amplFolderPath;
+		System.out.println("execute command:" + command);
+		executeCommand(directory, command);
 	}
 	
 	private static void deleteOldFiles() {
@@ -29,23 +29,24 @@ public class ExecuteAMPLComand {
     	}
 	}
  
-	private static String executeCommand(String command) {
+	private static void executeCommand(String directory, String command) {
  
-		StringBuffer output = new StringBuffer();
-		Process p;
-		
-		try {
-			p = Runtime.getRuntime().exec(command);
-			p.waitFor();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line = "";			
-			while ((line = reader.readLine())!= null) {
-				output.append(line + "\n");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return output.toString(); 
+		String[] cmds = new String[] {"cmd", "/c", command};
+		Thread execThread = new Thread("executing thread") {
+			public void run(){
+				try {
+					Process p = Runtime.getRuntime().exec(cmds, null, new File(directory));
+					while ( !Thread.currentThread().isInterrupted()) ;
+					p.destroyForcibly();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		     }
+		};
+		execThread.start();
+		File ansFile = new File(amplFolderPath + "wdp.ans");
+		while( !ansFile.exists() );
+		execThread.interrupt();
 	}
  
 }

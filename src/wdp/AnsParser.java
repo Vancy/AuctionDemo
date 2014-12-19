@@ -9,10 +9,8 @@ import java.util.StringTokenizer;
 public class AnsParser {
 	
 	public static void main(String[] args) {
-		ExecuteAMPLComand.getAnsFile();
 		AnsParser ansParser = new AnsParser();
-		System.out.println("Max revenue:" + ansParser.getResult());
-		
+		ansParser.printResults();
 	}
 	
 	public static String ansFilePath = "C:\\AMPL\\";
@@ -24,20 +22,28 @@ public class AnsParser {
 	private double revenue = 0;
 	
 	public AnsParser() {
-	}
-	
-	public double getResult() {
+		ExecuteAMPLComand.getAnsFile();
 		try {
 			content = readFile(ansFilePath + ansFileName);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		parse();
+	}
+	
+	public double getResultRevenue() {
 		return this.revenue;
 	}
 	
 	public ArrayList<String> getWinningBids() {
 		return this.results;
+	}
+	
+	public void printResults() {
+		System.out.println("Max revenue:" + this.revenue);
+		for (String s: this.results) {
+			System.out.println(s);
+		}
 	}
 	
 	private static String readFile(String fileName) throws IOException {
@@ -92,7 +98,7 @@ public class AnsParser {
 						String secondStarToken = secondStarVector.get(i);
 						if (tokenList.get(index+i).equals(Token.one)) {
 							String result = patternVector.replaceFirst("\\*", firstStarToken).replaceFirst("\\*", secondStarToken);
-							System.out.println(result + "  first:" + firstStarToken + " sec:" + secondStarToken);
+							//System.out.println(result + "  first:" + firstStarToken + " second:" + secondStarToken);
 							this.results.add(result);
 						}
 					}
