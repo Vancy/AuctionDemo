@@ -37,7 +37,7 @@ public class ExecuteAMPLComand {
 				try {
 					Process p = Runtime.getRuntime().exec(cmds, null, new File(directory));
 					while ( !Thread.currentThread().isInterrupted()) ;
-					p.destroyForcibly();
+					p.destroy();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
