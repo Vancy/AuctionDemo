@@ -333,8 +333,8 @@ public class Auctioneer extends Thread{
 				for (AuctionItem item: agentBid.getItemList()) {
 					System.out.println(bidder.getName()+" demands:"+item.getRequiredQuantity()+"for item:"+item.getName());
 				}
-			} else if (bidder instanceof Agent) {
-				Bid agentBid = ((Agent)bidder).auctionResponse(this.environment.context);
+			} else if (bidder instanceof SAAAgent) {
+				Bid agentBid = ((SAAAgent)bidder).auctionResponse(this.environment.context);
 				requestedBids.put(agentBid.getBidder().getID(), agentBid);
 				System.err.println("Agent:"+bidder.getName()+" place a bid:");
 				for (AuctionItem item: agentBid.getItemList()) {

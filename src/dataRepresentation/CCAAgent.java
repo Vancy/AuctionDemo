@@ -7,6 +7,10 @@ import java.util.Map;
 
 public class CCAAgent extends Agent{
 	
+	public CCAAgent(String name, String ip) {
+		super(name, ip);
+	}
+
 	/*This is demand vector which defines agent's demand of the number
 	 *of item, based on the price change. 
 	 e.g. demand vector <20, 18, 17, 15, 10, 5, 3, 2, 0> shows:
@@ -19,19 +23,20 @@ public class CCAAgent extends Agent{
 	 */
 	private HashMap<Integer, ArrayList<Double>> demandVectors;
 
-	// Never Use this Constructor
-	public CCAAgent(String name, String ip, List<AuctionItem> items,
-			Map<List<AuctionItem>, Double> valuations, double k) {
-		super(name, ip, items, valuations, k);
-
+	@Override
+	public Bid auctionResponse(AuctionContext ac) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
+
+
 	public CCAAgent(String name, String ip, List<AuctionItem> items,
 			Map<List<AuctionItem>, Double> valuations, HashMap<Integer, ArrayList<Double>> vector) {
-		super(name, ip, items, valuations, 0);
+		//super(name, ip, items, valuations, 0);
+		super(name, ip);
 		this.demandVectors = vector;
 	}
-	
+/*	
 	private double calculateSurplus(List<AuctionItem> valuationSet, List<AuctionItem> itemSet) {
 
 		//get current package valuation
@@ -152,6 +157,15 @@ public class CCAAgent extends Agent{
 			}
 			return nextRoundBehaviour;
 		}
+	}
+	
+*/
+
+
+	@Override
+	public Map<List<AuctionItem>, Double> getValuations() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -17,11 +18,15 @@ import javax.swing.JTextField;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
 import org.xml.sax.SAXException;
+
 import dataRepresentation.Agent;
 import dataRepresentation.AuctionEnvironment;
 import dataRepresentation.AuctionItem;
 import dataRepresentation.CCAAgent;
+import dataRepresentation.SAAAgent;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -187,7 +192,7 @@ public class AgentAddingDialog extends JDialog {
 		System.err.println("auction Type: SSA");
 		System.err.println("sunk awareness parameter:" + s_a);
 		
-		Agent newAgent = new Agent(agentName, "SSA", environment.context.getItemList(), preference, s_a);
+		SAAAgent newAgent = new SAAAgent(agentName, "SSA", environment.context.getItemList(), preference, s_a);
 		this.environment.bidderList.addBidder(newAgent);
 		
 	}
