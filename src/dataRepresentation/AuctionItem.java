@@ -9,8 +9,9 @@ public class AuctionItem implements Comparable<AuctionItem> {
 	private double price;
 	private Bidder owner;
 	
-	//this four parameters are used in CCA auction, SAA auction needn't use this values
+	//this five parameters are used in CCA auction, SAA auction needn't use this values
 	final private int quantity;
+	final private int eligibilityPoint;
 	private int quantity_required;
 	private HashMap<String, Integer> owners = new HashMap<String, Integer>();
 	public boolean biddingFinised = false;
@@ -26,6 +27,7 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		this.quantity = 0;
 		this.quantity_required = 0;
 		this.owner = null;
+		this.eligibilityPoint = 0;
 	}
 	
 	//copy constructor
@@ -41,6 +43,8 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		
 		this.quantity = item.quantity;
 		this.quantity_required = item.quantity_required;
+		
+		this.eligibilityPoint = item.eligibilityPoint;
 	}
 	
 	public AuctionItem(String n, double sp) {
@@ -52,6 +56,7 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		
 		this.quantity = 0;
 		this.quantity_required = 0;
+		this.eligibilityPoint = 0;
 	}
 	
 	public AuctionItem(int id, String n, double sp) {
@@ -63,6 +68,7 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		
 		this.quantity = 0;
 		this.quantity_required = 0;
+		this.eligibilityPoint = 0;
 	}
 	
 	/*
@@ -76,15 +82,17 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		this.quantity = 0;
 		this.quantity_required = require;
 		this.owner = null;
+		this.eligibilityPoint = 0;
 	}
 	
-	public AuctionItem(String n, double sp, int quantity) {
+	public AuctionItem(String n, double sp, int quantity, int eligibility) {
 		this.ID = ++number_of_items - 1;
 		this.name = n;
 		this.startingPrice = sp;
 		this.price = sp;
 		this.quantity = quantity;
 		this.owner = null;
+		this.eligibilityPoint = eligibility;
 	}
 	
 	protected void setStartingPrice(double startingPrice) {
@@ -151,6 +159,10 @@ public class AuctionItem implements Comparable<AuctionItem> {
 	
 	public int getRequiredQuantity() {
 		return this.quantity_required;
+	}
+	
+	public int getEligibility() {
+		return this.eligibilityPoint;
 	}
 		
 	public void setRequiredQuantity(int quantity) {

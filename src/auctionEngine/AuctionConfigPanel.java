@@ -263,10 +263,11 @@ public class AuctionConfigPanel extends JPanel {
 			tableModel.setRowCount(0);
 			tableModel.addColumn("Item");
 			tableModel.addColumn("Quantity");
+			tableModel.addColumn("Unit Eligibility");
 			//put some initial data
-			String[] s1 = {"ItemA", "5"};
-			String[] s2 = {"ItemB", "10"};
-			String[] s3 = {"ItemC", "8"};
+			String[] s1 = {"ItemA", "5", "5"};
+			String[] s2 = {"ItemB", "10", "10"};
+			String[] s3 = {"ItemC", "8", "8"};
 			tableModel.addRow(s1);
 			tableModel.addRow(s2);
 			tableModel.addRow(s3);
@@ -311,7 +312,7 @@ public class AuctionConfigPanel extends JPanel {
 			String name = this.table.getValueAt(i, 0).toString();
 			float price = Float.parseFloat(this.table.getValueAt(i, 1).toString());
 
-			list.add(new AuctionItem(name, price, 0/*invalid for SAA*/));
+			list.add(new AuctionItem(name, price, 0/*invalid for SAA*/,0/*eligibility is invalid for SAA*/));
 		}
 		this.environment.context.setData(time_duration, min_increment, list);
 		System.out.println(this.environment.context.generateXml());
@@ -331,8 +332,9 @@ public class AuctionConfigPanel extends JPanel {
 		for (int i=0; i<this.table.getRowCount(); i++) {
 			String name = this.table.getValueAt(i, 0).toString();
 			int quantity = Integer.parseInt(this.table.getValueAt(i, 1).toString());
+			int eligibility = Integer.parseInt(this.table.getValueAt(i, 2).toString());
 		
-			list.add(new AuctionItem(name, 0/*always from 0 for CCA*/, quantity));
+			list.add(new AuctionItem(name, 0/*always from 0 for CCA*/, quantity, eligibility));
 		}
 		this.environment.context.setData(time_duration, min_increment, list);
 		System.out.println(this.environment.context.generateXml());

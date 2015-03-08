@@ -327,7 +327,7 @@ public class Auctioneer extends Thread{
 	private void collectAgentBid() {
 		for (Bidder bidder: this.environment.bidderList.getList()) {
 			if (bidder instanceof CCAAgent) {
-				Bid agentBid = ((Agent)bidder).auctionResponse(this.environment.context);
+				Bid agentBid = ((CCAAgent)bidder).auctionResponse(this.environment.context);
 				requestedBids.put(agentBid.getBidder().getID(), agentBid);
 				System.err.println("Agent:"+bidder.getName()+" place a bid:");
 				for (AuctionItem item: agentBid.getItemList()) {
