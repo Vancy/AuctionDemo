@@ -16,6 +16,7 @@ Polymer('auction-cca', {
 
   activity: 0,
   eligibility: 0,
+  eligibilityReducingBids: {},
 
   domReady: function() {
     this.disableSubmittion();
@@ -118,9 +119,10 @@ Polymer('auction-cca', {
     if ( this.items.length == 0 || this.isFinal ) {
       console.log("Initial or Final", tmp);
       this.items = tmp;
+      this.activity = this.$.table.calculateTotalEligibility();
+
     } else {
       this.$.table.update(tmp);
-      this.activity = this.$.table.calculateTotalEligibility();
     }
 
     /* Xing: if isFinal is true, means clock round is end, so move to supplymentary round.
@@ -160,6 +162,7 @@ Polymer('auction-cca', {
   submit: function() {
     //Xing: always enable bidders to bid multiple times, so needn't disableSubmittion
     //this.disableSubmittion();
+    this.activity = this.eligibility;
     this.data = this.collectData();
     this.$.submit.go();
   },
@@ -190,15 +193,48 @@ Polymer('auction-cca', {
 
 
   //Xing: add these functions to support auction rules 2015.3.11
-   displayActivity: function(e) {
-     //console.log("display points:", e.detail.points);
-     //this.$.eligibilityPoints.innerHTML = 'Activityty:' + '<font color="red">'+e.detail.points+'</font>';
-     this.activity = e.detail.points;
-   },
-
    displayEligibility: function(e) {
      //console.log("display points:", e.detail.points);
      //this.$.eligibilityPoints.innerHTML = 'Eligibility:' + '<font color="green">'+e.detail.points+'</font>';
      this.eligibility = e.detail.points;
+     currentPkg = e.detail.require;
+     console.log("require:", requirePkg);
+     if (this.eligibility > this.activity) {
+	//check if RPC is satisfied
+	var RPCflag = true;
+	//1 calculate Nt
+	var Nt = 0;
+        for (var i in currentPkg) {
+	  // [1] unit price [2] unit required
+	  Nt += currentPkg[i][1] * currentPkg[i][2];
+	}
+	for (var s in this.eligibilityReducingBids) {
+	  var pkg = this.eligibilityReducingBids[s];
+	  var Ns = 0;
+	  var St = 0;
+	  var Ss = 0;
+	  for (var id in pkg) {
+		Ns += pkg[id][1] * currentPkg[id][2];
+		St += currentPkg[id][1] * pkg[id][2];
+		Ss += pkg[id][1] * pkg[id][2];
+	  }
+	  if ((Nt - Ns) <= (St - Ss)) {
+	    //RPC satisfied with round s
+	  } else {
+	    //PRC is not satisfied with round s
+	    RPCflag = false;
+	    break;
+	  }
+	}
+        //disable/able Bid buttion
+        if ( RPCflag == true) {
+	  this.enableSubmittion();
+	} else if ( RPCflag == false) {
+	  this.disableSubmittion();
+	}
+     } else if (this.eligibility < this.activity) {
+	//record eligibility decreasing round
+	this.eligibilityReducingBids[this.round] = requirePkg;
+     }
    }
 });
