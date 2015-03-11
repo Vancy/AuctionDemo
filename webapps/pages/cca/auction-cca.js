@@ -14,7 +14,10 @@ Polymer('auction-cca', {
   updateUrl: "",
   timer: undefined,
 
-   domReady: function() {
+  activity: 0,
+  eligibility: 0,
+
+  domReady: function() {
     this.disableSubmittion();
   },
 
@@ -117,6 +120,7 @@ Polymer('auction-cca', {
       this.items = tmp;
     } else {
       this.$.table.update(tmp);
+      this.activity = this.$.table.calculateTotalEligibility();
     }
 
     /* Xing: if isFinal is true, means clock round is end, so move to supplymentary round.
@@ -182,5 +186,19 @@ Polymer('auction-cca', {
   fail: function(e) {
     clearInterval(this.timer);
     console.log("fail", e);
-  }
+  },
+
+
+  //Xing: add these functions to support auction rules 2015.3.11
+   displayActivity: function(e) {
+     //console.log("display points:", e.detail.points);
+     //this.$.eligibilityPoints.innerHTML = 'Activityty:' + '<font color="red">'+e.detail.points+'</font>';
+     this.activity = e.detail.points;
+   },
+
+   displayEligibility: function(e) {
+     //console.log("display points:", e.detail.points);
+     //this.$.eligibilityPoints.innerHTML = 'Eligibility:' + '<font color="green">'+e.detail.points+'</font>';
+     this.eligibility = e.detail.points;
+   }
 });

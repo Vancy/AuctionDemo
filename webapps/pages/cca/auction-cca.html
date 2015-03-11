@@ -4,7 +4,7 @@
 <link rel="import" href="./auction-cca-phase2-table.html">
 <link rel="import" href="../utils/native-post.html">
 
-<polymer-element name="auction-cca">
+<polymer-element name="auction-cca" on-eligibility-calculated={{displayEligibility}}>
   <template>
     <link rel="stylesheet" href="./auction-cca.css" type="text/css" />
 
@@ -14,10 +14,12 @@
       </div>
       <div id="box">
         <p id="time"></p>
-        <div>
+	<p id="activityPoints">Activity:<font color="red">{{activity}}</font></p>
+	<p id="eligibilityPoints">Eligibility:<font color="green">{{eligibility}}</font></p>
+	<div>
           <auction-cca-table id="table" items="{{ items }}" final="{{ isFinal }}"></auction-cca-table>
-	        <auction-cca-phase2-table id="supplymentarytable" items="{{ items }}" hidden></auction-cca-phase2-table>
-        </div>
+	  <auction-cca-phase2-table id="supplymentarytable" items="{{ items }}" hidden></auction-cca-phase2-table>
+	</div>
         <div id="div-btn-submit" class="btn-group">
           <button id="bid" on-click="{{submit}}" type="button" class="btn btn-default">Bid</button>
           <span>{{ username }}@{{ localIP }}</span>

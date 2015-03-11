@@ -117,26 +117,37 @@
       // later I will improve it
       //  1. addEventListener   2. auction-input
       validate: function() {
+        var totalEligibilityPoints = 0;
         for ( i=0; i < this.items.length; i++ ) {
-          id = this.items[i].ID;
-          amount = this.items[i].quantity;
-          yamount = this.$.tbody.querySelector("#yamount" + id).value;
-          tips = this.$.tbody.querySelector("#yamount_tips" + id);
-
+          var id = this.items[i].ID;
+	  var itemUnitEligibility = this.items[i].eligibilityPoint;	  
+          var amount = this.items[i].quantity;
+          var yamount = this.$.tbody.querySelector("#yamount" + id).value;
+          var tips = this.$.tbody.querySelector("#yamount_tips" + id);
+	  var yAmountNum = S2N(yamount);
           hideTips(tips);
           if ( N2S(yamount).length != 0 ) {
             var re = /^[0-9]+$/;
             if ( ! re.test(yamount) ) {
               showTips(tips, "please enter a positive number");
             }
-            if ( S2N(amount) < S2N(yamount) ) {
-              showTips(tips, "too much");
+            if ( S2N(amount) < yAmountNum ) {
+              showTips(tips, "too many");
+	      yAmountNum = 0;
             }
           }
+	  totalEligibilityPoints += itemUnitEligibility * yAmountNum;
+	  console.log("i=", i, ";yamount=", yAmountNum, "itemUnitEligibility=", itemUnitEligibility, ";accumulated:", totalEligibilityPoints);
         } 
+        this.fire('eligibility-calculated', {points: totalEligibilityPoints});
+	console.log("eligibility-caculated signal sent:(points)", totalEligibilityPoints);
 
         // helper functions
         function S2N(str) {
+	  var re = /^[0-9]+$/;
+          if ( !re.test(str) || (str == null)) {
+	    return 0;
+          }
           return parseInt(str);
         }
 
@@ -157,6 +168,18 @@
           tip.style.display = "none";
           
         }
+      },
+
+      calculateTotalEligibility: function() {
+	total = 0;
+	console.log("caculate the init activity");
+	for ( i=0; i < this.items.length; i++ ) {
+	  var itemUnitEligibility = this.items[i].eligibilityPoint;	  
+          var amount = this.items[i].quantity;
+	  total += itemUnitEligibility * amount;
+	console.log("i=", i, ";amount=", amount, "itemUnitEligibility=", itemUnitEligibility, ";activity acc:", total)
+        } 
+	return total;
       }
 
     });
