@@ -17,6 +17,8 @@ Polymer('auction-cca', {
   activity: 0,
   eligibility: 0,
   eligibilityReducingBids: {},
+  tempRequirePkg: {},
+  RPC: false,
 
   domReady: function() {
     this.disableSubmittion();
@@ -123,6 +125,7 @@ Polymer('auction-cca', {
 
     } else {
       this.$.table.update(tmp);
+      this.$.table.validate();
     }
 
     /* Xing: if isFinal is true, means clock round is end, so move to supplymentary round.
@@ -161,8 +164,12 @@ Polymer('auction-cca', {
 
   submit: function() {
     //Xing: always enable bidders to bid multiple times, so needn't disableSubmittion
-    //this.disableSubmittion();
+    if (this.eligibility < this.activity) {
+	//record eligibility decreasing round bids
+	this.eligibilityReducingBids[this.round] = this.tempRequirePkg;
+    }
     this.activity = this.eligibility;
+    this.eligibility = 0;
     this.data = this.collectData();
     this.$.submit.go();
   },
@@ -198,43 +205,54 @@ Polymer('auction-cca', {
      //this.$.eligibilityPoints.innerHTML = 'Eligibility:' + '<font color="green">'+e.detail.points+'</font>';
      this.eligibility = e.detail.points;
      currentPkg = e.detail.require;
-     console.log("require:", requirePkg);
+     this.tempRequirePkg = currentPkg;
+     console.log("require package:", currentPkg);
      if (this.eligibility > this.activity) {
 	//check if RPC is satisfied
-	var RPCflag = true;
-	//1 calculate Nt
+	var RPCsatisfied = true;
+	//1 calculate Nt (current requirement package total price with current round unit price
 	var Nt = 0;
         for (var i in currentPkg) {
 	  // [1] unit price [2] unit required
 	  Nt += currentPkg[i][1] * currentPkg[i][2];
 	}
+	console.log("log", this.eligibilityReducingBids);
 	for (var s in this.eligibilityReducingBids) {
 	  var pkg = this.eligibilityReducingBids[s];
 	  var Ns = 0;
 	  var St = 0;
 	  var Ss = 0;
 	  for (var id in pkg) {
+		//2 calculate Ns (current requirement package total price with s round unit price
 		Ns += pkg[id][1] * currentPkg[id][2];
+		//3 calculate St (round s requirement package total price with current round unit price
 		St += currentPkg[id][1] * pkg[id][2];
+		//4 calculate Ss (current requirement package total price with s round unit price
 		Ss += pkg[id][1] * pkg[id][2];
 	  }
 	  if ((Nt - Ns) <= (St - Ss)) {
 	    //RPC satisfied with round s
 	  } else {
 	    //PRC is not satisfied with round s
-	    RPCflag = false;
+	    RPCsatisfied = false;
 	    break;
 	  }
 	}
         //disable/able Bid buttion
-        if ( RPCflag == true) {
+        if ( RPCsatisfied == true) {
+	  console.log("RPC is satisfied");
+          this.RPC = true;
 	  this.enableSubmittion();
-	} else if ( RPCflag == false) {
+	  return;
+	} else if ( RPCsatisfied == false) {
+	console.log("RPC is not satisfied");
+          this.RPC = false;
 	  this.disableSubmittion();
+	  return;
 	}
-     } else if (this.eligibility < this.activity) {
-	//record eligibility decreasing round
-	this.eligibilityReducingBids[this.round] = requirePkg;
      }
+     this.RPC = false;
+     //else should enable submittion buttion
+     this.enableSubmittion();
    }
 });

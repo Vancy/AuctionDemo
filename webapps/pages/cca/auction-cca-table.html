@@ -174,12 +174,12 @@
 
       calculateTotalEligibility: function() {
 	total = 0;
-	//console.log("caculate the init activity");
+	console.log("caculate the init activity");
 	for ( i=0; i < this.items.length; i++ ) {
 	  var itemUnitEligibility = this.items[i].eligibilityPoint;	  
           var amount = this.items[i].quantity;
 	  total += itemUnitEligibility * amount;
-	//console.log("i=", i, ";amount=", amount, "itemUnitEligibility=", itemUnitEligibility, ";activity acc:", total)
+	console.log("i=", i, ";amount=", amount, "itemUnitEligibility=", itemUnitEligibility, ";activity acc:", total)
         } 
 	return total;
       }
