@@ -9,6 +9,8 @@ import dataRepresentation.AuctionItem;
 public class ModGenerator {
 	private String content = new String();
 	private List<String> itemSymbols;
+	
+	public static String fileDir = "C:\\AMPL\\";
 
 	/////////////////////////////////////////////////////////////
 	public ModGenerator(List<AuctionItem> list) {
@@ -19,7 +21,7 @@ public class ModGenerator {
 	}
 	public void generateFile() {
 		generateContent();
-		File file = new File("./wdp.mod");
+		File file = new File(fileDir + "wdp.mod");
 		FileParser.writeToFile(file, this.content);
 	}
 	private void generateContent() {

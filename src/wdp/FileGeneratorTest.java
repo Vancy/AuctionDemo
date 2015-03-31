@@ -13,10 +13,9 @@ public class FileGeneratorTest {
 		/*
 		 * Gnerating .dat file for AMPL
 		 */
-		
-//		AnsParser ap = new AnsParser(null);
-//		AnsParser.ansFilePath = "";
-//		ap.getResult();
+		//ExecuteAMPLComand.getAnsFile();
+		AnsParser ap = new AnsParser();
+		ap.printResults();
 		
 	}
 

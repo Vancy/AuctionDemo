@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
 
+import wdp.AnsParser;
 import wdp.DatGenerator;
 import wdp.ModGenerator;
 
@@ -271,6 +272,7 @@ public class Auctioneer extends Thread{
 	}
 	
 	private void processCcaSupplementaryRoundBids() {
+		System.err.println("Processing CCA supplementary Round Bids (AMPL)...");
 		// collect all bids to an array
 		List<CCABiddingPackage> totalBiddingPakages = new ArrayList<CCABiddingPackage>();
 		for (int i: this.CCASupplementaryBids.keySet()) {
@@ -278,17 +280,27 @@ public class Auctioneer extends Thread{
 		}
 		
 		/*
-		 * Gnerating .mod file for AMPL
+		 * Generating .mod file for AMPL
 		 */
-		
+		System.err.println("(AMPL) Gnerating .mod file...");
 		ModGenerator modGenerator = new ModGenerator(this.environment.context.getItemList());
 		modGenerator.generateFile();
 		
 		/*
-		 * Gnerating .dat file for AMPL
+		 * Generating .dat file for AMPL
 		 */
+		System.err.println("(AMPL) Generating .dat file...");
 		DatGenerator datGenerator = new DatGenerator(this.environment.bidderList.getList(), totalBiddingPakages, this.environment.context.getItemList());
 		datGenerator.generateFile();
+		
+		/*
+		 * Processing and get answer
+		 */
+		System.err.println("(AMPL) Processing and get answer...");
+		AnsParser ap = new AnsParser();
+		ap.printResults();
+		System.err.println("(AMPL) Done...");
+		
 	}
 	
 	public ArrayList<AuctionContext> getLog() {

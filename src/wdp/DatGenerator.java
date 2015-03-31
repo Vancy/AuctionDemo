@@ -15,6 +15,8 @@ public class DatGenerator {
 	private List<AuctionItem> itemList;
 	private List<String> itemSymbols;
 
+	public static String fileDir = "C:\\AMPL\\";
+
 	/////////////////////////////////////////////////////////////
 	public DatGenerator(List<Bidder> bidderList, List<CCABiddingPackage> packageList, List<AuctionItem> itemList) {
 		this.itemSymbols = new ArrayList<String>();
@@ -28,7 +30,7 @@ public class DatGenerator {
 	
 	public void generateFile() {
 		generateContent();
-		File file = new File("./wdp.dat");
+		File file = new File(fileDir + "wdp.dat");
 		FileParser.writeToFile(file, this.content);
 	}
 	

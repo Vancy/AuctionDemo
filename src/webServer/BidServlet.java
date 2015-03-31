@@ -150,12 +150,7 @@ public class BidServlet extends DefaultServlet{
     	
     	Bidder bidder = this.auctionEnvironment.bidderList.getBidder(name, ip);
     	if (null == bidder) {
-    		try {
-				throw new Exception("BidServlet: Cannot find bidder inside bidderlist");
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
+				throw new RuntimeException("BidServlet: Cannot find bidder inside bidderlist");
     	}
     	
     	/*
