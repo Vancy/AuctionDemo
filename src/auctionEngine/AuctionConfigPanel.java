@@ -55,6 +55,7 @@ public class AuctionConfigPanel extends JPanel {
 	private JLabel lblRoundDurationsec;
 	private JLabel lblMinimumIncrement;
 	private JPanel panel_minimumInrement;
+	private JLabel lblPrice_Or_Quantity;
 	private AuctionEnvironment environment;
 	private JFrame parentFrame;
 	private JTable table;
@@ -152,8 +153,8 @@ public class AuctionConfigPanel extends JPanel {
 		panel_1.add(textField_name);
 		textField_name.setColumns(10);
 				
-				JLabel lblPrice = new JLabel("Price:");
-				panel_1.add(lblPrice);
+				lblPrice_Or_Quantity = new JLabel("Price:");
+				panel_1.add(lblPrice_Or_Quantity);
 				
 				textField_price = new JTextField();
 				panel_1.add(textField_price);
@@ -237,11 +238,12 @@ public class AuctionConfigPanel extends JPanel {
 		if (auctionType.equals("SAA")) {
 			this.lblRoundDurationsec.setText("Round Duration:(s)");
 			this.spinner_roundDuration.setValue(30);
+			this.lblPrice_Or_Quantity.setText("Price:");
 
 		} else if (auctionType.equals("CCA")) {
 			this.lblRoundDurationsec.setText("Round Tick:(ms)");
 			this.spinner_roundDuration.setValue(10000);
-
+			this.lblPrice_Or_Quantity.setText("Quantity:");
 		}
 	}
 	private void initTable(String auctionType) {
