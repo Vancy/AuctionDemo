@@ -10,6 +10,7 @@
             <th>Item</th>
             <th>Price</th>
             <th>Amount</th> 
+	    <th>Total Demands</th>
 
             <template if="{{ final }}">
               <th>Owner</th> 
@@ -26,6 +27,7 @@
                 <td>{{ item.name }}</td>
                 <td id="price{{item.ID}}">{{ item.price }}</td> 
                 <td id="amount{{item.ID}}">{{ item.quantity }}</td> 
+	        <td id="total_demands{{item.ID}}">{{ item.quantity_required }}</td> 
                 <td id="last{{item.ID}}">
                   <template if="{{ item.biddingFinised || final }}">
                     <span id="owner{{item.ID}}">
@@ -82,6 +84,7 @@
         for ( var i=0; i < newItems.length; i++ ) {
           var id = newItems[i].ID;
           this.$.tbody.querySelector("#price" + id).innerHTML = newItems[i].price;
+	  this.$.tbody.querySelector("#total_demands" + id).innerHTML = newItems[i].quantity_required;
         }
         if ( this.lastItems.length <= 0 || this.lastItems == undefined ) {
           this.lastItems = newItems;
@@ -139,10 +142,10 @@
           }
 	  requireDic[id] = [this.items[i].price, yAmountNum];
 	  totalEligibilityPoints += itemUnitEligibility * yAmountNum;
-	  console.log("i=", i, ";yamount=", yAmountNum, "itemUnitEligibility=", itemUnitEligibility, ";accumulated:", totalEligibilityPoints);
+	  //console.log("i=", i, ";yamount=", yAmountNum, "itemUnitEligibility=", itemUnitEligibility, ";accumulated:", totalEligibilityPoints);
         } 
         this.fire('eligibility-calculated', {points: totalEligibilityPoints, require: requireDic});
-	console.log("eligibility-caculated signal sent:(points)", totalEligibilityPoints);
+	//console.log("eligibility-caculated signal sent:(points)", totalEligibilityPoints);
 
         // helper functions
         function S2N(str) {
@@ -179,7 +182,7 @@
 	  var itemUnitEligibility = this.items[i].eligibilityPoint;	  
           var amount = this.items[i].quantity;
 	  total += itemUnitEligibility * amount;
-	console.log("i=", i, ";amount=", amount, "itemUnitEligibility=", itemUnitEligibility, ";activity acc:", total)
+	  //console.log("i=", i, ";amount=", amount, "itemUnitEligibility=", itemUnitEligibility, ";activity acc:", total)
         } 
 	return total;
       }
