@@ -18,7 +18,7 @@
 	<p id="eligibilityPoints">Eligibility:<font color="green">{{eligibility}}</font><template if="{{RPC}}"><font color="red">(RPC)</font></template></p>
 	<div>
           <auction-cca-table id="table" items="{{ items }}" final="{{ isFinal }}"></auction-cca-table>
-	  <auction-cca-phase2-table id="supplymentarytable" items="{{ items }}" hidden></auction-cca-phase2-table>
+	  <p><auction-cca-phase2-table id="supplymentarytable" items="{{ items }}" hidden></auction-cca-phase2-table></p>
 	</div>
         <div id="div-btn-submit" class="btn-group">
           <button id="bid" on-click="{{submit}}" type="button" class="btn btn-default">Bid</button>

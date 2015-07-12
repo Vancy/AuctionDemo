@@ -136,11 +136,11 @@ Polymer('auction-cca', {
     	var stage2table = this.$.supplymentarytable;
 
     	stage2table.hidden = false; // display phase2 table
-    	stage1table.hidden = true; // hidden phase1 table
-      this.items = tmp;
+    	//stage1table.hidden = true; // don't hide phase1 table (Xing at 2015.7.12)
+        this.items = tmp;
     	clearInterval(this.timer);  // stop timer update
     	this.$.time.innerHTML = "<b>Supplementary Round</b>";
-      this.$.title.innerHTML = "<p>CCA - Supplementary Round</p>"
+        this.$.title.innerHTML = "<p>CCA - Supplementary Round</p>"
     }
 
     // this.$.bid.disabled = false;
