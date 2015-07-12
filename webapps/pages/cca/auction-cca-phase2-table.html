@@ -30,6 +30,7 @@
           </tbody>
         </table>
         <button id="addPackage" on-click="{{addPackage}}">+</button>
+	<button id="deletePackage" on-click="{{deletePackage}}">-</button>
     </div>
   </template>
 
@@ -40,7 +41,8 @@
       addPackage: function () {
         var tr = document.createElement("tr");
         var td1 = document.createElement("td");
-        td1.innerHTML = "package " + this.numOfPackages;
+	var index = this.numOfPackages + 1
+        td1.innerHTML = "package " + index;
     
         tr.appendChild(td1);
         for ( var i=0; i<this.items.length; i++ ) {
@@ -71,7 +73,6 @@
         this.$.tbody.appendChild(tr);
         this.numOfPackages++;
 
-
         /**
         * * Create an element. Note: cannot bind event. Use `addEventListener` instead.
         * * Important: please bind this to the event handler. Like `this.validate.bind(this)`.
@@ -93,6 +94,13 @@
         }
       },
 
+      deletePackage: function () {
+	if (0 == this.numOfPackages) {
+		return;
+	}
+	this.$.tbody.deleteRow(this.numOfPackages);
+	this.numOfPackages--;
+      },
 
       getPackages: function() {
 
