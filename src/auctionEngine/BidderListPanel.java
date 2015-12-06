@@ -90,6 +90,7 @@ public class BidderListPanel extends JPanel {
 		btnAddAgent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				agentAddingDialog = new AgentAddingDialog(environment);
+				agentAddingDialog.setLocationByPlatform(true);
 				agentAddingDialog.setVisible(true);
 			}
 		});

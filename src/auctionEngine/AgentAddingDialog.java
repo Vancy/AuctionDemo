@@ -19,7 +19,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import dataRepresentation.Agent;
 import dataRepresentation.AuctionEnvironment;
@@ -122,17 +124,29 @@ public class AgentAddingDialog extends JDialog {
 	}
 	
 	private Document parseConfigFile(File file) {
-		File xmlFile = new File(this.filePathTextField.getText());
-		xmlFile.setReadOnly();
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = null;
 		Document doc = null;
+		boolean docReady = false;
 		try {
-			DocumentBuilder dBuilder;
-			dBuilder = dbFactory.newDocumentBuilder(); 
-			doc = dBuilder.parse(xmlFile);
-		} catch (ParserConfigurationException | SAXException | IOException e) {
-				e.printStackTrace();
+			dBuilder = dbFactory.newDocumentBuilder();
+		} catch (ParserConfigurationException pce) {
+			pce.printStackTrace();
+		}  
+		while (!docReady) {
+			try {
+				File xmlFile = new File(this.filePathTextField.getText());
+				xmlFile.setReadOnly();
+				doc = dBuilder.parse(xmlFile);
+			} catch (SAXException e) {
+				WarningDialog dialog = new WarningDialog(this, "XML file is not well-formed", e.getMessage());
+	            dialog.setVisible(true); // pop up warning dialog
+			} catch (IOException e) {
+				WarningDialog dialog = new WarningDialog(this, "XML file read error", e.getMessage());
+	            dialog.setVisible(true); // pop up warning dialog
+			}
+			docReady = true;
 		}
 		createAgent(doc);
 		return doc;
