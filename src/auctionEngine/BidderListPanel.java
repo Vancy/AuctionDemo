@@ -28,6 +28,8 @@ public class BidderListPanel extends JPanel {
 	private AgentAddingDialog agentAddingDialog;
 	
 	public JButton btnStart;
+	public JButton btnKickOut;
+	public JButton btnAddAgent;
 
 	/**
 	 * Create the panel.
@@ -83,10 +85,12 @@ public class BidderListPanel extends JPanel {
 			}
 		});
 		panel.add(btnStart);
-		JButton btnKickOut = new JButton("Kick Out");
+		btnKickOut = new JButton("Kick Out");
+		btnKickOut.setEnabled(false);
 		panel.add(btnKickOut);
 		
-		JButton btnAddAgent = new JButton("Add agent");
+		btnAddAgent = new JButton("Add agent");
+		btnAddAgent.setEnabled(false);
 		btnAddAgent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				agentAddingDialog = new AgentAddingDialog(environment);

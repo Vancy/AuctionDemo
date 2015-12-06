@@ -299,6 +299,8 @@ public class AuctionConfigPanel extends JPanel {
 		//enable Bidderlist auction start button 
 		BidderListPanel bidderListPanel = (BidderListPanel) sp.getRightComponent();
 		bidderListPanel.btnStart.setEnabled(true);
+		bidderListPanel.btnKickOut.setEnabled(true);
+		bidderListPanel.btnAddAgent.setEnabled(true);
 	}
 	
 	private void startSaaAuction() {
