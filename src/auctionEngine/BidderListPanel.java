@@ -24,10 +24,8 @@ public class BidderListPanel extends JPanel {
 	private JTable table;
 	private DefaultTableModel tableModel;
 	
-	private AuctionPanel auctionPanel;
 	private AgentAddingDialog agentAddingDialog;
 	
-	public JButton btnStart;
 	public JButton btnKickOut;
 	public JButton btnAddAgent;
 
@@ -36,7 +34,6 @@ public class BidderListPanel extends JPanel {
 	 */
 	public BidderListPanel(AuctionEnvironment e, AuctionPanel ap) {
 		this.environment = e;
-		this.auctionPanel = ap;
 		this.bidderList = e.bidderList;
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{450, 0};
@@ -71,20 +68,7 @@ public class BidderListPanel extends JPanel {
 		gbc_panel.gridx = 0;
 		gbc_panel.gridy = 1;
 		add(panel, gbc_panel);
-		
-		btnStart = new JButton("Start");
-		btnStart.setEnabled(false);
-		btnStart.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				environment.AuctionStarted = true;
-				environment.context.incrementRound(); // increment round from 0 to 1
-				environment.auctioneer.start();
-				auctionPanel.startAuction();
-				System.err.println("Click Auction Start:"+ environment.AuctionStarted);
-				btnStart.setEnabled(false);
-			}
-		});
-		panel.add(btnStart);
+
 		btnKickOut = new JButton("Kick Out");
 		btnKickOut.setEnabled(false);
 		panel.add(btnKickOut);

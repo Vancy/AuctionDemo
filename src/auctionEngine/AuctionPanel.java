@@ -6,11 +6,11 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.JButton;
 import javax.swing.JTextField;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.Timer;
 
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -31,73 +31,98 @@ public class AuctionPanel extends JPanel {
 	private JLabel lblTimer;
 	private JLabel lblActivityRuleStartRound;
 	
-	private JPanel panel;
-	private JButton btnNewButton_StartActivityRule;
+	private JButton btn_StartActivityRule;
+	private JButton btn_StartAuction;
 	
 	private Timer displayTimer; 
-	private JPanel panel_ForList;
+	private JPanel panel_AuctionTable;
+	private JPanel panel_AuctionRuleSetting;
 	
 	public AuctionPanel(AuctionEnvironment ae) {
 		this.environment = ae;
-		setLayout(null);
-		
+		setLayout(new BorderLayout());
+
 		JPanel panel_All = new JPanel();
-		//panel_All.setBounds(31, 5, 571, 564);
-		panel_All.setBounds(31, 5, 571, 1064);
+		panel_All.setBounds(0, 0, 800, 1000);
 		add(panel_All);
-		panel_All.setLayout(null);
+		panel_All.setLayout(new GridLayout(2,1)); //two rows and only one column.
 		
-		panel_ForList = new JPanel();
-		panel_ForList.setBounds(0, 0, 571, 505);
-		panel_All.add(panel_ForList);
+		panel_AuctionTable = new JPanel();
+		panel_AuctionTable.setBounds(0, 0, 800, 1500);
+		panel_All.add(panel_AuctionTable);
+			
+		JPanel panel_Control = new JPanel();
+		panel_Control.setLayout(new GridLayout(12,1)); //only one column and many rows.
+		panel_All.add(panel_Control);
+		//////////////////////////////////////////////////////////////////
 		
-		JPanel panel_Display = new JPanel();
-		panel_Display.setBounds(0, 503, 571, 25);
-		panel_All.add(panel_Display);
-		panel_Display.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		JPanel panel_AuctionInfoDisplay = new JPanel();
+
+		panel_AuctionInfoDisplay.setLayout(new FlowLayout());
+		panel_Control.add(panel_AuctionInfoDisplay);
 		
 		lblAuctionType = new JLabel("");
-		panel_Display.add(lblAuctionType);
+		panel_AuctionInfoDisplay.add(lblAuctionType);
 		
 		lblRound = new JLabel("");
-		panel_Display.add(lblRound);
+		panel_AuctionInfoDisplay.add(lblRound);
 		
 		lblTimer = new JLabel("");
-		panel_Display.add(lblTimer);
-				
-		panel = new JPanel();
-		panel.setBounds(0, 529, 571, 535);
-		panel_All.add(panel);
+		panel_AuctionInfoDisplay.add(lblTimer);
 		
+		//////////////////////////////////////////////////////////////////
 		
-		JLabel lblMinimumIncrement = new JLabel("Min Inc: ");
+		JPanel panel_AuctionArgsSetting = new JPanel();
+		panel_AuctionArgsSetting.setBounds(0, 529, 571, 535);
+		panel_Control.add(panel_AuctionArgsSetting);
 		
-		panel.add(lblMinimumIncrement);
+		JLabel lblMinimumIncrement = new JLabel("Minimun Increment: ");
+		
+		panel_AuctionArgsSetting.add(lblMinimumIncrement);
 		//SpinnerModel sm_minIncrement = new SpinnerNumberModel(1, 0, Double.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
 		spinner_Increment = new JSpinner(/*sm_minIncrement*/);
-		panel.add(spinner_Increment);
+		panel_AuctionArgsSetting.add(spinner_Increment);
 		
-		JLabel lblTimeDuration = new JLabel("Rnd Time: ");
-		panel.add(lblTimeDuration);
+		JLabel lblTimeDuration = new JLabel("Round Time: ");
+		panel_AuctionArgsSetting.add(lblTimeDuration);
 
 		//SpinnerModel sm_timeDuration = new SpinnerNumberModel(30, 0, Integer.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
 		spinner_timeDuration = new JSpinner(/*sm_timeDuration*/);
-		panel.add(spinner_timeDuration);
+		panel_AuctionArgsSetting.add(spinner_timeDuration);
+		
+		JButton btnNewButton_Set = new JButton("Set");
+		btnNewButton_Set.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				environment.context.setMinIncrement(Double.parseDouble(spinner_Increment.getValue().toString()));
+				environment.context.setDurationTime((int)Math.round(Double.parseDouble(spinner_timeDuration.getValue().toString())));
+				environment.context.setNumberOfActivityRuleWaivers(Integer.parseInt(spinner_activityRuleWaivers.getValue().toString()));
+				System.out.println("Minimum increment set to " + environment.context.getMinIncrement());
+				System.out.println("Round duration set to " + environment.context.getDurationTime());
+				System.out.println("Number of waivers set to " + environment.context.getNumberOfActivityRuleWaivers());
+			}
+		});
+		panel_AuctionArgsSetting.add(btnNewButton_Set);
+		
+		//////////////////////////////////////////////////////////////////////////
+		
+		JPanel panel_AuctionRuleSetting = new JPanel();
+		panel_AuctionRuleSetting.setBounds(0, 529, 571, 535);
+		panel_Control.add(panel_AuctionRuleSetting);
 		
 		JLabel lblActivityRuleWaivers = new JLabel("#Waivers: ");
-		panel.add(lblActivityRuleWaivers);
+		panel_AuctionRuleSetting.add(lblActivityRuleWaivers);
 		
 		spinner_activityRuleWaivers = new JSpinner();
-		panel.add(spinner_activityRuleWaivers);
+		panel_AuctionRuleSetting.add(spinner_activityRuleWaivers);
 		
 		lblActivityRuleStartRound = new JLabel("Act rule start rnd: ");
-		panel.add(lblActivityRuleStartRound);
+		panel_AuctionRuleSetting.add(lblActivityRuleStartRound);
 		
 		spinner_activityRuleStartRound = new JSpinner();
-		panel.add(spinner_activityRuleStartRound);
+		panel_AuctionRuleSetting.add(spinner_activityRuleStartRound);
 		
-		btnNewButton_StartActivityRule = new JButton("Start Activity Rule");
-		btnNewButton_StartActivityRule.addActionListener(new ActionListener() {
+		btn_StartActivityRule = new JButton("Start Activity Rule");
+		btn_StartActivityRule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int spinnerValue = (int)Double.parseDouble(spinner_activityRuleStartRound.getValue().toString());
 				int currentRound = environment.context.getRound();
@@ -113,41 +138,52 @@ public class AuctionPanel extends JPanel {
 				environment.context.setActivityRuleStartRound(spinnerValue);
 				System.out.println("Activity Rule announced in round " + currentRound + ". It begins in round " + spinnerValue);
 				
-				// destroy button and spinner
-				panel.remove(btnNewButton_StartActivityRule);
-				panel.remove(spinner_activityRuleStartRound);
-				panel.remove(lblActivityRuleStartRound);
-				
-				// give text field to auctioneer to inform of when activity rule starts
-				JTextField activityRuleTextField = new JTextField("The Activity Rule will take effect in round " + spinnerValue + ".");
-				activityRuleTextField.setEditable(false);
-				panel.add(activityRuleTextField);
-				
-				panel.updateUI();
+//				// destroy button and spinner
+//				panel_AuctionRuleSetting.remove(btn_StartActivityRule);
+//				panel_AuctionRuleSetting.remove(spinner_activityRuleStartRound);
+//				panel_AuctionRuleSetting.remove(lblActivityRuleStartRound);
+//				
+//				// give text field to auctioneer to inform of when activity rule starts
+//				JTextField activityRuleTextField = new JTextField("The Activity Rule will take effect in round " + spinnerValue + ".");
+//				activityRuleTextField.setEditable(false);
+//				panel_AuctionRuleSetting.add(activityRuleTextField);
+//				
+//				panel_AuctionRuleSetting.updateUI();
 			}
 		});
-		panel.add(btnNewButton_StartActivityRule);
+		panel_AuctionRuleSetting.add(btn_StartActivityRule);
 		
-		JButton btnNewButton_Stop = new JButton("Set");
-		btnNewButton_Stop.addActionListener(new ActionListener() {
+		JPanel panel_AuctionStartEnd = new JPanel();
+		panel_AuctionStartEnd.setBounds(0, 529, 571, 535);
+		panel_Control.add(panel_AuctionStartEnd);
+		
+		btn_StartAuction = new JButton("Start");
+		btn_StartAuction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				environment.context.setMinIncrement(Double.parseDouble(spinner_Increment.getValue().toString()));
-				environment.context.setDurationTime((int)Math.round(Double.parseDouble(spinner_timeDuration.getValue().toString())));
-				environment.context.setNumberOfActivityRuleWaivers(Integer.parseInt(spinner_activityRuleWaivers.getValue().toString()));
-				System.out.println("Minimum increment set to " + environment.context.getMinIncrement());
-				System.out.println("Round duration set to " + environment.context.getDurationTime());
-				System.out.println("Number of waivers set to " + environment.context.getNumberOfActivityRuleWaivers());
+				environment.AuctionStarted = true;
+				environment.context.incrementRound(); // increment round from 0 to 1
+				environment.auctioneer.start();
+				startAuction();
+				System.err.println("Click Auction Start:"+ environment.AuctionStarted);
 			}
 		});
-		panel.add(btnNewButton_Stop);
+		panel_AuctionStartEnd.add(btn_StartAuction);
 		
-		JButton btnNewButton_endAuction = new JButton("End");
-		btnNewButton_endAuction.addActionListener(new ActionListener() {
+		JButton btn_endAuction = new JButton("End");
+		btn_endAuction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setAuctionEndFlag();
 			}
 		});
-		panel.add(btnNewButton_endAuction);
+		panel_AuctionStartEnd.add(btn_endAuction);
+		
+		JButton btn_Back = new JButton("Back");
+		btn_Back.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO
+			}
+		});
+		panel_AuctionStartEnd.add(btn_Back);
 		
 		ActionListener listener = new ActionListener() {
 			@Override
@@ -171,7 +207,7 @@ public class AuctionPanel extends JPanel {
 	
 	protected void initAuctionList(){
 		this.auctionListPanel = new AuctionListPanel(this.environment);
-		this.panel_ForList.add(auctionListPanel);
+		this.panel_AuctionTable.add(auctionListPanel);
 		
 		//Set minimun increment to spinner
 		this.spinner_Increment.setValue(environment.context.getMinIncrement());
@@ -200,7 +236,7 @@ public class AuctionPanel extends JPanel {
 	private void setAuctionEndFlag() {
 		this.environment.context.setFinalRound();
 	}
-	public void startAuction() {
+	private void startAuction() {
 		this.environment.context.roundTimeRemain = this.environment.context.getDurationTime();
 		this.displayTimer.start();
 	}
