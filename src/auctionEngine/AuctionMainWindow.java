@@ -47,7 +47,7 @@ public class AuctionMainWindow {
 	    //auctionContentPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 	    auctionContentPane.setLayout(new CardLayout());
 	    this.auctionConfigPane = new AuctionConfigPanel(this, this.environment, this.frame);
-	    this.auctionPane = new AuctionPanel(this.environment);
+	    this.auctionPane = new AuctionPanel(this.environment, this.frame);
 	    auctionContentPane.add(auctionConfigPane, "ConfigPane"); 
 	    auctionContentPane.add(auctionPane, "AuctionPane");
 	    

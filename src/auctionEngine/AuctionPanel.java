@@ -1,14 +1,17 @@
 package auctionEngine;
 import dataRepresentation.AuctionEnvironment;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.JButton;
+import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
@@ -20,6 +23,8 @@ public class AuctionPanel extends JPanel {
 	private static final long serialVersionUID = 2896868153742237502L;
 
 	private AuctionEnvironment environment;
+	
+	private JFrame parentFrame;
 	
 	public AuctionListPanel auctionListPanel;
 	private JSpinner spinner_Increment;
@@ -33,13 +38,14 @@ public class AuctionPanel extends JPanel {
 	
 	private JButton btn_StartActivityRule;
 	private JButton btn_StartAuction;
+	private JButton btn_Back;
 	
 	private Timer displayTimer; 
 	private JPanel panel_AuctionTable;
-	private JPanel panel_AuctionRuleSetting;
 	
-	public AuctionPanel(AuctionEnvironment ae) {
+	public AuctionPanel(AuctionEnvironment ae, JFrame parentFrame) {
 		this.environment = ae;
+		this.parentFrame = parentFrame;
 		setLayout(new BorderLayout());
 
 		JPanel panel_All = new JPanel();
@@ -105,7 +111,7 @@ public class AuctionPanel extends JPanel {
 		
 		//////////////////////////////////////////////////////////////////////////
 		
-		JPanel panel_AuctionRuleSetting = new JPanel();
+		final JPanel panel_AuctionRuleSetting = new JPanel();
 		panel_AuctionRuleSetting.setBounds(0, 529, 571, 535);
 		panel_Control.add(panel_AuctionRuleSetting);
 		
@@ -138,17 +144,17 @@ public class AuctionPanel extends JPanel {
 				environment.context.setActivityRuleStartRound(spinnerValue);
 				System.out.println("Activity Rule announced in round " + currentRound + ". It begins in round " + spinnerValue);
 				
-//				// destroy button and spinner
-//				panel_AuctionRuleSetting.remove(btn_StartActivityRule);
-//				panel_AuctionRuleSetting.remove(spinner_activityRuleStartRound);
-//				panel_AuctionRuleSetting.remove(lblActivityRuleStartRound);
-//				
-//				// give text field to auctioneer to inform of when activity rule starts
-//				JTextField activityRuleTextField = new JTextField("The Activity Rule will take effect in round " + spinnerValue + ".");
-//				activityRuleTextField.setEditable(false);
-//				panel_AuctionRuleSetting.add(activityRuleTextField);
-//				
-//				panel_AuctionRuleSetting.updateUI();
+				// destroy button and spinner
+				panel_AuctionRuleSetting.remove(btn_StartActivityRule);
+				panel_AuctionRuleSetting.remove(spinner_activityRuleStartRound);
+				panel_AuctionRuleSetting.remove(lblActivityRuleStartRound);
+				
+				// give text field to auctioneer to inform of when activity rule starts
+				JTextField activityRuleTextField = new JTextField("The Activity Rule will take effect in round " + spinnerValue + ".");
+				activityRuleTextField.setEditable(false);
+				panel_AuctionRuleSetting.add(activityRuleTextField);
+				
+				panel_AuctionRuleSetting.updateUI();
 			}
 		});
 		panel_AuctionRuleSetting.add(btn_StartActivityRule);
@@ -165,6 +171,7 @@ public class AuctionPanel extends JPanel {
 				environment.auctioneer.start();
 				startAuction();
 				System.err.println("Click Auction Start:"+ environment.AuctionStarted);
+				btn_Back.setEnabled(false);
 			}
 		});
 		panel_AuctionStartEnd.add(btn_StartAuction);
@@ -177,10 +184,11 @@ public class AuctionPanel extends JPanel {
 		});
 		panel_AuctionStartEnd.add(btn_endAuction);
 		
-		JButton btn_Back = new JButton("Back");
+		btn_Back = new JButton("Back");
 		btn_Back.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO
+				backToAuctionConfig();
 			}
 		});
 		panel_AuctionStartEnd.add(btn_Back);
@@ -207,6 +215,7 @@ public class AuctionPanel extends JPanel {
 	
 	protected void initAuctionList(){
 		this.auctionListPanel = new AuctionListPanel(this.environment);
+		this.panel_AuctionTable.removeAll(); //remove all previous tables
 		this.panel_AuctionTable.add(auctionListPanel);
 		
 		//Set minimun increment to spinner
@@ -221,6 +230,7 @@ public class AuctionPanel extends JPanel {
 		if (this.environment.context.isFinalRound()) {
 			this.lblTimer.setText("Auction Finished");
 			this.lblRound.setText("Round:"+Integer.toString(this.environment.context.getRound()));
+			btn_Back.setEnabled(true);
 			return;
 		}
 		this.lblAuctionType.setText(this.environment.context.getType() + " auction");
@@ -239,5 +249,14 @@ public class AuctionPanel extends JPanel {
 	private void startAuction() {
 		this.environment.context.roundTimeRemain = this.environment.context.getDurationTime();
 		this.displayTimer.start();
+	}
+	
+	private void backToAuctionConfig() {
+		
+		JSplitPane sp = (JSplitPane)(this.parentFrame.getContentPane());
+		JPanel auctionContentPanel = (JPanel) sp.getLeftComponent();
+		CardLayout contentPaneLayout = (CardLayout)auctionContentPanel.getLayout();
+		contentPaneLayout.show(auctionContentPanel, "ConfigPane");
+
 	}
 }
