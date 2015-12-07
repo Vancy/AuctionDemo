@@ -19,7 +19,7 @@ public class FileParser {
 	        stringBuilder.append( line );
 	        stringBuilder.append( ls );
 	    }
-
+	    reader.close();
 	    return stringBuilder.toString();
 	}
 	public static void writeToFile(File file, String contents) {

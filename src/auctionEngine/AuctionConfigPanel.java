@@ -24,9 +24,6 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 
-import wdp.DatGenerator;
-import wdp.ModGenerator;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -216,8 +213,8 @@ public class AuctionConfigPanel extends JPanel {
 		panel_quit.add(btnQuit);
 		
 		/*
-		 * This listener must put at the end of Constuctor, after
-		 * all widgets initilized
+		 * This listener must put at the end of Constructor, after
+		 * all widgets initialized
 		 */
 		typeComboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -264,11 +261,12 @@ public class AuctionConfigPanel extends JPanel {
 			tableModel.setRowCount(0);
 			tableModel.addColumn("Item");
 			tableModel.addColumn("Quantity");
+			tableModel.addColumn("Initial Price");
 			tableModel.addColumn("Unit Eligibility");
 			//put some initial data
-			String[] s1 = {"ItemA", "5", "5"};
-			String[] s2 = {"ItemB", "10", "10"};
-			String[] s3 = {"ItemC", "8", "8"};
+			String[] s1 = {"ItemA", "5", "0", "5"};
+			String[] s2 = {"ItemB", "10", "5", "10"};
+			String[] s3 = {"ItemC", "8", "2", "8"};
 			tableModel.addRow(s1);
 			tableModel.addRow(s2);
 			tableModel.addRow(s3);
@@ -341,9 +339,9 @@ public class AuctionConfigPanel extends JPanel {
 		for (int i=0; i<this.table.getRowCount(); i++) {
 			String name = this.table.getValueAt(i, 0).toString();
 			int quantity = Integer.parseInt(this.table.getValueAt(i, 1).toString());
-			int eligibility = Integer.parseInt(this.table.getValueAt(i, 2).toString());
-		
-			list.add(new AuctionItem(name, 0/*always from 0 for CCA*/, quantity, eligibility));
+			int startingPrice = Integer.parseInt(this.table.getValueAt(i, 2).toString());
+			int eligibility = Integer.parseInt(this.table.getValueAt(i, 3).toString());
+			list.add(new AuctionItem(name, startingPrice, quantity, eligibility));
 		}
 		this.environment.context.setData(time_duration, min_increment, list);
 		System.out.println(this.environment.context.generateXml());

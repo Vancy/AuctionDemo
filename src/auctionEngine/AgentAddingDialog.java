@@ -19,11 +19,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-
-import dataRepresentation.Agent;
 import dataRepresentation.AuctionEnvironment;
 import dataRepresentation.AuctionItem;
 import dataRepresentation.CCAAgent;

@@ -17,7 +17,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
