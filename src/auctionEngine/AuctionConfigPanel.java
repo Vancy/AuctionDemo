@@ -1,7 +1,6 @@
 package auctionEngine;
 
 
-import dataRepresentation.AuctionContext;
 import dataRepresentation.AuctionEnvironment;
 import dataRepresentation.AuctionItem;
 
@@ -277,7 +276,14 @@ public class AuctionConfigPanel extends JPanel {
 		
 	}
 	
+	private void AuctionEvironmentReset() {
+		this.environment.context.roundTimeRemain = this.environment.context.getDurationTime();
+		this.environment.context.setRound(0);
+	}
+	
 	private void startAuction() {
+		AuctionEvironmentReset();
+		
 		String auctionType = this.typeComboBox.getSelectedItem().toString();
 
 		if (auctionType.equals("SAA")) {

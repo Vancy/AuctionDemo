@@ -163,6 +163,10 @@ public class AuctionContext {
 		return this.round;
 	}
 	
+	public void setRound(int r) {
+		this.round = r;
+	}
+	
 	public void incrementRound() {
 		round++;
 	}

@@ -187,7 +187,6 @@ public class AuctionPanel extends JPanel {
 		btn_Back = new JButton("Back");
 		btn_Back.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO
 				backToAuctionConfig();
 			}
 		});
@@ -217,6 +216,12 @@ public class AuctionPanel extends JPanel {
 		this.auctionListPanel = new AuctionListPanel(this.environment);
 		this.panel_AuctionTable.removeAll(); //remove all previous tables
 		this.panel_AuctionTable.add(auctionListPanel);
+		
+		
+		//reset all labels
+		this.lblAuctionType.setText("");
+		this.lblRound.setText("");
+		this.lblTimer.setText("");
 		
 		//Set minimun increment to spinner
 		this.spinner_Increment.setValue(environment.context.getMinIncrement());
