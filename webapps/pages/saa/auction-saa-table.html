@@ -54,7 +54,7 @@
     Polymer('auction-saa-table', { 
       username: "",
       items: [],
-
+      minimumIncreament: 0,
       getItems: function() {
 
         var itemList = [];
@@ -80,7 +80,7 @@
         }
       },
 
-      update: function(newItems) {
+      update: function(newItems, minIncrement) {
         for ( i=0; i < newItems.length; i++ ) {
           var id = newItems[i].ID;
 	  //Xing: if this item's temp owner is me, highlight it
@@ -91,6 +91,7 @@
 	    this.$.tbody.querySelector("#price" + id).innerHTML = "<font color='red'>"+newItems[i].price+"</font>";
 	  }
         }
+	this.minimumIncreament = minIncrement;
       },
 
       // until now, it simply tries to validate all the input
@@ -111,6 +112,11 @@
             }
             if ( S2N(price) > S2N(yprice) ) {
               showTips(tips, "you are aborting this bid");
+	      return;
+            }
+ 	    if ( (S2N(price)+S2N(this.minimumIncreament)) > S2N(yprice) ) {
+              showTips(tips, "your bid price does not surpass the minimum increment of this round");
+              return;
             }
           }
         } 

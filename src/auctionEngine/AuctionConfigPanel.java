@@ -288,8 +288,8 @@ public class AuctionConfigPanel extends JPanel {
 			startSaaAuction();
 		} else if (auctionType.equals("CCA")) {
 			startCcaAuction();
-		}else if (auctionType.equals("ULA")) {
-			startUlaAuction();
+		}else if (auctionType.equals("LUA")) {
+			startLuaAuction();
 		}
 		
 		/*************inform GUI to update**********************/
@@ -348,7 +348,7 @@ public class AuctionConfigPanel extends JPanel {
 		
 	}
 	
-	private void startUlaAuction() {
-		//todo: ULA auction preparation
+	private void startLuaAuction() {
+		//TODO: ULA auction preparation
 	}
 }

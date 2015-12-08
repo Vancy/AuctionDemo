@@ -100,7 +100,7 @@ Polymer('auction-saa', {
     if ( this.items.length == 0 || this.isFinal ) {
         this.items = tmp;
     } else {
-        this.$.table.update(tmp);
+        this.$.table.update(tmp, this.minimumIncreament);
     }
 
     // this.$.bid.disabled = false;
