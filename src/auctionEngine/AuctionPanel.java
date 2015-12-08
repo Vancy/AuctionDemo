@@ -1,6 +1,7 @@
 package auctionEngine;
 import dataRepresentation.AuctionEnvironment;
 
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -12,6 +13,7 @@ import javax.swing.Timer;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
@@ -87,6 +89,9 @@ public class AuctionPanel extends JPanel {
 		panel_AuctionArgsSetting.add(lblMinimumIncrement);
 		//SpinnerModel sm_minIncrement = new SpinnerNumberModel(1, 0, Double.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
 		spinner_Increment = new JSpinner(/*sm_minIncrement*/);
+		Component spinner_Increment_Editor = spinner_Increment.getEditor();
+		JFormattedTextField jftf_increment = ((JSpinner.DefaultEditor) spinner_Increment_Editor).getTextField();
+		jftf_increment.setColumns(3);
 		panel_AuctionArgsSetting.add(spinner_Increment);
 		
 		JLabel lblTimeDuration = new JLabel("Round Time: ");
@@ -94,6 +99,9 @@ public class AuctionPanel extends JPanel {
 
 		//SpinnerModel sm_timeDuration = new SpinnerNumberModel(30, 0, Integer.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
 		spinner_timeDuration = new JSpinner(/*sm_timeDuration*/);
+		Component spinner_timeDuration_Editor = spinner_timeDuration.getEditor();
+		JFormattedTextField jftf_timeDuration = ((JSpinner.DefaultEditor) spinner_timeDuration_Editor).getTextField();
+		jftf_timeDuration.setColumns(3);
 		panel_AuctionArgsSetting.add(spinner_timeDuration);
 		
 		JButton btnNewButton_Set = new JButton("Set");
@@ -119,12 +127,18 @@ public class AuctionPanel extends JPanel {
 		panel_AuctionRuleSetting.add(lblActivityRuleWaivers);
 		
 		spinner_activityRuleWaivers = new JSpinner();
+		Component spinner_activityRuleWaivers_Editor = spinner_activityRuleWaivers.getEditor();
+		JFormattedTextField jftf_activityRuleWaivers = ((JSpinner.DefaultEditor) spinner_activityRuleWaivers_Editor).getTextField();
+		jftf_activityRuleWaivers.setColumns(2);
 		panel_AuctionRuleSetting.add(spinner_activityRuleWaivers);
 		
 		lblActivityRuleStartRound = new JLabel("Act rule start rnd: ");
 		panel_AuctionRuleSetting.add(lblActivityRuleStartRound);
 		
 		spinner_activityRuleStartRound = new JSpinner();
+		Component spinner_activityRuleStartRound_Editor = spinner_activityRuleStartRound.getEditor();
+		JFormattedTextField jftf_activityRuleStartRound = ((JSpinner.DefaultEditor) spinner_activityRuleStartRound_Editor).getTextField();
+		jftf_activityRuleStartRound.setColumns(3);
 		panel_AuctionRuleSetting.add(spinner_activityRuleStartRound);
 		
 		btn_StartActivityRule = new JButton("Start Activity Rule");
