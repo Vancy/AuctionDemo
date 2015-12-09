@@ -23,6 +23,8 @@ import java.awt.event.ActionEvent;
 public class AuctionPanel extends JPanel {
 
 	private static final long serialVersionUID = 2896868153742237502L;
+	
+	final private int timerInterval = 100; // every 10ms the display timer triggers
 
 	private AuctionEnvironment environment;
 	
@@ -94,14 +96,14 @@ public class AuctionPanel extends JPanel {
 		jftf_increment.setColumns(3);
 		panel_AuctionArgsSetting.add(spinner_Increment);
 		
-		JLabel lblTimeDuration = new JLabel("Round Time: ");
+		JLabel lblTimeDuration = new JLabel("Round Time(ms): ");
 		panel_AuctionArgsSetting.add(lblTimeDuration);
 
 		//SpinnerModel sm_timeDuration = new SpinnerNumberModel(30, 0, Integer.MAX_VALUE, 1); //default value,lower bound,upper bound,increment by
 		spinner_timeDuration = new JSpinner(/*sm_timeDuration*/);
 		Component spinner_timeDuration_Editor = spinner_timeDuration.getEditor();
 		JFormattedTextField jftf_timeDuration = ((JSpinner.DefaultEditor) spinner_timeDuration_Editor).getTextField();
-		jftf_timeDuration.setColumns(3);
+		jftf_timeDuration.setColumns(5);
 		panel_AuctionArgsSetting.add(spinner_timeDuration);
 		
 		JButton btnNewButton_Set = new JButton("Set");
@@ -215,7 +217,7 @@ public class AuctionPanel extends JPanel {
 				updateAuctionList();
 			}
 		};
-		displayTimer = new Timer(1000, listener);
+		displayTimer = new Timer(timerInterval, listener);
 	}
 	
 	private void updateAuctionList() {
@@ -254,12 +256,12 @@ public class AuctionPanel extends JPanel {
 		}
 		this.lblAuctionType.setText(this.environment.context.getType() + " auction");
 		/*if current time remain is bigger than 0, minus it and display
-		 * Else, direcly display 0, until Auctioneer class refresh it
+		 * Else, directly display 0, until Auctioneer class refresh it
 		 */
 		if (this.environment.context.roundTimeRemain > 0) {
-			this.environment.context.roundTimeRemain--;
+			this.environment.context.roundTimeRemain -= timerInterval;
 		}
-		this.lblTimer.setText("Remain:"+Integer.toString(this.environment.context.roundTimeRemain));
+		this.lblTimer.setText("Remain(s): "+Double.toString((double)this.environment.context.roundTimeRemain/1000));
 		this.lblRound.setText("Round:"+Integer.toString(this.environment.context.getRound()));
 	}
 	private void setAuctionEndFlag() {
