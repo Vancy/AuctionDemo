@@ -23,13 +23,13 @@ import org.w3c.dom.Element;
 
 
 public class AuctionContext {
-	public static enum AuctionType {SAA, CCA, ULA};
+	public static enum AuctionType {SAA, CCA, LUA};
 	private AuctionType type;
 	private int round;
-	private int duration_Sec;
+	private int duration_ms;
 	private ArrayList<AuctionItem> itemList;
 	private double minIncreament;
-	//priceTick is used in CCA auction, keep track of current price for all items
+	//priceTick is used in CCA and LUA auction, keep track of current price for all items
 	private double priceTick = 0;
 	private boolean finalRound;
 	public static int numberOfActivityRuleWaivers = 2;
@@ -49,7 +49,7 @@ public class AuctionContext {
 	public AuctionContext(BidderList bidderList) {
 		this.type = AuctionType.SAA;
 		this.round = 0;
-		this.duration_Sec = 30;
+		this.duration_ms = 30000;
 		this.itemList = new ArrayList<AuctionItem>();
 		this.minIncreament = 0;
 		this.finalRound = false;
@@ -60,7 +60,7 @@ public class AuctionContext {
 	public AuctionContext(AuctionContext ac) {
 		this.type = ac.type;
 		this.round = ac.round;
-		this.duration_Sec = ac.duration_Sec;
+		this.duration_ms = ac.duration_ms;
 		this.minIncreament = ac.minIncreament;
 		this.finalRound = ac.finalRound;
 		
@@ -75,7 +75,7 @@ public class AuctionContext {
 	public AuctionContext(AuctionType type, int time, double min, ArrayList<AuctionItem> list) {
 		this.type = type;
 		this.round = 0;
-		this.duration_Sec = time;
+		this.duration_ms = time;
 		this.itemList = list;
 		this.minIncreament = min;
 		this.finalRound = false;
@@ -83,7 +83,7 @@ public class AuctionContext {
 	
 	public void setData(int time, double min, ArrayList<AuctionItem> list) {
 		this.round = 0;
-		this.duration_Sec = time;
+		this.duration_ms = time;
 		this.itemList = list;
 		this.minIncreament = min;
 		this.finalRound = false;
@@ -99,8 +99,8 @@ public class AuctionContext {
 			 this.type = AuctionType.CCA;
 			 return;
 		 }
-		 if (typeName.equals("ULA")) {
-			 this.type = AuctionType.ULA;
+		 if (typeName.equals("LUA")) {
+			 this.type = AuctionType.LUA;
 			 return;
 		 }  
 	}
@@ -123,10 +123,10 @@ public class AuctionContext {
 		return this.finalRound;
 	}
 	public void setDurationTime(int t) {
-		this.duration_Sec = t;
+		this.duration_ms = t;
 	}
 	public int getDurationTime() {
-		return this.duration_Sec;
+		return this.duration_ms;
 	}
 	public void setNumberOfActivityRuleWaivers(int numberOfActivityRuleWaivers) {
 		AuctionContext.numberOfActivityRuleWaivers = numberOfActivityRuleWaivers;
@@ -222,8 +222,8 @@ public class AuctionContext {
 	    case CCA:
 	    	typeName = "CCA";
 	    	break;
-	    case ULA:
-	    	typeName = "ULA";
+	    case LUA:
+	    	typeName = "LUA";
 	    	break;
 		default:
 			break;
@@ -237,7 +237,7 @@ public class AuctionContext {
 	    child.setAttribute("final", this.finalRound?"yes":"no");
 	    root.appendChild(child);
 	    child = doc.createElement("duration");
-	    child.setAttribute("value", Integer.toString(this.duration_Sec));
+	    child.setAttribute("value", Integer.toString(this.duration_ms));
 	    child.setAttribute("remain", Integer.toString(this.roundTimeRemain));
 	    root.appendChild(child);
 	    child = doc.createElement("minimum_increament");
@@ -259,7 +259,7 @@ public class AuctionContext {
 	    	child.setAttribute("price", Double.toString(item.getPrice()));
 	    	child.setAttribute("quantity", Integer.toString(item.getQuantity()));
 	    	String ownerName = "";
-	    	// if current Item has Owner and Owner has name, then assgin owner name to Item
+	    	// if current Item has Owner and Owner has name, then assign owner name to Item
 	    	if ( (null != item.getOwner()) && (null != item.getOwner().getName()) ) {
 	    		ownerName = item.getOwner().getName();
 	    	}

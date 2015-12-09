@@ -16,10 +16,12 @@ public class AuctionItem implements Comparable<AuctionItem> {
 	private HashMap<String, Integer> owners = new HashMap<String, Integer>();
 	public boolean biddingFinised = false;
 	
-
+	//the parameter maxPrice is only used in LUA. SAA and CCA needn't use this value
+	private double maxPrice;
 	
 	static int number_of_items = 0;
 	
+	//default constructor, initial item object with invalid values.
 	public AuctionItem() {
 		this.ID = ++number_of_items - 1;
 		this.name = "";
@@ -28,6 +30,7 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		this.quantity_required = 0;
 		this.owner = null;
 		this.eligibilityPoint = 0;
+		this.maxPrice = 0;
 	}
 	
 	//copy constructor
@@ -45,8 +48,10 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		this.quantity_required = item.quantity_required;
 		
 		this.eligibilityPoint = item.eligibilityPoint;
+		this.maxPrice = item.maxPrice;
 	}
 	
+	//create item object by initializing name and start price.
 	public AuctionItem(String n, double sp) {
 		this.ID = ++number_of_items - 1;
 		this.name = n;
@@ -57,8 +62,10 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		this.quantity = 0;
 		this.quantity_required = 0;
 		this.eligibilityPoint = 0;
+		this.maxPrice = 0;
 	}
 	
+	//create item object by initializing id, name and start price.
 	public AuctionItem(int id, String n, double sp) {
 		this.ID = id;
 		this.name = n;
@@ -69,6 +76,20 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		this.quantity = 0;
 		this.quantity_required = 0;
 		this.eligibilityPoint = 0;
+		this.maxPrice = 0;
+	}
+	
+	//create item object by initializing name, start price and max price.
+	public AuctionItem(String n, double sp, double mp) {
+		this.name = n;
+		this.startingPrice = sp;
+		this.price = sp;
+		this.owner = null;
+		
+		this.quantity = 0;
+		this.quantity_required = 0;
+		this.eligibilityPoint = 0;
+		this.maxPrice = mp;
 	}
 	
 	/*
@@ -83,6 +104,7 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		this.quantity_required = require;
 		this.owner = null;
 		this.eligibilityPoint = 0;
+		this.maxPrice = 0;
 	}
 	
 	public AuctionItem(String n, double sp, int quantity, int eligibility) {
@@ -93,16 +115,13 @@ public class AuctionItem implements Comparable<AuctionItem> {
 		this.quantity = quantity;
 		this.owner = null;
 		this.eligibilityPoint = eligibility;
+		this.maxPrice = 0;
 	}
 	
 	protected void setStartingPrice(double startingPrice) {
 		this.startingPrice = startingPrice;
 	}
-	
-	protected double getStartingPrice() {
-		return this.startingPrice;
-	}
-	
+		
 	@Override
 	public int compareTo(AuctionItem i) {
 		if (this.ID == i.ID) {
@@ -136,6 +155,15 @@ public class AuctionItem implements Comparable<AuctionItem> {
 	public String getName() {
 		return this.name;
 	}
+	
+	protected double getStartingPrice() {
+		return this.startingPrice;
+	}
+	
+	protected double getMaxPrice() {
+		return this.maxPrice;
+	}
+	
 	public void setPrice(double newPrice) {
 		this.price = newPrice;
 	}

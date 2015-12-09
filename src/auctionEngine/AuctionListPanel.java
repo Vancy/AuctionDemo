@@ -36,7 +36,7 @@ public class AuctionListPanel extends JPanel {
 
 		initTableModel(); //initialize table model to fill data
 		
-		table = new JTable(tableModel); //Buid up table based on table model
+		table = new JTable(tableModel); //Build up table based on table model
 		table.setEnabled(false);
 		table.setDefaultRenderer(Object.class, new PriceOwnerCellRenderer(this.environment));
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); 
@@ -56,7 +56,7 @@ public class AuctionListPanel extends JPanel {
 			//keep table scroll down to the last row
 			table.changeSelection(table.getRowCount() - 1, 0, false, false);
 			break;
-		case ULA:
+		case LUA:
 			updateUlaAuctionList();
 			break;
 		default:
@@ -72,7 +72,7 @@ public class AuctionListPanel extends JPanel {
 		case CCA:
 			initCcaTableModel();
 			break;
-		case ULA:
+		case LUA:
 			initUlaTableModel();
 			break;
 		default:
@@ -119,7 +119,7 @@ public class AuctionListPanel extends JPanel {
 			double payoff = agentItemList.getValue() - totalPricePaid;
 			return payoff;
 		}
-		// agent didnt win anything that he has a valuation for. Therefore, his payoff is 0 - totalPricePaid
+		// agent didn't win anything that he has a valuation for. Therefore, his payoff is 0 - totalPricePaid
 		double payoff = 0.0;
 		for (AuctionItem item : this.environment.context.getItemList()) {
 			if (item.getOwner().getID() == currAgent.getID()) {

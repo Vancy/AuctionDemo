@@ -13,7 +13,6 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JSpinner;
-import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
@@ -26,8 +25,6 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
@@ -283,7 +280,7 @@ public class AuctionConfigPanel extends JPanel {
 
 		this.environment.context.setType("SAA");
 		
-		int time_duration = Integer.parseInt(this.spinner_roundDuration.getValue().toString());
+		int time_duration = Integer.parseInt(this.spinner_roundDuration.getValue().toString()) * 1000;
 		float min_increment = Float.parseFloat(this.spinner_minIncrement.getValue().toString());
 
 		ArrayList<AuctionItem> list = new ArrayList<AuctionItem>();
@@ -295,8 +292,6 @@ public class AuctionConfigPanel extends JPanel {
 			list.add(new AuctionItem(name, price, 0/*invalid for SAA*/,0/*eligibility is invalid for SAA*/));
 		}
 		this.environment.context.setData(time_duration, min_increment, list);
-		System.out.println(this.environment.context.generateXml());
-
 	}
 	
 	private void startCcaAuction() {
@@ -304,7 +299,6 @@ public class AuctionConfigPanel extends JPanel {
 		this.environment.context.setType("CCA");
 		
 		int time_duration = Integer.parseInt(this.spinner_roundDuration.getValue().toString());
-		time_duration = time_duration / 1000;
 		float min_increment = Float.parseFloat(this.spinner_minIncrement.getValue().toString());
 		
 		ArrayList<AuctionItem> list = new ArrayList<AuctionItem>();
@@ -317,11 +311,24 @@ public class AuctionConfigPanel extends JPanel {
 			list.add(new AuctionItem(name, startingPrice, quantity, eligibility));
 		}
 		this.environment.context.setData(time_duration, min_increment, list);
-		System.out.println(this.environment.context.generateXml());
 		
 	}
 	
 	private void startLuaAuction() {
-		//TODO: ULA auction preparation
+		this.environment.context.setType("LUA");
+		
+		int time_duration = Integer.parseInt(this.spinner_roundDuration.getValue().toString());
+		float min_increment = Float.parseFloat(this.spinner_minIncrement.getValue().toString());
+
+		ArrayList<AuctionItem> list = new ArrayList<AuctionItem>();
+
+		for (int i=0; i<this.table.getRowCount(); i++) {
+			String name = this.table.getValueAt(i, 0).toString();
+			float startprice = Float.parseFloat(this.table.getValueAt(i, 1).toString());
+			float maxprice = Float.parseFloat(this.table.getValueAt(i, 2).toString());
+
+			list.add(new AuctionItem(name, startprice, maxprice));
+		}
+		this.environment.context.setData(time_duration, min_increment, list);
 	}
 }
