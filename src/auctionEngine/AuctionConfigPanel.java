@@ -45,7 +45,7 @@ public class AuctionConfigPanel extends JPanel {
 	private JPanel panel_auctionParemeters;
 	private JSpinner spinner_minIncrement;
 	private JSpinner spinner_roundDuration;
-	private String auctionTypes[] = {"SAA", "CCA", "ULA"};
+	private String auctionTypes[] = {"SAA", "CCA", "LUA"};
 	private JTextField textField_name;
 	private JTextField textField_price;
 	private JLabel lblRoundDurationsec;
@@ -235,11 +235,17 @@ public class AuctionConfigPanel extends JPanel {
 			this.lblRoundDurationsec.setText("Round Duration:(s)");
 			this.spinner_roundDuration.setValue(30);
 			this.lblPrice_Or_Quantity.setText("Price:");
+			this.lblMinimumIncrement.setText("Minimum Increment:");
 
 		} else if (auctionType.equals("CCA")) {
 			this.lblRoundDurationsec.setText("Round Tick:(ms)");
 			this.spinner_roundDuration.setValue(10000);
 			this.lblPrice_Or_Quantity.setText("Quantity:");
+			this.lblMinimumIncrement.setText("Minimum Increment:");
+		} else if (auctionType.equals("LUA")) {
+			this.lblRoundDurationsec.setText("Tick Duration:(ms)");
+			this.spinner_roundDuration.setValue(200);
+			this.lblMinimumIncrement.setText("Tick Increment:");
 		}
 	}
 	private void initTable(String auctionType) {
@@ -270,6 +276,8 @@ public class AuctionConfigPanel extends JPanel {
 			tableModel.addRow(s1);
 			tableModel.addRow(s2);
 			tableModel.addRow(s3);
+		} else if (auctionType.equals("LUA")) {
+			//TODO
 		}
 		
 	}
