@@ -46,12 +46,10 @@ public class AuctionConfigPanel extends JPanel {
 	private JSpinner spinner_minIncrement;
 	private JSpinner spinner_roundDuration;
 	private String auctionTypes[] = {"SAA", "CCA", "LUA"};
-	private JTextField textField_name;
-	private JTextField textField_price;
+
 	private JLabel lblRoundDurationsec;
 	private JLabel lblMinimumIncrement;
 	private JPanel panel_minimumInrement;
-	private JLabel lblPrice_Or_Quantity;
 	private AuctionEnvironment environment;
 	private JFrame parentFrame;
 	private JTable table;
@@ -125,54 +123,25 @@ public class AuctionConfigPanel extends JPanel {
 		panel_auctionItems.add(scrollPane);
 		
 		table = new JTable(tableModel);
-		table.addMouseListener(new MouseAdapter() {
-		      public void mouseClicked(MouseEvent e) {
-		            int row = table.rowAtPoint(e.getPoint());
-		            textField_name.setText(table.getValueAt(row, 0).toString());
-		            textField_price.setText(table.getValueAt(row, 1).toString());
-		        }
-		 });
 		scrollPane.setViewportView(table);
 		
 				
 		JPanel panel_tableOperation = new JPanel();
 		panel_auctionItems.add(panel_tableOperation);
 		panel_tableOperation.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-				
-		JPanel panel_1 = new JPanel();
-		panel_tableOperation.add(panel_1);
-			
-		JLabel lblName = new JLabel("Name:");
-		panel_1.add(lblName);
-				
-		textField_name = new JTextField();
-		panel_1.add(textField_name);
-		textField_name.setColumns(10);
-				
-				lblPrice_Or_Quantity = new JLabel("Price:");
-				panel_1.add(lblPrice_Or_Quantity);
-				
-				textField_price = new JTextField();
-				panel_1.add(textField_price);
-				textField_price.setColumns(10);
-				
-				JPanel panel_2 = new JPanel();
-				panel_tableOperation.add(panel_2);
-				
-				JButton btnAdd = new JButton("Add");
-				btnAdd.addActionListener(new ActionListener(){
-					public void actionPerformed(ActionEvent e){
-                String[] rowValues = {textField_name.getText(),textField_price.getText()};
-                tableModel.addRow(rowValues);  
-                int rowCount = table.getRowCount() + 1;   
-                textField_name.setText("Item"+rowCount);
-                textField_price.setText("0");
+		
+		JButton btnAdd = new JButton("Add");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+                int rowCount = table.getRowCount() + 1;  
+				String[] rowValues = {"Item"+rowCount, "0"};
+                tableModel.addRow(rowValues);
             }
         });
-				panel_2.add(btnAdd);
+		panel_tableOperation.add(btnAdd);
 				
-				JButton btnDelete = new JButton("Delete");
-				btnDelete.addActionListener(new ActionListener(){
+		JButton btnDelete = new JButton("Delete");
+		btnDelete.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 int selectedRow = table.getSelectedRow();
                 if(selectedRow!=-1)  
@@ -181,20 +150,7 @@ public class AuctionConfigPanel extends JPanel {
                 }
             }
         });
-				panel_2.add(btnDelete);
-				
-				JButton btnAlter = new JButton("Alter");
-				btnAlter.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-                int selectedRow = table.getSelectedRow();
-                if(selectedRow!= -1)  
-                {
-                    tableModel.setValueAt(textField_name.getText(), selectedRow, 0);
-                    tableModel.setValueAt(textField_price.getText(), selectedRow, 1);
-                }
-            }
-        });
-		panel_2.add(btnAlter);
+		panel_tableOperation.add(btnDelete);
 		
 		JPanel panel_quit = new JPanel();
 		panel_quit.setBounds(51, 463, 415, 40);
@@ -234,13 +190,11 @@ public class AuctionConfigPanel extends JPanel {
 		if (auctionType.equals("SAA")) {
 			this.lblRoundDurationsec.setText("Round Duration:(s)");
 			this.spinner_roundDuration.setValue(30);
-			this.lblPrice_Or_Quantity.setText("Price:");
 			this.lblMinimumIncrement.setText("Minimum Increment:");
 
 		} else if (auctionType.equals("CCA")) {
 			this.lblRoundDurationsec.setText("Round Tick:(ms)");
 			this.spinner_roundDuration.setValue(10000);
-			this.lblPrice_Or_Quantity.setText("Quantity:");
 			this.lblMinimumIncrement.setText("Minimum Increment:");
 		} else if (auctionType.equals("LUA")) {
 			this.lblRoundDurationsec.setText("Tick Duration:(ms)");
@@ -254,11 +208,11 @@ public class AuctionConfigPanel extends JPanel {
 			tableModel.setColumnCount(0);
 			tableModel.setRowCount(0);
 			tableModel.addColumn("Item");
-			tableModel.addColumn("Price");
+			tableModel.addColumn("Initial Price");
 			//put some initial data
-			String[] s1 = {"ItemA", "0.0"};
-			String[] s2 = {"ItemB", "0.0"};
-			String[] s3 = {"ItemC", "0.0"};
+			String[] s1 = {"ItemA", "0"};
+			String[] s2 = {"ItemB", "0"};
+			String[] s3 = {"ItemC", "0"};
 			tableModel.addRow(s1);
 			tableModel.addRow(s2);
 			tableModel.addRow(s3);
@@ -277,7 +231,18 @@ public class AuctionConfigPanel extends JPanel {
 			tableModel.addRow(s2);
 			tableModel.addRow(s3);
 		} else if (auctionType.equals("LUA")) {
-			//TODO
+			tableModel.setColumnCount(0);
+			tableModel.setRowCount(0);
+			tableModel.addColumn("Item");
+			tableModel.addColumn("Start Price");
+			tableModel.addColumn("Max Price");
+			//put some initial data
+			String[] s1 = {"ItemA", "0", "100"};
+			String[] s2 = {"ItemB", "0", "500"};
+			String[] s3 = {"ItemC", "5", "400"};
+			tableModel.addRow(s1);
+			tableModel.addRow(s2);
+			tableModel.addRow(s3);
 		}
 		
 	}
