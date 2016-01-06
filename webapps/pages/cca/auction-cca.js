@@ -57,7 +57,7 @@ Polymer('auction-cca', {
     if ( this.isTimerStarted == false ) {
       this.timer = setInterval(function() {
         self.$.period.go()
-      }, 1000);
+      }, 10);
       this.isTimerStarted = true;
     }
   },
@@ -90,7 +90,7 @@ Polymer('auction-cca', {
       this.enableSubmittion();
     } 
     this.round = this.cca.round;
-    this.timeRemain = this.cca.roundTimeRemain;
+    this.timeRemain = this.cca.roundTimeRemain / 1000; //ms to s conversion
     this.minimumIncreament = this.cca.minIncreament;
     this.isFinal = this.cca.finalRound;
 
@@ -206,7 +206,7 @@ Polymer('auction-cca', {
      this.eligibility = e.detail.points;
      currentPkg = e.detail.require;
      this.tempRequirePkg = currentPkg;
-     console.log("require package:", currentPkg);
+     //console.log("require package:", currentPkg);
      if (this.eligibility > this.activity) {
 	//check if RPC is satisfied
 	var RPCsatisfied = true;
@@ -216,7 +216,7 @@ Polymer('auction-cca', {
 	  // [1] unit price [2] unit required
 	  Nt += currentPkg[i][1] * currentPkg[i][2];
 	}
-	console.log("log", this.eligibilityReducingBids);
+	//console.log("log", this.eligibilityReducingBids);
 	for (var s in this.eligibilityReducingBids) {
 	  var pkg = this.eligibilityReducingBids[s];
 	  var Ns = 0;
@@ -240,12 +240,12 @@ Polymer('auction-cca', {
 	}
         //disable/able Bid buttion
         if ( RPCsatisfied == true) {
-	  console.log("RPC is satisfied");
+	  //console.log("RPC is satisfied");
           this.RPC = true;
 	  this.enableSubmittion();
 	  return;
 	} else if ( RPCsatisfied == false) {
-	console.log("RPC is not satisfied");
+	  //console.log("RPC is not satisfied");
           this.RPC = false;
 	  this.disableSubmittion();
 	  return;

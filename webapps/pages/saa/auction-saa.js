@@ -52,7 +52,7 @@ Polymer('auction-saa', {
     if ( this.isTimerStarted == false ) {
       this.timer = setInterval(function() {
         self.$.period.go()
-      }, 1000);
+      }, 10);
       this.isTimerStarted = true;
     }
   },
@@ -84,7 +84,7 @@ Polymer('auction-saa', {
       this.enableSubmittion();
     } 
     this.round = this.saa.round;
-    this.timeRemain = this.saa.roundTimeRemain;
+    this.timeRemain = this.saa.roundTimeRemain / 1000; // ms to s convertion
     this.minimumIncreament = this.saa.minIncreament;
     this.isFinal = this.saa.finalRound;
     this.activityRuleAnnounced = this.saa.activityRuleAnnounced;
