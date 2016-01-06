@@ -1,24 +1,16 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
-<polymer-element name="auction-cca-table" attributes="items final">
+<polymer-element name="auction-lua-table" attributes="items final">
   <template>
-    <link rel="stylesheet" href="./auction-cca-table.css" />
+    <link rel="stylesheet" href="./auction-lua-table.css" />
 
     <div class="panel panel-default">
         <table id="bidTable" class="table table-hover">
           <thead>
             <th>Item</th>
             <th>Price</th>
-            <th>Amount</th> 
-	    <th>Total Demands</th>
-
-            <template if="{{ final }}">
-              <th>Owner</th> 
-            </template>
-
-            <template if="{{ ! final }}">
-              <th>Your Amount</th>
-            </template>           
+            <th>Lisensed</th> 
+	    <th>Unlisensed</th>         
           </thead>
 
           <tbody id="tbody">
@@ -26,24 +18,8 @@
               <tr>
                 <td>{{ item.name }}</td>
                 <td id="price{{item.ID}}">{{ item.price }}</td> 
-                <td id="amount{{item.ID}}">{{ item.quantity }}</td> 
-	        <td id="total_demands{{item.ID}}">{{ item.quantity_required }}</td> 
-                <td id="last{{item.ID}}">
-                  <template if="{{ item.biddingFinised || final }}">
-                    <span id="owner{{item.ID}}">
-                      <template repeat="{{ owner in item.owners }}">
-                        {{ owner.name }}: {{ owner.quantity }} 
-                      </template>
-                    </span> 
-                  </template>
-
-                  <template if="{{ ! item.biddingFinised && ! final }}">
-                    <span id="y{{item.ID}}">
-                      <input id="yamount{{item.ID}}" type="text" class="form-control" on-keyup="{{validate}}">
-                      <p id="yamount_tips{{item.ID}}" class="tips"></p>
-                    </span>
-                  </template>
-              </td>
+                <td><button id="license_price{{item.ID}}" on-click="{{bid}}" type="button" class="btn btn-default">Bid</button></td> 
+	        <td><button id="unlicense_price{{item.ID}}" on-click="{{bid}}" type="button" class="btn btn-default">Bid</button></td> 
               </tr>
             </template>
           </tbody>
@@ -53,9 +29,8 @@
   </template>
 
   <script>
-    Polymer('auction-cca-table', {
+    Polymer('auction-lua-table', {
       items: [],
-      lastItems: [],
 
       getItems: function() {
         var itemList = [];
@@ -81,72 +56,6 @@
       },
 
       update: function(newItems) {
-        for ( var i=0; i < newItems.length; i++ ) {
-          var id = newItems[i].ID;
-          this.$.tbody.querySelector("#price" + id).innerHTML = newItems[i].price;
-	  this.$.tbody.querySelector("#total_demands" + id).innerHTML = newItems[i].quantity_required;
-        }
-        if ( this.lastItems.length <= 0 || this.lastItems == undefined ) {
-          this.lastItems = newItems;
-          return;
-        } else {
-
-          for ( var i = 0; i <newItems.length; i++ ) {
-            if ( this.lastItems[i].biddingFinised == false
-              &&  newItems[i].biddingFinised == true ) {
-
-              console.log("CCC", newItems[i].biddingFinised, this.lastItems[i].biddingFinised);
-              var id = newItems[i].ID;
-              var old = "#y" + id;
-              var span = document.createElement("span");
-              span.id = "owner" + id;
-              var str = "";
-              for ( var j=0; j<newItems[i].owners.length; j++ ) {
-                str += newItems[i].owners[j].name + ": " + newItems[i].owners[j].quantity + " ";
-              }
-              span.innerHTML = str;
-              this.$.tbody.querySelector("#y" + id).hidden = true;
-              // this.$.tbody.querySelector("#last" + id).removeChild(old);
-              this.$.tbody.querySelector("#last" + id).appendChild(span);
-            }
-
-          }
-          this.lastItems = newItems;
-
-        }
-      },
-
-      // until now, it simply tries to validate all the input
-      // later I will improve it
-      //  1. addEventListener   2. auction-input
-      validate: function() {
-        var totalEligibilityPoints = 0;
-	var requireDic = {};
-        for ( i=0; i < this.items.length; i++ ) {
-          var id = this.items[i].ID;
-	  var itemUnitEligibility = this.items[i].eligibilityPoint;	  
-          var amount = this.items[i].quantity;
-          var yamount = this.$.tbody.querySelector("#yamount" + id).value;
-          var tips = this.$.tbody.querySelector("#yamount_tips" + id);
-	  var yAmountNum = S2N(yamount);
-          hideTips(tips);
-          if ( N2S(yamount).length != 0 ) {
-            var re = /^[0-9]+$/;
-            if ( ! re.test(yamount) ) {
-              showTips(tips, "please enter a positive number");
-            }
-            if ( S2N(amount) < yAmountNum ) {
-              showTips(tips, "too many");
-	      yAmountNum = 0;
-            }
-          }
-	  requireDic[id] = [this.items[i].price, yAmountNum];
-	  totalEligibilityPoints += itemUnitEligibility * yAmountNum;
-	  //console.log("i=", i, ";yamount=", yAmountNum, "itemUnitEligibility=", itemUnitEligibility, ";accumulated:", totalEligibilityPoints);
-        } 
-        this.fire('eligibility-calculated', {points: totalEligibilityPoints, require: requireDic});
-	//console.log("eligibility-caculated signal sent:(points)", totalEligibilityPoints);
-
         // helper functions
         function S2N(str) {
 	  var re = /^[0-9]+$/;
@@ -173,18 +82,6 @@
           tip.style.display = "none";
           
         }
-      },
-
-      calculateTotalEligibility: function() {
-	total = 0;
-	console.log("caculate the init activity");
-	for ( i=0; i < this.items.length; i++ ) {
-	  var itemUnitEligibility = this.items[i].eligibilityPoint;	  
-          var amount = this.items[i].quantity;
-	  total += itemUnitEligibility * amount;
-	  //console.log("i=", i, ";amount=", amount, "itemUnitEligibility=", itemUnitEligibility, ";activity acc:", total)
-        } 
-	return total;
       }
 
     });
