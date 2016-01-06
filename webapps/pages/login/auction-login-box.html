@@ -2,6 +2,7 @@
 <link rel="import" href="../bower_components/core-ajax/core-ajax.html">
 <link rel="import" href="../saa/auction-saa.html">
 <link rel="import" href="../cca/auction-cca.html">
+<!--<link rel="import" href="../lua/auction-lua.html"> -->
 
 
 <polymer-element name="auction-login-box">
@@ -105,9 +106,18 @@
           console.log("CCA: ", json);
           cca.setUp(this.username, this.localIP);
           cca.setData(json);
+         } else if ( type == "LUA" ){
+          var lua = document.querySelector("#lua");
+          lua.hidden = false;
+          this.hidden = true;
+
+          console.log("LUA -->", this.username, this.localIP);
+          console.log("LUA: ", json);
+          //lua.setUp(this.username, this.localIP);
+          //lua.setData(json);
         } else {
-          // Error
-        }
+	  console.log("error: Unsupported type:", type);
+	}
       },
 
       keypressHandler: function(event, detail, sender) {

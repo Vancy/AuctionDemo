@@ -1,0 +1,39 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="./auction-lua-table.html">
+<link rel="import" href="../utils/native-post.html">
+
+<polymer-element name="auction-lua">
+  <template>
+    <link rel="stylesheet" href="./auction-lua.css" type="text/css" />
+
+    <div id="auction-lua">
+      <div id="title" class="title">
+        <p>LUA</p>
+      </div>
+      <div id="box">
+        <auction-lua-table id="table" items="{{ items }}" final="{{ isFinal }}"></auction-cca-table>
+        <p>{{ username }}@{{ localIP }}</p>
+      </div>
+    </div>
+
+    <!-- The ajax that submits a bid. -->
+    <native-post
+      id="submit"
+      url="/WEB-INF/bid.xml"
+      params="{{ data }}"
+      success="{{ success }}"      
+      fail="{{ fail }}"
+    ></native-post>
+
+    <!-- The ajax TIMER that asks for newer inforamtion. -->
+    <core-ajax
+      id="period"
+      url="{{ updateUrl }}"
+      handleAs="xml"
+      on-core-response="{{ update }}"
+    ></core-ajax>    
+
+  </template>
+  <script src="./auction-cca.js"></script>
+</polymer-element>
