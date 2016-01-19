@@ -8,9 +8,9 @@
         <table id="bidTable" class="table table-hover">
           <thead>
             <th>Item</th>
-            <th>Price</th>
-            <th>Lisensed</th> 
-	    <th>Unlisensed</th>         
+	    <th>Price</th>
+            <th>Licensed</th> 
+	    <th>Unlicensed</th>         
           </thead>
 
           <tbody id="tbody">
@@ -30,7 +30,22 @@
 
   <script>
     Polymer('auction-lua-table', {
-      items: [],
+      lua: {},
+      clockTick: undefined,
+
+      startAuction: function() {
+        var tickDuration = this.lua.duration_ms;
+        var self = this;
+        this.timer = setInterval(function() {
+          self.updatePrice()
+        }, tickDuration);
+	console.log("table start");
+      },
+
+      updatePrice() {
+	var minIncrement = this.lua.minIncreament;
+	console.log("update price");
+      },
 
       getItems: function() {
         var itemList = [];

@@ -4,9 +4,9 @@ Polymer('auction-lua', {
   lua: {},
  
   items: [],
+  auctionStarted: false,
   isFinal: false,
   data: "",
-  isTimerStarted: false,
 
   updateUrl: "",
   timer: undefined,
@@ -28,13 +28,9 @@ Polymer('auction-lua', {
 
     // Start the ajax timer when it is the first time.
     var self = this;
-    if ( this.isTimerStarted == false ) {
-      this.timer = setInterval(function() {
+    this.timer = setInterval(function() {
         self.$.period.go()
-      }, 10);
-      this.isTimerStarted = true;
-    }
-    //console.log("set data");
+    }, 1000);
   },
 
   update: function(e) {
@@ -43,16 +39,27 @@ Polymer('auction-lua', {
     if ( e.detail.xhr.status != 200 ) {
         clearInterval(this.timer);
         console.log("Unable to connect to server. Status code: ", e.detail.xhr.status);
-        this.$.time.innerHTML = "<b class='error'>Error. Cannot connect to the server.</b>";
+        this.$.status.innerHTML = "<b class='error'>Error. Cannot connect to the server.</b>";
         return;
     }
     var json = JSON.parse(e.detail.xhr.response); 
-    this.setData(json);
+    this.lua = json;
+    this.updateInformation();
   },
   
   updateInformation: function() {
     this.items = this.lua.itemList;
-	console.log("update info");
+    console.log("update info");
+    var currentRound = this.lua.round;
+    if (currentRound <= 0) {
+      this.auctionStarted = false;
+    } else {
+      //The timer finishes its job.
+      clearTimeout(this.timer);
+      this.auctionStarted = true;
+      console.log("auction starts");
+      this.$.table.startAuction();
+    }
   },
 
   // successfully submit
