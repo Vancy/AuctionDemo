@@ -31,19 +31,37 @@
   <script>
     Polymer('auction-lua-table', {
       lua: {},
+      items: [],
+      minIncrement: 0,
       clockTick: undefined,
 
-      startAuction: function() {
+      startAuction: function(lua_context) {
+	console.log("table start");
+	this.lua = lua_context;
+	this.items = this.lua.itemList;
         var tickDuration = this.lua.duration_ms;
+  	this.minIncrement = this.lua.minIncreament;
         var self = this;
-        this.timer = setInterval(function() {
+        this.clockTick = setInterval(function() {
           self.updatePrice()
         }, tickDuration);
-	console.log("table start");
       },
 
       updatePrice() {
-	var minIncrement = this.lua.minIncreament;
+        for (i=0; i < this.items.length; i++) {
+	  var id = this.items[i].ID;
+	  var currentPrice = parseInt(this.$.tbody.querySelector("#price" + id).innerHTML);
+          var maxPrice = this.items[i].maxPrice;
+	  var nextPrice = currentPrice;
+	  if (currentPrice < maxPrice) {
+	    nextPrice += this.minIncrement;
+	    if (nextPrice > maxPrice) {
+		nextPrice = maxPrice;
+	    }
+	  }
+	  console.log("id:" + id + "currentPrice:" + currentPrice + "nextPrice:" + nextPrice);
+	  this.$.tbody.querySelector("#price" + id).innerHTML = nextPrice;
+	}
 	console.log("update price");
       },
 

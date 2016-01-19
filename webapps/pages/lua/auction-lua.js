@@ -58,7 +58,7 @@ Polymer('auction-lua', {
       clearTimeout(this.timer);
       this.auctionStarted = true;
       console.log("auction starts");
-      this.$.table.startAuction();
+      this.$.table.startAuction(this.lua);
     }
   },
 

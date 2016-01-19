@@ -81,6 +81,7 @@ public class AuctionItem implements Comparable<AuctionItem> {
 	
 	//create item object by initializing name, start price and max price.
 	public AuctionItem(String n, double sp, double mp) {
+		this.ID = ++number_of_items - 1;
 		this.name = n;
 		this.startingPrice = sp;
 		this.price = sp;
