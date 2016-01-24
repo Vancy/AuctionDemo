@@ -18,8 +18,8 @@
               <tr>
                 <td>{{ item.name }}</td>
                 <td id="price{{item.ID}}">{{ item.price }}</td> 
-                <td><button id="license_price{{item.ID}}" on-click="{{bid}}" type="button" class="btn btn-default">Bid</button></td> 
-	        <td><button id="unlicense_price{{item.ID}}" on-click="{{bid}}" type="button" class="btn btn-default">Bid</button></td> 
+                <td><button id="license_price_{{item.ID}}" on-click="{{placeBid}}" data-args="2,{{item.ID}}" type="button" class="btn btn-default">Bid</button></td> 
+	        <td><button id="unlicense_price_{{item.ID}}" on-click="{{placeBid}}" data-args="1,{{item.ID}}" type="button" class="btn btn-default">Bid</button></td> 
               </tr>
             </template>
           </tbody>
@@ -34,6 +34,9 @@
       items: [],
       minIncrement: 0,
       clockTick: undefined,
+      numOfFinishedItem: 0,
+
+      auctionStarted: false,
 
       startAuction: function(lua_context) {
 	console.log("table start");
@@ -45,6 +48,7 @@
         this.clockTick = setInterval(function() {
           self.updatePrice()
         }, tickDuration);
+	this.auctionStarted = true;
       },
 
       updatePrice() {
@@ -52,17 +56,55 @@
 	  var id = this.items[i].ID;
 	  var currentPrice = parseInt(this.$.tbody.querySelector("#price" + id).innerHTML);
           var maxPrice = this.items[i].maxPrice;
-	  var nextPrice = currentPrice;
 	  if (currentPrice < maxPrice) {
-	    nextPrice += this.minIncrement;
-	    if (nextPrice > maxPrice) {
-		nextPrice = maxPrice;
+	    currentPrice = currentPrice + this.minIncrement;
+	    if (currentPrice >= maxPrice) {
+		currentPrice = maxPrice;
+		//this item price reaches the highest, this item finishes bid
+		this.numOfFinishedItem++;
 	    }
+	    //console.log("id:" + id + "currentPrice:" + currentPrice);
+	    this.$.tbody.querySelector("#price" + id).innerHTML = currentPrice;
+	  } else if (currentPrice == maxPrice) {
+	    continue;
 	  }
-	  console.log("id:" + id + "currentPrice:" + currentPrice + "nextPrice:" + nextPrice);
-	  this.$.tbody.querySelector("#price" + id).innerHTML = nextPrice;
 	}
-	console.log("update price");
+	//console.log("update price");
+	if (this.numOfFinishedItem == this.items.length) {
+	  clearTimeout(this.clockTick);
+	  this.submitBids();
+	}
+      },
+
+      submitBids: function() {
+	console.log("submit bids");
+      },
+
+      placeBid: function(event, detail, sender) {
+
+	if (this.auctionStarted == false) {
+	  console.log("place invalid bid");
+	} else {
+	  var args = sender.getAttribute('data-args').split(',');
+	  var bidType = parseInt(args[0]);
+	  var bidID = parseInt(args[1]);
+	console.log(bidType);
+	console.log(bidID);
+	  switch(bidType) {
+    	    case 1:
+              var btn = this.$.tbody.querySelector("#unlicense_price_" + bidID);
+	      btn.innerHTML = this.$.tbody.querySelector("#price" + bidID).innerHTML;
+	      btn.disabled = true;
+              break;
+            case 2:
+              var btn = this.$.tbody.querySelector("#license_price_" + bidID);
+	      btn.innerHTML = this.$.tbody.querySelector("#price" + bidID).innerHTML;
+	      btn.disabled = true;
+              break;
+            default:
+	  } 
+	  console.log("place bid");
+ 	}
       },
 
       getItems: function() {
