@@ -39,7 +39,7 @@
       auctionStarted: false,
 
       startAuction: function(lua_context) {
-	console.log("table start");
+	//console.log("table start");
 	this.lua = lua_context;
 	this.items = this.lua.itemList;
         var tickDuration = this.lua.duration_ms;
@@ -88,8 +88,7 @@
 	  var args = sender.getAttribute('data-args').split(',');
 	  var bidType = parseInt(args[0]);
 	  var bidID = parseInt(args[1]);
-	console.log(bidType);
-	console.log(bidID);
+	
 	  switch(bidType) {
     	    case 1:
               var btn = this.$.tbody.querySelector("#unlicense_price_" + bidID);

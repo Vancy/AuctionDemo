@@ -93,6 +93,10 @@ public class Auctioneer extends Thread{
 					System.err.println("SAA Auction End");
 					break; // break from while loop, terminate auctioneer
 				}
+				if (this.environment.context.getType() == AuctionContext.AuctionType.LUA) {
+					System.err.println("LUA Auction End");
+					break; // break from while loop, terminate auctioneer
+				}
 				else if (this.environment.context.getType() == AuctionContext.AuctionType.CCA) {
 					//process CCA supplementary round
 					

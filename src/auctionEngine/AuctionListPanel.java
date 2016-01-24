@@ -58,6 +58,8 @@ public class AuctionListPanel extends JPanel {
 			break;
 		case LUA:
 			updateUlaAuctionList();
+			//keep table scroll down to the last row
+			table.changeSelection(table.getRowCount() - 1, 0, false, false);
 			break;
 		default:
 			break;
@@ -200,6 +202,8 @@ public class AuctionListPanel extends JPanel {
 	}
 	
 	private void updateUlaAuctionList() {	
+		
+		//TODO: display all bidders LUA bids in each row
 	}
 	
 	private void initSaaTableModel() {
@@ -235,7 +239,15 @@ public class AuctionListPanel extends JPanel {
 	}
 	
 	private void initUlaTableModel() {
-		
+		tableModel  = new DefaultTableModel();
+
+		tableModel.addColumn("Bids");
+	
+		for (AuctionItem item: this.environment.context.getItemList()) {
+			String itemName = item.getName();
+			tableModel.addColumn(itemName+"(L/U)");
+		}
+		tableModel.fireTableDataChanged();
 	}
 	
 }
