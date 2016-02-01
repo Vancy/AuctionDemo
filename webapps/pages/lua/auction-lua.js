@@ -19,6 +19,7 @@ Polymer('auction-lua', {
     this.username = username;
     this.localIP = localIP;
     this.updateUrl = "/WEB-INF/update.xml?name=" + this.username + "&ip=" + this.localIP;
+    this.$.table.setUp(username, localIP);
     console.log("LUA-setup");
   },
 

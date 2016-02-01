@@ -222,7 +222,17 @@ public class BidServlet extends DefaultServlet{
 	}
 	
 	private ArrayList<LuaBid> getLuaPackageBid(JsonObject jsonBid, Bidder bidder) {
-		//TODO: 
-		return null;
+		JsonArray packageList = jsonBid.get("luaBidPackage").getAsJsonArray();
+		ArrayList<LuaBid> bids = new ArrayList<LuaBid>();
+		for (int i=0; i<packageList.size(); i++) {
+			int id = packageList.get(i).getAsJsonObject().get("item").getAsJsonObject().get("ID").getAsInt();
+			String name = packageList.get(i).getAsJsonObject().get("item").getAsJsonObject().get("name").getAsString();
+			double licenced_price = packageList.get(i).getAsJsonObject().get("licence").getAsDouble();
+			double unlicenced_price = packageList.get(i).getAsJsonObject().get("unlicence").getAsDouble();
+			AuctionItem item = new AuctionItem(id, name, -1/*we use this constructor but required is not valid*/);
+			LuaBid luaBid = new LuaBid(item, licenced_price, unlicenced_price);
+			bids.add(luaBid);
+		}
+		return bids;
 	}
 }

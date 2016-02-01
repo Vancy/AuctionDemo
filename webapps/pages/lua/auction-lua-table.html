@@ -31,7 +31,7 @@
     <native-post
       id="submit"
       url="/WEB-INF/bid.xml"
-      params="{{ luaBidPackage }}"
+      params="{{ data }}"
       success="{{ success }}"      
       fail="{{ fail }}"
     ></native-post>
@@ -40,6 +40,10 @@
 
   <script>
     Polymer('auction-lua-table', {
+
+      localIP: "127.0.0.1",
+      username: "",
+
       lua: {},
       items: [],
       minIncrement: 0,
@@ -47,7 +51,13 @@
       numOfFinishedItem: 0,
 
       auctionStarted: false,
-      luaBidPackage: [],
+      data: "",
+
+      setUp: function(username, localIP) {
+    	this.username = username;
+    	this.localIP = localIP;
+   	console.log("LUA-table-setup");
+      },
 
       startAuction: function(lua_context) {
 	//console.log("table start");
@@ -89,7 +99,7 @@
 
       submitBids: function() {
 	console.log("submit bids");
-	this.luaBidPackage = this.collectBids();
+	this.data = this.collectBids();
 	this.$.submit.go();
       },
 
@@ -120,16 +130,19 @@
       },
 
       collectBids: function() {
-        var bids = [];
+	var data = {};
+ 	data.bid = {};
+    	data.bid.bidder = {name: this.username, ip: this.localIP};
+    	data.bid.luaBidPackage = [];
         for ( i=0; i < this.items.length; i++ ) {
-          var bid = {};
+          var ibid = {};
 	  var bidID = this.items[i].ID;
-          bid.item = this.items[i];
-	  bid.unlicence = priceGetter(this, bidID, 1);
-	  bid.licence = priceGetter(this, bidID, 2);
-	  bids[i] = bid;
+          ibid.item = this.items[i];
+	  ibid.unlicence = priceGetter(this, bidID, 1);
+	  ibid.licence = priceGetter(this, bidID, 2);
+	  data.bid.luaBidPackage[i] = ibid;
         }
-	return bids;
+	return JSON.stringify(data);
 
 	function priceGetter(self, id, type) {
 	  var price = 0;

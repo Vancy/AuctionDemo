@@ -322,6 +322,7 @@ public class Auctioneer extends Thread{
 	
 	private void processLuaBids() {
 		//TODO
+		System.out.println("We now process LUA bids");
 	}
 	
 	public ArrayList<AuctionContext> getLog() {
