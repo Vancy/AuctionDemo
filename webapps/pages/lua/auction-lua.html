@@ -18,15 +18,6 @@
       </div>
     </div>
 
-    <!-- The ajax that submits a bid. -->
-    <native-post
-      id="submit"
-      url="/WEB-INF/bid.xml"
-      params="{{ data }}"
-      success="{{ success }}"      
-      fail="{{ fail }}"
-    ></native-post>
-
     <!-- The ajax TIMER that asks for newer inforamtion. -->
     <core-ajax
       id="period"

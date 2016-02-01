@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html">
 
 <polymer-element name="auction-lua-table" attributes="items final">
   <template>
@@ -26,6 +27,15 @@
         </table>
     </div>
 
+    <!-- The ajax that submits a bid. -->
+    <native-post
+      id="submit"
+      url="/WEB-INF/bid.xml"
+      params="{{ luaBidPackage }}"
+      success="{{ success }}"      
+      fail="{{ fail }}"
+    ></native-post>
+
   </template>
 
   <script>
@@ -37,6 +47,7 @@
       numOfFinishedItem: 0,
 
       auctionStarted: false,
+      luaBidPackage: [],
 
       startAuction: function(lua_context) {
 	//console.log("table start");
@@ -78,6 +89,8 @@
 
       submitBids: function() {
 	console.log("submit bids");
+	this.luaBidPackage = this.collectBids();
+	this.$.submit.go();
       },
 
       placeBid: function(event, detail, sender) {
@@ -106,56 +119,44 @@
  	}
       },
 
-      getItems: function() {
-        var itemList = [];
+      collectBids: function() {
+        var bids = [];
         for ( i=0; i < this.items.length; i++ ) {
           var bid = {};
-          bid.ID = this.items[i].ID;
-          bid.name = this.items[i].name;
-          bid.quantity_required = testAndSet(this, bid.ID, this.items[i].amount);
-          bid.owners = {};
-          itemList[i] = bid;
+	  var bidID = this.items[i].ID;
+          bid.item = this.items[i];
+	  bid.unlicence = priceGetter(this, bidID, 1);
+	  bid.licence = priceGetter(this, bidID, 2);
+	  bids[i] = bid;
         }
-        return itemList;
+	return bids;
 
-        function testAndSet(self, id, amount) {
-          var yamount = self.$.tbody.querySelector("#yamount" + id).value;
+	function priceGetter(self, id, type) {
+	  var price = 0;
           var re = /^[0-9]+$/;
-          if ( ! re.test(yamount)  ||  parseInt(amount) > parseInt(yamount) ) {
-            return "0";
-          } else {
-            return yamount;
-          }
-        }
+	  switch(type) {
+	  case 1:
+            var btn = self.$.tbody.querySelector("#unlicense_price_" + bidID);
+	    price = re.test(btn.innerHTML)? parseInt(btn.innerHTML):0;
+            break;
+          case 2:
+            var btn = self.$.tbody.querySelector("#license_price_" + bidID);
+	    price = re.test(btn.innerHTML)? parseInt(btn.innerHTML):0;
+            break;
+          default:
+ 	  }
+          return price;
+	}
       },
 
-      update: function(newItems) {
-        // helper functions
-        function S2N(str) {
-	  var re = /^[0-9]+$/;
-          if ( !re.test(str) || (str == null)) {
-	    return 0;
-          }
-          return parseInt(str);
-        }
+      // successfully submit
+      success: function(e) {
+    	console.log("submit bids successes", e);
+      },
 
-        function N2S(number) {
-          if ( typeof number == "number" ) {
-            return number.toString();
-          }
-          return number;
-        }
-
-        function showTips(tip, str) {
-          tip.innerHTML = str;
-          tip.style.display = "block";
-          
-        }
-
-        function hideTips(tip) {
-          tip.style.display = "none";
-          
-        }
+      // fail to submit
+      fail: function(e) {
+    	console.log("submit bids fails", e);
       }
 
     });
