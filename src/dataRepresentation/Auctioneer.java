@@ -26,6 +26,7 @@ public class Auctioneer extends Thread{
 	
 	ConcurrentHashMap<Integer, Bid> requestedBids;
 	ConcurrentHashMap<Integer, ArrayList<CCABiddingPackage>> CCASupplementaryBids;
+	ConcurrentHashMap<Integer, ArrayList<LuaBid>> LuaBids;
 	
 	AuctionEnvironment environment;
 	ArrayList<AuctionContext> auctionLog = new ArrayList<AuctionContext>();
@@ -39,6 +40,7 @@ public class Auctioneer extends Thread{
 		this.environment = e;
 		this.requestedBids = new ConcurrentHashMap<Integer, Bid>();
 		this.CCASupplementaryBids = new ConcurrentHashMap<Integer, ArrayList<CCABiddingPackage>>();
+		this.LuaBids= new ConcurrentHashMap<Integer, ArrayList<LuaBid>>();
 		saaLogger = new SAALogger();
 	}
 	
@@ -58,6 +60,13 @@ public class Auctioneer extends Thread{
 			}
 	}
 	
+	public void getLuaBidPackage(Bidder bidder, ArrayList<LuaBid> bidPackage) {
+		this.LuaBids.put(bidder.getID(), bidPackage);
+		if (this.LuaBids.size() == this.environment.bidderList.size()) {
+			processLuaBids();
+		}
+	}
+	
 	private boolean removeBids() {
 			this.requestedBids.clear();
 			System.out.println("current request list size after remove all:"+requestedBids.size());
@@ -67,6 +76,15 @@ public class Auctioneer extends Thread{
 	@Override
 	public void run() {
 		while (true) {
+			/*
+			 * If this auction is LUA auction, we run one-off bid collection, so there is no need to do the while loop.
+			 * Collect enough bids, then end the auction.
+			 */
+			if (this.environment.context.getType() == AuctionContext.AuctionType.LUA) {
+				//TODO
+				System.err.println("LUA Auction End");
+				break; // break from while loop, terminate auctioneer
+			}
 			/**************Next Round Start**************/
 			System.err.println("******Round " + this.environment.context.getRound() + " Start*****Min increment " + this.environment.context.getMinIncrement() + "*****");
 			
@@ -92,12 +110,7 @@ public class Auctioneer extends Thread{
 				if (this.environment.context.getType() == AuctionContext.AuctionType.SAA) {
 					System.err.println("SAA Auction End");
 					break; // break from while loop, terminate auctioneer
-				}
-				if (this.environment.context.getType() == AuctionContext.AuctionType.LUA) {
-					System.err.println("LUA Auction End");
-					break; // break from while loop, terminate auctioneer
-				}
-				else if (this.environment.context.getType() == AuctionContext.AuctionType.CCA) {
+				}	else if (this.environment.context.getType() == AuctionContext.AuctionType.CCA) {
 					//process CCA supplementary round
 					
 				}
@@ -305,6 +318,10 @@ public class Auctioneer extends Thread{
 		ap.printResults();
 		System.err.println("(AMPL) Done...");
 		
+	}
+	
+	private void processLuaBids() {
+		//TODO
 	}
 	
 	public ArrayList<AuctionContext> getLog() {

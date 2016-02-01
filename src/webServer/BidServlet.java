@@ -10,7 +10,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 import org.eclipse.jetty.servlet.DefaultServlet;
 
 import com.google.gson.JsonArray;
@@ -23,6 +22,7 @@ import dataRepresentation.AuctionItem;
 import dataRepresentation.Bid;
 import dataRepresentation.Bidder;
 import dataRepresentation.CCABiddingPackage;
+import dataRepresentation.LuaBid;
 
 public class BidServlet extends DefaultServlet{
 
@@ -146,6 +146,11 @@ public class BidServlet extends DefaultServlet{
 				throw new RuntimeException("BidServlet: Cannot find bidder inside bidderlist");
     	}
     	
+    	if (null != jsonBid.get("luaBidPackage")) {
+    		this.auctionEnvironment.auctioneer.getLuaBidPackage(bidder, getLuaPackageBid(jsonBid, bidder));
+    		return null;
+    	}
+    	
     	/*
     	 * If this bid contain key words "packageList", this bid is
     	 * supplymentary round of CCA, so process it as CCA supplymentary round bid.
@@ -214,5 +219,10 @@ public class BidServlet extends DefaultServlet{
 			packages.add(thisPkg);
 		}
 		return packages;
+	}
+	
+	private ArrayList<LuaBid> getLuaPackageBid(JsonObject jsonBid, Bidder bidder) {
+		//TODO: 
+		return null;
 	}
 }
