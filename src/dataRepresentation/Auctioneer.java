@@ -81,8 +81,7 @@ public class Auctioneer extends Thread{
 			 * Collect enough bids, then end the auction.
 			 */
 			if (this.environment.context.getType() == AuctionContext.AuctionType.LUA) {
-				//TODO
-				System.err.println("LUA Auction End");
+				System.err.println("LUA Auction start");
 				break; // break from while loop, terminate auctioneer
 			}
 			/**************Next Round Start**************/
@@ -321,8 +320,12 @@ public class Auctioneer extends Thread{
 	}
 	
 	private void processLuaBids() {
-		//TODO
 		System.out.println("We now process LUA bids");
+		//TODO
+		this.environment.context.LuaBids = this.LuaBids;
+		this.environment.context.setFinalRound();
+		this.environment.context.bidsProcessingFinished = true;
+
 	}
 	
 	public ArrayList<AuctionContext> getLog() {

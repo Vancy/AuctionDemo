@@ -239,7 +239,7 @@ public class AuctionPanel extends JPanel {
 		this.lblRound.setText("");
 		this.lblTimer.setText("");
 		
-		//Set minimun increment to spinner
+		//Set minimum increment to spinner
 		this.spinner_Increment.setValue(environment.context.getMinIncrement());
 		//Set time_duration to spinner
 		this.spinner_timeDuration.setValue(environment.context.getDurationTime());

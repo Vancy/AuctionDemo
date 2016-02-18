@@ -1,12 +1,15 @@
 package auctionEngine;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
+
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -15,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 
 import dataRepresentation.AuctionEnvironment;
 import dataRepresentation.AuctionItem;
+import dataRepresentation.LuaBid;
 
 
 public class AuctionListPanel extends JPanel {
@@ -202,8 +206,21 @@ public class AuctionListPanel extends JPanel {
 	}
 	
 	private void updateUlaAuctionList() {	
-		
-		//TODO: display all bidders LUA bids in each row
+		if (this.environment.context.isFinalRound()) {
+			//TODO: display all bidders LUA bids in each row
+			ConcurrentHashMap<Integer, ArrayList<LuaBid>> LuaBids = this.environment.context.LuaBids;
+			for (int bidderID: LuaBids.keySet()) {
+				Vector<String> newRow = new Vector<String>(); 
+				String bidderName = this.environment.bidderList.getBidderName(bidderID);
+				newRow.add(bidderName);
+				for (LuaBid bid: LuaBids.get(bidderID)) {
+					double licenced = bid.getLicencedBidPrice();
+					double unlicenced = bid.getUnlicencedBidPrice();
+					newRow.add(licenced+"/"+unlicenced);
+				}
+				tableModel.addRow(newRow);
+			}
+		}
 	}
 	
 	private void initSaaTableModel() {
@@ -241,7 +258,7 @@ public class AuctionListPanel extends JPanel {
 	private void initUlaTableModel() {
 		tableModel  = new DefaultTableModel();
 
-		tableModel.addColumn("Bids");
+		tableModel.addColumn("Bidders");
 	
 		for (AuctionItem item: this.environment.context.getItemList()) {
 			String itemName = item.getName();

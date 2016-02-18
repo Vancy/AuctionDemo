@@ -48,5 +48,14 @@ public class BidderList {
 		}
 		return null;
 	}
+	
+	public String getBidderName(int id) {
+		for (Bidder b: this.list) {
+			if (b.getID() == id) {
+				return b.getName();
+			}
+		}
+		throw new RuntimeException("cannot find bidder id:" + id);
+	}
 
 }

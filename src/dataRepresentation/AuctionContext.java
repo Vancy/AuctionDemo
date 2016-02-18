@@ -4,6 +4,7 @@ package dataRepresentation;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,6 +46,9 @@ public class AuctionContext {
 	public boolean bidsProcessingFinished = false;
 	
 	private BidderList bidderList;
+	
+	//This is only used by LUA. Bad programming style, but for making that work.
+	public ConcurrentHashMap<Integer, ArrayList<LuaBid>> LuaBids;
 	
 	public AuctionContext(BidderList bidderList) {
 		this.type = AuctionType.SAA;
