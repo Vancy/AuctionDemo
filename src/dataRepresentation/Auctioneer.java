@@ -32,7 +32,8 @@ public class Auctioneer extends Thread{
 	ArrayList<AuctionContext> auctionLog = new ArrayList<AuctionContext>();
 	Timer roundTimer = new Timer();
 
-	SAALogger saaLogger;
+	SAALogger saaLogger = new SAALogger();
+	LUALogger luaLogger = new LUALogger();
 	
 	public volatile boolean nextRoundNotReady = true;
 	
@@ -41,7 +42,6 @@ public class Auctioneer extends Thread{
 		this.requestedBids = new ConcurrentHashMap<Integer, Bid>();
 		this.CCASupplementaryBids = new ConcurrentHashMap<Integer, ArrayList<CCABiddingPackage>>();
 		this.LuaBids= new ConcurrentHashMap<Integer, ArrayList<LuaBid>>();
-		saaLogger = new SAALogger();
 	}
 	
 	public void getBid(Bid bid) {
@@ -63,7 +63,7 @@ public class Auctioneer extends Thread{
 	public void getLuaBidPackage(Bidder bidder, ArrayList<LuaBid> bidPackage) {
 		this.LuaBids.put(bidder.getID(), bidPackage);
 		if (this.LuaBids.size() == this.environment.bidderList.size()) {
-			processLuaBids();
+			processLUABids();
 		}
 	}
 	
@@ -283,6 +283,15 @@ public class Auctioneer extends Thread{
 		}
 	}
 	
+	private void processLUABids() {
+		System.out.println("We now process LUA bids");
+		//TODO
+		this.environment.context.LuaBids = this.LuaBids;
+		this.environment.context.setFinalRound();
+		this.environment.context.bidsProcessingFinished = true;
+
+	}
+	
 	private void recordLog() {	
 		this.auctionLog.add(new AuctionContext(this.environment.context));
 	}
@@ -317,15 +326,6 @@ public class Auctioneer extends Thread{
 		ap.printResults();
 		System.err.println("(AMPL) Done...");
 		
-	}
-	
-	private void processLuaBids() {
-		System.out.println("We now process LUA bids");
-		//TODO
-		this.environment.context.LuaBids = this.LuaBids;
-		this.environment.context.setFinalRound();
-		this.environment.context.bidsProcessingFinished = true;
-
 	}
 	
 	public ArrayList<AuctionContext> getLog() {
