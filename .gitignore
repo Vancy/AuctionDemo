@@ -25,4 +25,4 @@ hs_err_pid*
 /bin
 
 #xls log file
-AuctionResults.xls
+*.xls

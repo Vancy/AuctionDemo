@@ -289,7 +289,7 @@ public class Auctioneer extends Thread{
 		this.environment.context.LuaBids = this.LuaBids;
 		this.environment.context.setFinalRound();
 		this.environment.context.bidsProcessingFinished = true;
-
+		this.luaLogger.createRawLuaBidResults(this.LuaBids, this.environment);
 	}
 	
 	private void recordLog() {	
