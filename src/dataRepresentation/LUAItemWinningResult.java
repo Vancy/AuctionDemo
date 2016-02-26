@@ -1,5 +1,6 @@
 package dataRepresentation;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 
@@ -10,8 +11,7 @@ public class LUAItemWinningResult {
 		private double L_winner_price = 0;
 		private int L_winner_bidder_id = 0;
 		private double U_Sum = 0;
-		private HashSet<Integer> U_bidders = new HashSet<Integer>();
-		private WinnerType winnerType;
+		private HashMap<Integer, Double> U_bidder_prices = new HashMap<Integer, Double>();
 		private double L_secondHighest_price = 0;
 		
 		public LUAItemWinningResult(int id, String name) {
@@ -29,19 +29,63 @@ public class LUAItemWinningResult {
 			}
 			if(unlicenced > 0) {
 				this.U_Sum += unlicenced;
-				this.U_bidders.add(bidderID);
+				this.U_bidder_prices.put(bidderID, unlicenced);
 			}
 		}
-		
+		public int getItemID() {
+			return this.itemID;
+		}
 		public String getItemName() {
 			return this.itemName;
 		}
 		
-		public WinnerType processWinner() {
+		public WinnerType getWinnerType() {
 			if(this.L_winner_price >= this.U_Sum) {
-				return this.winnerType = WinnerType.LicencedWin;
+				return WinnerType.LicencedWin;
 			} else {
-				return this.winnerType = WinnerType.UnlicencedWin;
+				return WinnerType.UnlicencedWin;
 			}
+		}
+		
+		public double getWinnerPrice() {
+			if(this.L_winner_price >= this.U_Sum) {
+				return this.L_winner_price;
+			} else {
+				return this.U_Sum;
+			}
+		}
+		public double getWinnerLprice() {
+			return this.L_winner_price;
+		}
+		
+		public double getUnlicencedPriceSum() {
+			return this.U_Sum;
+		}
+		
+		public double getSecondHighestPrice() {
+			if (this.L_secondHighest_price > this.U_Sum) {
+				return this.L_secondHighest_price;
+			} else {
+				return this.U_Sum;
+			}
+		}
+		
+		public String getWinnerDistributionResult() {
+			StringBuffer result = new StringBuffer();
+			double payPrice = this.getSecondHighestPrice();
+			if (WinnerType.LicencedWin == this.getWinnerType()) {
+				result.append(this.L_winner_bidder_id);
+				result.append("(");
+				result.append(payPrice);
+				result.append(")");
+			} else if (WinnerType.UnlicencedWin == this.getWinnerType()){
+				for (int bidderID: this.U_bidder_prices.keySet()) {
+					result.append(bidderID);
+					result.append("(");
+					result.append(payPrice * this.U_bidder_prices.get(bidderID) / this.U_Sum);
+					result.append(")");
+				}
+			}
+			return result.toString();
 		}
 }

@@ -16,18 +16,30 @@ import org.apache.poi.ss.usermodel.Row;
 
 public class LUALogger {
 	
-	public static String targetFile = "./LuaAuctionResults.xls"; 
+	private static String targetFile = "./LuaAuctionResults.xls"; 
+
+	private ConcurrentHashMap<Integer, ArrayList<LuaBid>> luaBids;
+	private AuctionEnvironment environment;
+	private ArrayList<AuctionItem> items;
+	
+	public LUALogger(ConcurrentHashMap<Integer, ArrayList<LuaBid>> luaBids, AuctionEnvironment environment) {
+		this.luaBids = luaBids;
+		this.environment = environment;
+		this.items = this.environment.context.getItemList();
+	}
 
 	
-	public void printResults(ConcurrentHashMap<Integer, ArrayList<LuaBid>> luaBids, AuctionEnvironment environment) {
+	public void printResults() {
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		HSSFSheet sheet = workbook.createSheet("LUA auction results");
-		createRawLuaBidResults(sheet, luaBids, environment);
-		createLuaWinnerInfo(sheet);
+		
+		createRawLuaBidResults(sheet);
+		createWinnerResults(sheet);
+		
 		close(workbook);
 	}
-	
-	private void createRawLuaBidResults(HSSFSheet sheet, ConcurrentHashMap<Integer, ArrayList<LuaBid>> luaBids, AuctionEnvironment environment) {
+
+	private void createRawLuaBidResults(HSSFSheet sheet) {
 		
 		printRawResultsHeader(sheet, environment.context.getItemList());
 		
@@ -49,7 +61,25 @@ public class LUALogger {
 
 	}
 	
-	private void createLuaWinnerInfo(HSSFSheet sheet) {
+	
+	private void createWinnerResults(HSSFSheet sheet) {
+		printWinnerResultsHeader(sheet);
+		HashMap<Integer, LUAItemWinningResult> winnerResults = processWinners();
+		int firstAvailableRow = sheet.getLastRowNum() + 1;
+		for(int itemId: winnerResults.keySet()) {
+			LUAItemWinningResult itemWinResult = winnerResults.get(itemId);
+			Row headerRow = sheet.createRow(firstAvailableRow);
+			headerRow.createCell(0).setCellValue(itemWinResult.getItemName());
+			headerRow.createCell(1).setCellValue(itemWinResult.getWinnerLprice());
+			headerRow.createCell(2).setCellValue(itemWinResult.getUnlicencedPriceSum());
+			headerRow.createCell(3).setCellValue(itemWinResult.getWinnerType()==LUAItemWinningResult.WinnerType.LicencedWin? "L":"U");
+			headerRow.createCell(4).setCellValue(itemWinResult.getSecondHighestPrice());
+			headerRow.createCell(5).setCellValue(itemWinResult.getWinnerDistributionResult());
+			firstAvailableRow++;
+		}
+	}
+	
+	private void printWinnerResultsHeader(HSSFSheet sheet) {
 		int firstAvailableRow = sheet.getLastRowNum();
 		Row headerRow = sheet.createRow(firstAvailableRow);
 		headerRow.createCell(0).setCellValue("Item");
@@ -82,15 +112,33 @@ public class LUALogger {
 	}
 	
 	
-	private void processWinners(ConcurrentHashMap<Integer, ArrayList<LuaBid>> luaBids) {
+	private HashMap<Integer, LUAItemWinningResult> processWinners() {
 		HashMap<Integer, LUAItemWinningResult> results = new HashMap<Integer, LUAItemWinningResult>();
 		for (int bidderID: luaBids.keySet()) {
-			//TODO
+			
 			for (LuaBid bid: luaBids.get(bidderID)) {
-				double licenced = bid.getLicencedBidPrice();
-				double unlicenced = bid.getUnlicencedBidPrice();
+				int itemID = bid.ItemID();
+				LUAItemWinningResult itemResult;
+				if (!results.containsKey(itemID)) {
+					itemResult = results.put(itemID, new LUAItemWinningResult(itemID, getItemNameByID(itemID)));
+				} else {
+					itemResult = results.get(itemID);		
+				}
+				itemResult.updateBidInfo(bidderID, bid);
 			}
 		}
+		return results;
+	}
+	
+	private String getItemNameByID(int id) {
+		for(AuctionItem item: this.items) {
+			if(item.getID() == id) {
+				return item.getName();
+			} else {
+				continue;
+			}
+		}
+		throw new RuntimeException("Cannot find item id in current item list:"+id);
 	}
 	
 	private void close(HSSFWorkbook workbook) {

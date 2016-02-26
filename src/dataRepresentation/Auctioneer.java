@@ -33,7 +33,7 @@ public class Auctioneer extends Thread{
 	Timer roundTimer = new Timer();
 
 	SAALogger saaLogger = new SAALogger();
-	LUALogger luaLogger = new LUALogger();
+	LUALogger luaLogger;
 	
 	public volatile boolean nextRoundNotReady = true;
 	
@@ -285,11 +285,14 @@ public class Auctioneer extends Thread{
 	
 	private void processLUABids() {
 		System.out.println("We now process LUA bids");
-		//TODO
+
 		this.environment.context.LuaBids = this.LuaBids;
 		this.environment.context.setFinalRound();
 		this.environment.context.bidsProcessingFinished = true;
-		this.luaLogger.printResults(this.LuaBids, this.environment);
+		this.luaLogger = new LUALogger(this.LuaBids, environment);
+		this.luaLogger.printResults();
+		
+		System.out.println("The results of LUA acution has been generated!");
 	}
 	
 	private void recordLog() {	
