@@ -80,7 +80,7 @@ public class LUALogger {
 	}
 	
 	private void printWinnerResultsHeader(HSSFSheet sheet) {
-		int firstAvailableRow = sheet.getLastRowNum();
+		int firstAvailableRow = sheet.getLastRowNum() + 1;
 		Row headerRow = sheet.createRow(firstAvailableRow);
 		headerRow.createCell(0).setCellValue("Item");
 		headerRow.createCell(1).setCellValue("Winner L");
@@ -120,7 +120,8 @@ public class LUALogger {
 				int itemID = bid.ItemID();
 				LUAItemWinningResult itemResult;
 				if (!results.containsKey(itemID)) {
-					itemResult = results.put(itemID, new LUAItemWinningResult(itemID, getItemNameByID(itemID)));
+					itemResult = new LUAItemWinningResult(itemID, getItemNameByID(itemID));
+					results.put(itemID, itemResult);
 				} else {
 					itemResult = results.get(itemID);		
 				}

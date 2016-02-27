@@ -1,5 +1,6 @@
 package dataRepresentation;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -63,6 +64,9 @@ public class LUAItemWinningResult {
 		}
 		
 		public double getSecondHighestPrice() {
+			if (this.L_winner_price < this.U_Sum) {
+				return this.L_winner_price;
+			}
 			if (this.L_secondHighest_price > this.U_Sum) {
 				return this.L_secondHighest_price;
 			} else {
@@ -82,7 +86,11 @@ public class LUAItemWinningResult {
 				for (int bidderID: this.U_bidder_prices.keySet()) {
 					result.append(bidderID);
 					result.append("(");
-					result.append(payPrice * this.U_bidder_prices.get(bidderID) / this.U_Sum);
+					double winPriceRaw  = new Double(payPrice * this.U_bidder_prices.get(bidderID) / this.U_Sum);
+					double winPrice = new BigDecimal(winPriceRaw)
+				    						.setScale(2, BigDecimal.ROUND_HALF_UP)
+				    						.doubleValue(); //set float precision as 2, and using round half up
+					result.append(winPrice);
 					result.append(")");
 				}
 			}
