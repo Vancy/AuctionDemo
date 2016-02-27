@@ -25,9 +25,11 @@ public class BidderListPanel extends JPanel {
 	private DefaultTableModel tableModel;
 	
 	private AgentAddingDialog agentAddingDialog;
+	private LuaValuationSettingDialog luaValuationSettingDialog;
 	
 	public JButton btnKickOut;
 	public JButton btnAddAgent;
+	public JButton btnAddLuaBiddingValuations;
 
 	/**
 	 * Create the panel.
@@ -83,6 +85,17 @@ public class BidderListPanel extends JPanel {
 			}
 		});
 		panel.add(btnAddAgent);
+		
+		btnAddLuaBiddingValuations = new JButton("LUA valuation");
+		btnAddLuaBiddingValuations.setEnabled(false);
+		btnAddLuaBiddingValuations.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				luaValuationSettingDialog = new LuaValuationSettingDialog();
+				luaValuationSettingDialog.setLocationByPlatform(true);
+				luaValuationSettingDialog.setVisible(true);
+			}
+		});
+		panel.add(btnAddLuaBiddingValuations);
 		
 		ActionListener listener = new ActionListener() {
 			@Override

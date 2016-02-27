@@ -274,6 +274,11 @@ public class AuctionConfigPanel extends JPanel {
 		BidderListPanel bidderListPanel = (BidderListPanel) sp.getRightComponent();
 		bidderListPanel.btnKickOut.setEnabled(true);
 		bidderListPanel.btnAddAgent.setEnabled(true);
+		
+		//If current auction type is LUA, set LUA valuation setting button enable;
+		if (auctionType.equals("LUA")) {
+			bidderListPanel.btnAddLuaBiddingValuations.setEnabled(true);
+		}
 	}
 	
 	private void startSaaAuction() {
