@@ -5,6 +5,11 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -14,6 +19,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 public class LuaValuationSettingDialog extends JDialog{
 	
@@ -29,7 +39,7 @@ public class LuaValuationSettingDialog extends JDialog{
 		
 		configFileChooser = new JFileChooser();
 		configFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);  
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Config Excel File","csv", "xlsx", "xlm");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Config Excel File","csv", "xlsx", "xls");
 		configFileChooser.setFileFilter(filter);
 		configFileChooser.setDialogTitle("Select LUA bidding valuation setup File");  
 
@@ -91,7 +101,54 @@ public class LuaValuationSettingDialog extends JDialog{
 	}
 	
 	private void parseSetupFile(File file) {
-		// TODO Auto-generated method stub
+		FileInputStream fileInputStream;
+		HSSFWorkbook workbook = null;
+		try {
+			fileInputStream = new FileInputStream(file);
+			workbook = new HSSFWorkbook(fileInputStream);
+		} catch (IOException e) {
+			WarningDialog dialog = new WarningDialog(this, "There is an error opening excel file:" + file.getName(), e.getMessage());
+            dialog.setVisible(true); // pop up warning dialog
+		}
+
+		HSSFSheet worksheet = workbook.getSheet("sheet1");
+		int bidderNumber = (int)worksheet.getRow(2).getCell(2).getNumericCellValue();
+		int itemNumber = (int)worksheet.getRow(3).getCell(2).getNumericCellValue();
+		int auctionNumber = (int)worksheet.getRow(4).getCell(2).getNumericCellValue();
+		
+		ArrayList<ArrayList<String>> allAuction_valuationMsgs = new ArrayList<ArrayList<String>>();
+		
+		int rowCursor = 6; //the real data starts from 6th row.
+		final int rowGap = 4; //between every two auctions, the gap is 4.
+		final int colGap = 3; //each item consume 3 columns.
+		for(int an=0; an<auctionNumber; an++) {
+			//Store valuations of this auction.
+			ArrayList<String> thisAuction_valuationMsg = new ArrayList<String>();
+			//Store item names into a vector.
+			ArrayList<String> itemNames = new ArrayList<String>();
+			final int startcol = 3;
+			for(int in=0; in<itemNumber; in++) {
+				itemNames.add(in, worksheet.getRow(rowCursor).getCell(startcol+colGap*in).getStringCellValue());
+			}
+			rowCursor+=2;
+			for(int bn=0; bn<bidderNumber; bn++) {
+				StringBuffer valuations = new StringBuffer();
+				for(int in=0; in<itemNumber; in++) {
+					String licenced = worksheet.getRow(rowCursor).getCell(startcol+colGap*in).getStringCellValue();
+					String unlicenced = worksheet.getRow(rowCursor).getCell(startcol+colGap*in+1).getStringCellValue();
+					valuations.append(itemNames.get(in)+":");
+					valuations.append(licenced.isEmpty()?"NA":licenced);
+					valuations.append("(L)");
+					valuations.append(unlicenced.isEmpty()?"NA":unlicenced);
+					valuations.append("(U)");
+					valuations.append("\n");
+					thisAuction_valuationMsg.add(valuations.toString());
+					rowCursor++;
+				}
+			}
+			rowCursor+=rowGap;
+			allAuction_valuationMsgs.add(thisAuction_valuationMsg); 
+		}
 		
 	}
 }
