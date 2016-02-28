@@ -9,10 +9,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class LUALogger {
 	
@@ -30,8 +31,8 @@ public class LUALogger {
 
 	
 	public void printResults() {
-		HSSFWorkbook workbook = new HSSFWorkbook();
-		HSSFSheet sheet = workbook.createSheet("LUA auction results");
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		XSSFSheet sheet = workbook.createSheet("LUA auction results");
 		
 		createRawLuaBidResults(sheet);
 		createWinnerResults(sheet);
@@ -39,13 +40,13 @@ public class LUALogger {
 		close(workbook);
 	}
 
-	private void createRawLuaBidResults(HSSFSheet sheet) {
+	private void createRawLuaBidResults(XSSFSheet sheet) {
 		
 		printRawResultsHeader(sheet, environment.context.getItemList());
 		
 		int contentRow = 2;
 		for (int bidderID: luaBids.keySet()) {
-			Row thisRow = sheet.createRow(contentRow);
+			XSSFRow thisRow = sheet.createRow(contentRow);
 			String bidderName = environment.bidderList.getBidderName(bidderID);
 			thisRow.createCell(0).setCellValue(bidderID);
 			thisRow.createCell(1).setCellValue(bidderName);
@@ -62,7 +63,7 @@ public class LUALogger {
 	}
 	
 	
-	private void createWinnerResults(HSSFSheet sheet) {
+	private void createWinnerResults(XSSFSheet sheet) {
 		printWinnerResultsHeader(sheet);
 		HashMap<Integer, LUAItemWinningResult> winnerResults = processWinners();
 		int firstAvailableRow = sheet.getLastRowNum() + 1;
@@ -79,7 +80,7 @@ public class LUALogger {
 		}
 	}
 	
-	private void printWinnerResultsHeader(HSSFSheet sheet) {
+	private void printWinnerResultsHeader(XSSFSheet sheet) {
 		int firstAvailableRow = sheet.getLastRowNum() + 1;
 		Row headerRow = sheet.createRow(firstAvailableRow);
 		headerRow.createCell(0).setCellValue("Item");
@@ -91,7 +92,7 @@ public class LUALogger {
 	}
 	
 	
-	private void printRawResultsHeader(HSSFSheet sheet, ArrayList<AuctionItem> items) {
+	private void printRawResultsHeader(XSSFSheet sheet, ArrayList<AuctionItem> items) {
 	    Row headerRow = sheet.createRow(0);
 	    Row subheaderRow = sheet.createRow(1);
 	    
@@ -142,7 +143,7 @@ public class LUALogger {
 		throw new RuntimeException("Cannot find item id in current item list:"+id);
 	}
 	
-	private void close(HSSFWorkbook workbook) {
+	private void close(XSSFWorkbook workbook) {
 		try {
 		    FileOutputStream out = new FileOutputStream(new File(targetFile));
 		    workbook.write(out);
