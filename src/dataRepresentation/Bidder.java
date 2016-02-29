@@ -29,7 +29,7 @@ public class Bidder {
 	 * this field stores the LUA valuation messages for this bidder, if any.
 	 * Currently only LUA auction uses this field. This field will be read in client side.
 	 */
-	public String luaValuationsMessage = "";
+	private String luaValuationsMessage = "";
 	
 	protected final String activityString = "Your current activity: ";
 	protected final String eligibilityString = " Your current eligibility: ";
@@ -47,6 +47,10 @@ public class Bidder {
 
 	public int getActivity() {
 		return activity;
+	}
+	
+	public void setValuationMsg(String msg) {
+		this.luaValuationsMessage = msg;
 	}
 
 	public void setActivity(int activity) {
@@ -120,6 +124,10 @@ public class Bidder {
 	
 	public String getActivityAndEligibilityMsg() {
 		return this.activityAndEligibilityMessage;
+	}
+	
+	public String getLuaValuationsMessage() {
+		return this.luaValuationsMessage;
 	}
 	
 	public Color getColor() {

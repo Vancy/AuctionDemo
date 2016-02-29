@@ -28,6 +28,7 @@ public class JsonBidderAdapter implements JsonSerializer<Bidder>, JsonDeserializ
 		json_bidder.addProperty("warningMessage", bidder.getWarnMsg());
 		json_bidder.addProperty("leadingItemsMessage", bidder.getLeadingItemsMsg());
 		json_bidder.addProperty("activityAndEligibilityMessage", bidder.getActivityAndEligibilityMsg());
+		json_bidder.addProperty("luaValuationsMessage", bidder.getLuaValuationsMessage());
 		json_bidder.addProperty("activityCounter", bidder.getActivityCounter());
 		
 	    return json_bidder;

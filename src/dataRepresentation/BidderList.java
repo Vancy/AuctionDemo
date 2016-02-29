@@ -46,6 +46,22 @@ public class BidderList {
 		this.lua_allAuction_valuationMsgs = msg;
 	}
 	
+	public ArrayList<ArrayList<String>> getLuaValuationSetups() {
+		return this.lua_allAuction_valuationMsgs;
+	}
+	
+	public void valuationMsgDistribution(int luaAuctionRound) {
+		ArrayList<String> toDistribute = lua_allAuction_valuationMsgs.get(luaAuctionRound);
+		for (int i=0; i<toDistribute.size(); i++) {
+			if (this.list.size() < i+1) {
+				System.out.println("the bidder number is smaller than distribution qouta, stop distribution.");
+				return;
+			}
+			Bidder targetBidder = this.list.get(i);
+			targetBidder.setValuationMsg(toDistribute.get(i));
+		}
+	}
+		
 	public Bidder getBidder(String name, String ip) {
 		for (Bidder b: this.list) {
 			if ((b.getName().equals(name)) && (b.getIP().equals(ip))) {

@@ -1,6 +1,7 @@
 package webServer;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.servlet.DefaultServlet;
 
 import dataRepresentation.AuctionEnvironment;
+import dataRepresentation.Bidder;
 import dataRepresentation.HumanBidder;
 
 public class LoginServlet extends DefaultServlet{
@@ -37,7 +39,10 @@ public class LoginServlet extends DefaultServlet{
 		System.out.println("RequesterIP:"+userip);
 		
 		//add user's info to bidder list
-		auctionEnvironment.bidderList.addBidder(new HumanBidder(username, userip));
+		Bidder newBidder = new HumanBidder(username, userip);
+		auctionEnvironment.bidderList.addBidder(newBidder);
+		//add LUA valuation message to this bidder, if any.
+		this.setLuaValuationMsg(newBidder);
 		
 		//send cookie if cookie is null
 		if( !hasCookie(request.getCookies()) ) {
@@ -51,6 +56,20 @@ public class LoginServlet extends DefaultServlet{
 		// Actual logic goes here.
 		PrintWriter out = response.getWriter();
 		out.println(this.auctionEnvironment.context.generateJson());
+	}
+	
+	private void setLuaValuationMsg(Bidder bidder) {
+		int id = bidder.getID();
+		ArrayList<ArrayList<String>> valuationSetups = this.auctionEnvironment.bidderList.getLuaValuationSetups();
+		if (null == valuationSetups) {
+			return;
+		} else {
+			//TODO
+			//Bidderlist id starts from 1
+			String msg = valuationSetups.get(0).get(id-1);
+			bidder.setValuationMsg(msg);
+		}
+		
 	}
 	
 	private boolean hasCookie(Cookie[] cookies){

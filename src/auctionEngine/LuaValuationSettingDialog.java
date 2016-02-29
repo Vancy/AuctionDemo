@@ -85,7 +85,7 @@ public class LuaValuationSettingDialog extends JDialog{
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				parseSetupFile(new File(filePathTextField.getText()));
-				System.err.println("Successfully parsed file");
+				System.err.println("Successfully parsed valuation file!");
 				dispose();
 			}
 		});
@@ -143,12 +143,12 @@ public class LuaValuationSettingDialog extends JDialog{
 				for(int in=0; in<itemNumber; in++) {
 					String licenced = getStringValueFromCell(worksheet.getRow(rowCursor).getCell(startcol+colGap*in));
 					String unlicenced = getStringValueFromCell(worksheet.getRow(rowCursor).getCell(startcol+colGap*in+1));
-					valuations.append(itemNames.get(in)+":");
+					valuations.append(itemNames.get(in)+": ");
 					valuations.append(licenced.isEmpty()?"NA":licenced);
-					valuations.append("(L)");
+					valuations.append("(L) ");
 					valuations.append(unlicenced.isEmpty()?"NA":unlicenced);
 					valuations.append("(U)");
-					valuations.append("\n");
+					valuations.append("<br/>");
 				}
 				thisAuction_valuationMsg.add(valuations.toString());
 				rowCursor++;
@@ -166,6 +166,8 @@ public class LuaValuationSettingDialog extends JDialog{
 		}
 		//Here we store the messages to auction environment
 		this.environment.bidderList.setLuaValuationSetups(allAuction_valuationMsgs);
+		//TODO
+		this.environment.bidderList.valuationMsgDistribution(0);
 	}
 	
 	private int getNumericValueFromCell(XSSFCell cell){

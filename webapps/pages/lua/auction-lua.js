@@ -61,6 +61,19 @@ Polymer('auction-lua', {
       console.log("auction starts");
       this.$.table.startAuction(this.lua);
     }
+    this.$.valuations.innerHTML = this.getMyValuationMsg();       
+  },
+
+  getMyValuationMsg: function() {
+    var bidderList = this.lua.bidderList.list;
+    for (var i = 0; i < bidderList.length; i++) {
+	if (bidderList[i].ipAddress === this.localIP &&	bidderList[i].name === this.username) {
+	  return "Item valuations:<br/>" + bidderList[i].luaValuationsMessage;
+	} else {
+	  continue;
+	}
+    }
+    return "";
   },
 
   // successfully submit
