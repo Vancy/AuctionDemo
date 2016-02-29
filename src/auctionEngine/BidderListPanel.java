@@ -90,7 +90,7 @@ public class BidderListPanel extends JPanel {
 		btnAddLuaBiddingValuations.setEnabled(false);
 		btnAddLuaBiddingValuations.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				luaValuationSettingDialog = new LuaValuationSettingDialog();
+				luaValuationSettingDialog = new LuaValuationSettingDialog(environment);
 				luaValuationSettingDialog.setLocationByPlatform(true);
 				luaValuationSettingDialog.setVisible(true);
 			}

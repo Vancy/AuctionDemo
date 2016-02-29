@@ -23,15 +23,21 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import dataRepresentation.AuctionEnvironment;
+
 public class LuaValuationSettingDialog extends JDialog{
 	
 	private static final long serialVersionUID = 1L;
+	
+	private AuctionEnvironment environment;
 	
 	private final JPanel contentPanel = new JPanel();
 	private JTextField filePathTextField;
 	private JFileChooser configFileChooser; 
 	
-	public LuaValuationSettingDialog() {
+	public LuaValuationSettingDialog(AuctionEnvironment environment) {
+		
+		this.environment = environment;
 		
 		this.setTitle("Setting LUA bidding valuations");
 		
@@ -158,6 +164,8 @@ public class LuaValuationSettingDialog extends JDialog{
 				System.out.println(s);
 			}
 		}
+		//Here we store the messages to auction environment
+		this.environment.bidderList.setLuaValuationSetups(allAuction_valuationMsgs);
 	}
 	
 	private int getNumericValueFromCell(XSSFCell cell){

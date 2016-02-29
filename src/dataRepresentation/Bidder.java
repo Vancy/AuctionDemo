@@ -18,12 +18,18 @@ public class Bidder {
 	private int activity;
 	private int activityCounter = AuctionContext.numberOfActivityRuleWaivers;
 	
-	/*this field store the warning message auctioneer gives to this bidder, if any.
+	/*this field stores the warning message auctioneer gives to this bidder, if any.
 	 * this message will be sent to client side, then human bidder can read this message.
 	 */
 	private String warningMessage = "";
 	
 	protected String leadingItemsMessage = "";
+	
+	/*
+	 * this field stores the LUA valuation messages for this bidder, if any.
+	 * Currently only LUA auction uses this field. This field will be read in client side.
+	 */
+	public String luaValuationsMessage = "";
 	
 	protected final String activityString = "Your current activity: ";
 	protected final String eligibilityString = " Your current eligibility: ";

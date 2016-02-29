@@ -7,6 +7,8 @@ public class BidderList {
 	
 	public static ArrayList<Color> colorList;
 	
+	private ArrayList<ArrayList<String>> lua_allAuction_valuationMsgs;
+	
 	static{
 		colorList = new ArrayList<Color>();
 		colorList.add(Color.WHITE);
@@ -38,6 +40,10 @@ public class BidderList {
 	
 	public int size() {
 		return list.size();
+	}
+	
+	public void setLuaValuationSetups(ArrayList<ArrayList<String>> msg) {
+		this.lua_allAuction_valuationMsgs = msg;
 	}
 	
 	public Bidder getBidder(String name, String ip) {

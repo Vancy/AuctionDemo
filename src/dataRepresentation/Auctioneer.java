@@ -461,7 +461,7 @@ public class Auctioneer extends Thread{
 	}
 	
 	/*
-	 * Two utility funcitons: deliberateDelay, flipCoinWin
+	 * Two utility functions: deliberateDelay, flipCoinWin
 	 */
 	static private void deliberateDelay(double sec) {
 		try {
