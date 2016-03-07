@@ -36,6 +36,10 @@ public class CCAAgent extends Agent{
 		super(name, ip);
 		this.demandVectors = vector;
 	}
+	
+	public HashMap<Integer, ArrayList<Double>> getDemandVectors() {
+		return this.demandVectors;
+	}
 /*	
 	private double calculateSurplus(List<AuctionItem> valuationSet, List<AuctionItem> itemSet) {
 

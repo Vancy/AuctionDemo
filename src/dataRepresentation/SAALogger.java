@@ -134,6 +134,7 @@ public class SAALogger {
 		            new FileOutputStream(new File(directory));
 		    workbook.write(out);
 		    out.close();
+		    workbook.close();
 		    System.out.println("Excel file written successfully!");
 		     
 		} catch (FileNotFoundException e) {

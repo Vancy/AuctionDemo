@@ -30,7 +30,6 @@ public class PriceOwnerCellRenderer extends DefaultTableCellRenderer {
 		setBackground(Color.WHITE); //firstly set back to original color
 		 if (row >0 && col >0) {
 
-	 		int round = row;
 	    	int itemID = col - 1;
 	    	int ownerID = -1;
 	    	for (AuctionContext context: this.environment.auctioneer.getLog()) {

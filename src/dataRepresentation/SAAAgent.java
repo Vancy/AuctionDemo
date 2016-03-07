@@ -65,30 +65,30 @@ public class SAAAgent extends Agent {
 		return bid;
 	}
 
-	private List<List<AuctionItem>> getPowerSet(List<AuctionItem> itemList) {
-		List<List<AuctionItem>> ps = new ArrayList<List<AuctionItem>>();
-		ps.add(new ArrayList<AuctionItem>()); // add the empty set
-
-		// for every item in the original list
-		for (AuctionItem i : itemList) {
-			List<List<AuctionItem>> newPs = new ArrayList<List<AuctionItem>>();
-
-			for (List<AuctionItem> subset : ps) {
-				// copy all of the current powerset's subsets
-				newPs.add(subset);
-
-				// plus the subsets appended with the current item
-				List<AuctionItem> newSubset = new ArrayList<AuctionItem>(subset);
-				newSubset.add(i);
-				newPs.add(newSubset);
-			}
-
-			// powerset is now powerset of list.subList(0, list.indexOf(item)+1)
-			ps = newPs;
-		}
-		ps.remove(0); // remove the emptyset
-		return ps;
-	}
+//	private List<List<AuctionItem>> getPowerSet(List<AuctionItem> itemList) {
+//		List<List<AuctionItem>> ps = new ArrayList<List<AuctionItem>>();
+//		ps.add(new ArrayList<AuctionItem>()); // add the empty set
+//
+//		// for every item in the original list
+//		for (AuctionItem i : itemList) {
+//			List<List<AuctionItem>> newPs = new ArrayList<List<AuctionItem>>();
+//
+//			for (List<AuctionItem> subset : ps) {
+//				// copy all of the current powerset's subsets
+//				newPs.add(subset);
+//
+//				// plus the subsets appended with the current item
+//				List<AuctionItem> newSubset = new ArrayList<AuctionItem>(subset);
+//				newSubset.add(i);
+//				newPs.add(newSubset);
+//			}
+//
+//			// powerset is now powerset of list.subList(0, list.indexOf(item)+1)
+//			ps = newPs;
+//		}
+//		ps.remove(0); // remove the emptyset
+//		return ps;
+//	}
 
 	private double calculateSurplus(List<AuctionItem> valuationSet,
 			List<AuctionItem> itemSet, double increment) {
