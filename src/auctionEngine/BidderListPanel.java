@@ -3,7 +3,9 @@ package auctionEngine;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.ListSelectionModel;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
@@ -25,11 +27,11 @@ public class BidderListPanel extends JPanel {
 	private DefaultTableModel tableModel;
 	
 	private AgentAddingDialog agentAddingDialog;
-	private LuaValuationSettingDialog luaValuationSettingDialog;
 	
 	public JButton btnKickOut;
 	public JButton btnAddAgent;
-	public JButton btnAddLuaBiddingValuations;
+	public DefaultComboBoxModel<String> ComboBoxModel;
+	public JComboBox<String> comboLuaBiddingValuationSetting;
 
 	/**
 	 * Create the panel.
@@ -86,16 +88,19 @@ public class BidderListPanel extends JPanel {
 		});
 		panel.add(btnAddAgent);
 		
-		btnAddLuaBiddingValuations = new JButton("LUA valuation");
-		btnAddLuaBiddingValuations.setEnabled(false);
-		btnAddLuaBiddingValuations.addActionListener(new ActionListener() {
+		ComboBoxModel = new DefaultComboBoxModel<String>();
+		comboLuaBiddingValuationSetting = new JComboBox<String>(ComboBoxModel);
+		comboLuaBiddingValuationSetting.setEnabled(false);
+		comboLuaBiddingValuationSetting.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
-				luaValuationSettingDialog = new LuaValuationSettingDialog(environment);
-				luaValuationSettingDialog.setLocationByPlatform(true);
-				luaValuationSettingDialog.setVisible(true);
+				 int auctionIndex = comboLuaBiddingValuationSetting.getSelectedIndex();
+				 bidderList.valuationMsgDistribution(auctionIndex);
 			}
 		});
-		panel.add(btnAddLuaBiddingValuations);
+		
+	
+		panel.add(comboLuaBiddingValuationSetting);
 		
 		ActionListener listener = new ActionListener() {
 			@Override

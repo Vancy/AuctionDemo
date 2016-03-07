@@ -275,9 +275,11 @@ public class AuctionConfigPanel extends JPanel {
 		bidderListPanel.btnKickOut.setEnabled(true);
 		bidderListPanel.btnAddAgent.setEnabled(true);
 		
-		//If current auction type is LUA, set LUA valuation setting button enable;
+		//If current auction type is LUA, set LUA valuation setting comboBox enable;
 		if (auctionType.equals("LUA")) {
-			bidderListPanel.btnAddLuaBiddingValuations.setEnabled(true);
+			bidderListPanel.comboLuaBiddingValuationSetting.setEnabled(true);
+		} else {
+			bidderListPanel.comboLuaBiddingValuationSetting.setEnabled(false);
 		}
 	}
 	

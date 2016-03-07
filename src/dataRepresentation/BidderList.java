@@ -50,6 +50,10 @@ public class BidderList {
 		return this.lua_allAuction_valuationMsgs;
 	}
 	
+	public int getLuaValuationSetupNumber() {
+		return this.lua_allAuction_valuationMsgs.size();
+	}
+	
 	public void valuationMsgDistribution(int luaAuctionRound) {
 		ArrayList<String> toDistribute = lua_allAuction_valuationMsgs.get(luaAuctionRound);
 		for (int i=0; i<toDistribute.size(); i++) {

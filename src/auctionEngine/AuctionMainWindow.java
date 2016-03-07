@@ -88,6 +88,23 @@ public class AuctionMainWindow {
 		});
 		mnStart.add(mntmQuit);
 		
+		//-----------------------------------------------------
+		
+		JMenu mnConfig = new JMenu("Config");
+		menuBar.add(mnConfig);
+		
+		JMenuItem mntmLuaValuationSetting= new JMenuItem("LUA valuation setting");
+		mnConfig.add(mntmLuaValuationSetting);
+		mntmLuaValuationSetting.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LuaValuationSettingDialog luaValuationSettingDialog = new LuaValuationSettingDialog(environment, bidderListPanel);
+				luaValuationSettingDialog.setLocationByPlatform(true);
+				luaValuationSettingDialog.setVisible(true);
+			}
+		});
+		
+		//-----------------------------------------------------
+
 		JMenu mnAbout = new JMenu("About");
 		menuBar.add(mnAbout);
 		

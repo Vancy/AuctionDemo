@@ -32,12 +32,14 @@ public class LuaValuationSettingDialog extends JDialog{
 	private AuctionEnvironment environment;
 	
 	private final JPanel contentPanel = new JPanel();
+	private BidderListPanel bidderListPanel;
 	private JTextField filePathTextField;
 	private JFileChooser configFileChooser; 
 	
-	public LuaValuationSettingDialog(AuctionEnvironment environment) {
+	public LuaValuationSettingDialog(AuctionEnvironment environment, BidderListPanel bidderListPanel) {
 		
 		this.environment = environment;
+		this.bidderListPanel = bidderListPanel;
 		
 		this.setTitle("Setting LUA bidding valuations");
 		
@@ -166,8 +168,13 @@ public class LuaValuationSettingDialog extends JDialog{
 		}
 		//Here we store the messages to auction environment
 		this.environment.bidderList.setLuaValuationSetups(allAuction_valuationMsgs);
-		//TODO
+		//we set the auction index 0 as the default.
 		this.environment.bidderList.valuationMsgDistribution(0);
+		//Update ComboBox in BidderListPanel
+		this.bidderListPanel.ComboBoxModel.removeAllElements();
+		for(int i=0; i<this.environment.bidderList.getLuaValuationSetupNumber(); i++) {
+			this.bidderListPanel.ComboBoxModel.addElement("LUA auction:" + (i+1));
+		}		
 	}
 	
 	private int getNumericValueFromCell(XSSFCell cell){
