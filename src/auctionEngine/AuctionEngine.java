@@ -13,7 +13,7 @@ public class AuctionEngine {
 		WebServer server = new WebServer(environment);
 		server.start();
 		
-		AuctionMainWindow window = new AuctionMainWindow(environment);
+		AuctionMainWindow window = new AuctionMainWindow(environment, server);
 		window.frame.setVisible(true);
 
 	}

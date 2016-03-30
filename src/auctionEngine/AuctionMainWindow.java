@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import dataRepresentation.AuctionEnvironment;
+import webServer.WebServer;
 
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
@@ -17,7 +18,9 @@ public class AuctionMainWindow {
 
 	protected JFrame frame;
 	
-	private JPanel contentPane;
+	private WebServer server;
+	
+    private JPanel auctionContentPane;
 	private AuctionConfigPanel auctionConfigPane;
 	protected AuctionPanel auctionPane;
 	protected BidderListPanel bidderListPanel;
@@ -27,8 +30,9 @@ public class AuctionMainWindow {
 	/**
 	 * Create the application.
 	 */
-	public AuctionMainWindow(AuctionEnvironment e) {
+	public AuctionMainWindow(AuctionEnvironment e, WebServer server) {
 		this.environment = e;
+		this.server = server;
 		initialize();
 	}
 
@@ -43,13 +47,13 @@ public class AuctionMainWindow {
 
 		JSplitPane splitPane = new JSplitPane();
 		
-	    JPanel auctionContentPane = new JPanel();
+		auctionContentPane = new JPanel();
 	    //auctionContentPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 	    auctionContentPane.setLayout(new CardLayout());
 	    this.auctionConfigPane = new AuctionConfigPanel(this, this.environment, this.frame);
 	    this.auctionPane = new AuctionPanel(this.environment, this.frame);
-	    auctionContentPane.add(auctionConfigPane, "ConfigPane"); 
-	    auctionContentPane.add(auctionPane, "AuctionPane");
+	    this.auctionContentPane.add(auctionConfigPane, "ConfigPane"); 
+	    this.auctionContentPane.add(auctionPane, "AuctionPane");
 	    
 	    
 	    this.bidderListPanel = new BidderListPanel(this.environment, this.auctionPane);
@@ -83,7 +87,13 @@ public class AuctionMainWindow {
 		JMenuItem mntmQuit = new JMenuItem("Quit");
 		mntmQuit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					server.stopServer();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 				frame.dispose();
+				System.out.println("Quit auction engine");
 			}
 		});
 		mnStart.add(mntmQuit);
@@ -118,9 +128,8 @@ public class AuctionMainWindow {
 	}
 	
 	private void changeToAuctionCreation() {
-		System.out.println("Create new Auction triggered");
-		CardLayout contentPaneLayout = (CardLayout)this.contentPane.getLayout();
-		contentPaneLayout.show(contentPane, "ConfigPane");
+		CardLayout contentPaneLayout = (CardLayout)this.auctionContentPane.getLayout();
+		contentPaneLayout.show(auctionContentPane, "ConfigPane");
 		frame.revalidate();  // fresh
 		
 	}

@@ -146,9 +146,9 @@ public class LuaValuationSettingDialog extends JDialog{
 					String licenced = getStringValueFromCell(worksheet.getRow(rowCursor).getCell(startcol+colGap*in));
 					String unlicenced = getStringValueFromCell(worksheet.getRow(rowCursor).getCell(startcol+colGap*in+1));
 					valuations.append(itemNames.get(in)+": ");
-					valuations.append(licenced.isEmpty()?"NA":licenced);
+					valuations.append(licenced.isEmpty()?"0":licenced);
 					valuations.append("(L) ");
-					valuations.append(unlicenced.isEmpty()?"NA":unlicenced);
+					valuations.append(unlicenced.isEmpty()?"0":unlicenced);
 					valuations.append("(U)");
 					valuations.append("<br/>");
 				}
@@ -188,16 +188,16 @@ public class LuaValuationSettingDialog extends JDialog{
 	}
 	private String getStringValueFromCell(XSSFCell cell){
 		if (null == cell) {
-			return "NA";
+			return "0";
 		}
 		if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
 			return ""+cell.getNumericCellValue();
 		} else if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
 			return cell.getStringCellValue();
 		} else if (cell.getCellType() == Cell.CELL_TYPE_BLANK) {
-			return "NA";
+			return "0";
 		} else {		
-			return "NA";
+			return "0";
 		}
 	}
 }
