@@ -92,8 +92,10 @@ public class AuctionMainWindow {
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
+				frame.setVisible(false);
 				frame.dispose();
 				System.out.println("Quit auction engine");
+				System.exit(0);
 			}
 		});
 		mnStart.add(mntmQuit);
