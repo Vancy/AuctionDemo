@@ -95,4 +95,14 @@ public class LUAItemWinningResult {
 			}
 			return result.toString();
 		}
+		
+		public String getWinnerTypeAndDistributionResult() {
+			switch(getWinnerType()) {
+			case LicencedWin:
+				return "{L}" + getWinnerDistributionResult();
+			case UnlicencedWin:
+				return "{U}" + getWinnerDistributionResult();
+			}
+			return "";
+		}
 }

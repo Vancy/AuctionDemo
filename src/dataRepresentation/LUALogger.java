@@ -23,6 +23,8 @@ public class LUALogger {
 	private AuctionEnvironment environment;
 	private ArrayList<AuctionItem> items;
 	
+	private HashMap<Integer, LUAItemWinningResult> winnerResults;
+	
 	public LUALogger(ConcurrentHashMap<Integer, ArrayList<LuaBid>> luaBids, AuctionEnvironment environment) {
 		this.luaBids = luaBids;
 		this.environment = environment;
@@ -36,6 +38,8 @@ public class LUALogger {
 		
 		createRawLuaBidResults(sheet);
 		createWinnerResults(sheet);
+		
+		System.out.println(printWinnerResultsString());
 		
 		close(workbook);
 	}
@@ -65,7 +69,7 @@ public class LUALogger {
 	
 	private void createWinnerResults(XSSFSheet sheet) {
 		printWinnerResultsHeader(sheet);
-		HashMap<Integer, LUAItemWinningResult> winnerResults = processWinners();
+		winnerResults = processWinners();
 		int firstAvailableRow = sheet.getLastRowNum() + 1;
 		for(int itemId: winnerResults.keySet()) {
 			LUAItemWinningResult itemWinResult = winnerResults.get(itemId);
@@ -130,6 +134,15 @@ public class LUALogger {
 			}
 		}
 		return results;
+	}
+	
+	private String printWinnerResultsString() {
+		String result = "";
+		for(int itemId: winnerResults.keySet()) {
+			LUAItemWinningResult itemWinResult = winnerResults.get(itemId);
+			result += (itemWinResult.getWinnerTypeAndDistributionResult() + "\n");
+		}
+		return result;
 	}
 	
 	private String getItemNameByID(int id) {
