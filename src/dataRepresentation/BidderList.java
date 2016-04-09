@@ -65,6 +65,15 @@ public class BidderList {
 			targetBidder.setValuationMsg(toDistribute.get(i));
 		}
 	}
+	
+	public boolean containBidder(String name, String ip) {
+		for (Bidder b: this.list) {
+			if ((b.getName().equals(name)) && (b.getIP().equals(ip))) {
+				return true;
+			}
+		}
+		return false;
+	}
 		
 	public Bidder getBidder(String name, String ip) {
 		for (Bidder b: this.list) {

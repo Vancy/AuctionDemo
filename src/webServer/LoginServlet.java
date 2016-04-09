@@ -38,11 +38,13 @@ public class LoginServlet extends DefaultServlet{
 		String userip = request.getParameter("ip");
 		System.out.println("RequesterIP:"+userip);
 		
-		//add user's info to bidder list
-		Bidder newBidder = new HumanBidder(username, userip);
-		auctionEnvironment.bidderList.addBidder(newBidder);
-		//add LUA valuation message to this bidder, if any.
-		this.setLuaValuationMsg(newBidder);
+		//add user's info to bidder list if bidder info does not exist
+		if (!auctionEnvironment.bidderList.containBidder(username, userip)) {
+			Bidder newBidder = new HumanBidder(username, userip);
+			auctionEnvironment.bidderList.addBidder(newBidder);
+			//add LUA valuation message to this bidder, if any.
+			this.setLuaValuationMsg(newBidder);
+		}
 		
 		//send cookie if cookie is null
 		if( !hasCookie(request.getCookies()) ) {
