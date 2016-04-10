@@ -83,6 +83,13 @@ public class BidderList {
 		}
 		return null;
 	}
+	public Bidder getBidder(int id) {
+		Bidder bidder = this.list.get(id);
+		if (null == bidder) {
+			throw new RuntimeException("Bidder cannot be found in bidder list");
+		}
+		return bidder;
+	}
 	
 	public String getBidderName(int id) {
 		for (Bidder b: this.list) {

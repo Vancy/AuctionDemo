@@ -39,6 +39,8 @@ public class LUALogger {
 		createRawLuaBidResults(sheet);
 		createWinnerResults(sheet);
 		
+		DistributeWinningResultsToBidders();
+		
 		System.out.println(printWinnerResultsString());
 		
 		close(workbook);
@@ -140,7 +142,7 @@ public class LUALogger {
 		String result = "";
 		for(int itemId: winnerResults.keySet()) {
 			LUAItemWinningResult itemWinResult = winnerResults.get(itemId);
-			result += (itemWinResult.getWinnerTypeAndDistributionResult() + "\n");
+			result += (itemId + itemWinResult.getWinnerTypeAndDistributionResult() + "\n");
 		}
 		return result;
 	}
@@ -154,6 +156,20 @@ public class LUALogger {
 			}
 		}
 		throw new RuntimeException("Cannot find item id in current item list:"+id);
+	}
+	
+	private void DistributeWinningResultsToBidders() {
+		BidderList bidderList = this.environment.bidderList;
+		for(int itemId: winnerResults.keySet()) {
+			LUAItemWinningResult itemWinResult = winnerResults.get(itemId);
+			String itemName = this.getItemNameByID(itemId);
+			String winType = itemWinResult.getWinnerType().toString();
+			HashMap<Integer, Double> winnersAndPrices = itemWinResult.getWinnerBiddersAndPrices();
+			for(int winnerId: winnersAndPrices.keySet()) {
+				Bidder bidder = bidderList.getBidder(winnerId);
+				bidder.addWinningMsg(itemId +" "+ itemName +" ("+ winType + ") "+ winnersAndPrices.get(winnerId) + "<br/>");
+			}
+		}
 	}
 	
 	private void close(XSSFWorkbook workbook) {

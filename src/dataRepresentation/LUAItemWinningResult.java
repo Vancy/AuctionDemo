@@ -96,6 +96,23 @@ public class LUAItemWinningResult {
 			return result.toString();
 		}
 		
+		public HashMap<Integer, Double> getWinnerBiddersAndPrices() {
+			HashMap<Integer, Double> bidderAndPrice = new HashMap<Integer, Double>();
+			double payPrice = this.getSecondHighestPrice();
+			if (WinnerType.LicencedWin == this.getWinnerType()) {
+				bidderAndPrice.put(this.L_winner_bidder_id, payPrice);
+			} else if (WinnerType.UnlicencedWin == this.getWinnerType()){
+				for (int bidderID: this.U_bidder_prices.keySet()) {
+					double winPriceRaw  = new Double(payPrice * this.U_bidder_prices.get(bidderID) / this.U_Sum);
+					double winPrice = new BigDecimal(winPriceRaw)
+    						.setScale(2, BigDecimal.ROUND_HALF_UP)
+    						.doubleValue(); //set float precision as 2, and using round half up
+					bidderAndPrice.put(bidderID, winPrice);
+				}
+			}
+			return bidderAndPrice;
+		}
+		
 		public String getWinnerTypeAndDistributionResult() {
 			switch(getWinnerType()) {
 			case LicencedWin:
