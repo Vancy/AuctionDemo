@@ -84,7 +84,8 @@ public class BidderList {
 		return null;
 	}
 	public Bidder getBidder(int id) {
-		Bidder bidder = this.list.get(id);
+		//Bidder's actual id starts from 1, but store from 0.
+		Bidder bidder = this.list.get(id-1);
 		if (null == bidder) {
 			throw new RuntimeException("Bidder cannot be found in bidder list");
 		}

@@ -4,7 +4,7 @@ Polymer('auction-lua', {
   lua: {},
  
   items: [],
-  auctionStarted: false,
+  auctionTableStarted: false,
   isFinal: false,
   data: "",
 
@@ -49,17 +49,22 @@ Polymer('auction-lua', {
   },
   
   updateInformation: function() {
-    this.items = this.lua.itemList;
     console.log("update info");
     var currentRound = this.lua.round;
+    this.isFinal = this.lua.finalRound;
     if (currentRound <= 0) {
-      this.auctionStarted = false;
+      //we only update the item price when auction is not started yet.
+      this.items = this.lua.itemList;
+      this.auctionTableStarted = false;
     } else {
-      //The timer finishes its job.
-      clearTimeout(this.timer);
-      this.auctionStarted = true;
-      console.log("auction starts");
-      this.$.table.startAuction(this.lua);
+      if (!this.auctionTableStarted) {
+        this.$.table.startAuction(this.lua);
+	this.auctionTableStarted = true;
+	console.log("auction starts");
+      }
+    }
+    if (this.isFinal) {
+      this.$.results.innerHTML = this.getMyResultMsg();
     }
     this.$.valuations.innerHTML = this.getMyValuationMsg();       
   },
@@ -69,6 +74,18 @@ Polymer('auction-lua', {
     for (var i = 0; i < bidderList.length; i++) {
 	if (bidderList[i].ipAddress === this.localIP &&	bidderList[i].name === this.username) {
 	  return "Item valuations:<br/>" + bidderList[i].luaValuationsMessage;
+	} else {
+	  continue;
+	}
+    }
+    return "";
+  },
+
+  getMyResultMsg: function() {
+    var bidderList = this.lua.bidderList.list;
+    for (var i = 0; i < bidderList.length; i++) {
+	if (bidderList[i].ipAddress === this.localIP &&	bidderList[i].name === this.username) {
+	  return "My winning result:<br/>ID Name WinType WinPrice<br/>" + bidderList[i].luaWinningMessage;
 	} else {
 	  continue;
 	}
