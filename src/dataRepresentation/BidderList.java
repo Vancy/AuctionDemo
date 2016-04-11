@@ -100,5 +100,11 @@ public class BidderList {
 		}
 		throw new RuntimeException("cannot find bidder id:" + id);
 	}
+	
+	public void clearBiddersLuaWinningMsg() {
+		for (Bidder b: this.list) {
+			b.clearWinningMsg();
+		}
+	}
 
 }

@@ -274,6 +274,9 @@ public class AuctionPanel extends JPanel {
 	
 	private void backToAuctionConfig() {
 		
+		//clear previous round bidder winning message, if any.
+		this.environment.bidderList.clearBiddersLuaWinningMsg();
+		
 		JSplitPane sp = (JSplitPane)(this.parentFrame.getContentPane());
 		JPanel auctionContentPanel = (JPanel) sp.getLeftComponent();
 		CardLayout contentPaneLayout = (CardLayout)auctionContentPanel.getLayout();

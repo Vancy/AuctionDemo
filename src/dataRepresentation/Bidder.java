@@ -61,6 +61,10 @@ public class Bidder {
 			this.luaWinningMessage += msg;
 		}
 	}
+	
+	public void clearWinningMsg() {
+		this.luaWinningMessage = "";
+	}
 
 	public void setActivity(int activity) {
 		this.activity = activity;
