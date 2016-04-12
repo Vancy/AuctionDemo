@@ -161,6 +161,35 @@
           return price;
 	}
       },
+      
+      //disable or enable the bid button according to the index of bidder's valuation. If the valuation is 0, disable the bid button, otherwise enable that.
+      updateBidButton: function(index, valuation) {
+	console.log(index, valuation);
+        var bidType = (index % 2 == 0) ? 2:1;
+	var bidID = (index - index % 2) / 2 + 1;
+	console.log(bidType, bidID);
+	switch(bidType) {
+    	    case 1:
+              var btn = this.$.tbody.querySelector("#unlicense_price_" + bidID);
+	console.log(btn);
+	      if (valuation == 0) {
+		btn.disabled = true;
+	      } else {
+		btn.disabled = false;
+ 	      }
+              break;
+            case 2:
+             var btn = this.$.tbody.querySelector("#license_price_" + bidID);
+	console.log(btn);
+	      if (valuation == 0) {
+		btn.disabled = true;
+	      } else {
+		btn.disabled = false;
+ 	      }
+              break;
+            default:
+	} 
+      },
 
       // successfully submit
       success: function(e) {

@@ -69,18 +69,6 @@ Polymer('auction-lua', {
     this.$.valuations.innerHTML = this.getMyValuationMsg();       
   },
 
-  getMyValuationMsg: function() {
-    var bidderList = this.lua.bidderList.list;
-    for (var i = 0; i < bidderList.length; i++) {
-	if (bidderList[i].ipAddress === this.localIP &&	bidderList[i].name === this.username) {
-	  return "Item valuations:<br/>" + bidderList[i].luaValuationsMessage;
-	} else {
-	  continue;
-	}
-    }
-    return "";
-  },
-
   getMyResultMsg: function() {
     var bidderList = this.lua.bidderList.list;
     for (var i = 0; i < bidderList.length; i++) {
@@ -91,6 +79,28 @@ Polymer('auction-lua', {
 	}
     }
     return "";
+  },
+
+  getMyValuationMsg: function() {
+    var bidderList = this.lua.bidderList.list;
+    for (var i = 0; i < bidderList.length; i++) {
+	if (bidderList[i].ipAddress === this.localIP &&	bidderList[i].name === this.username) {
+	  //this.reflectZeroValuationToDisableBidButton(bidderList[i].luaValuationsMessage);
+	  return "Item valuations:<br/>" + bidderList[i].luaValuationsMessage;
+	} else {
+	  continue;
+	}
+    }
+    return "";
+  },
+
+  reflectZeroValuationToDisableBidButton: function(valuationMessage) {
+     var floatRegex = /[+-]?\d+(\.\d+)?/g;
+     var floats = valuationMessage.match(floatRegex).map(function(v) { return parseFloat(v); });
+     //console.log(floats);
+     for (var i=0; i<floats.length; i++) {
+	this.$.table.updateBidButton(i,floats[i]);
+     }
   },
 
   // successfully submit
