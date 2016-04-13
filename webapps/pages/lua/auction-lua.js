@@ -25,7 +25,7 @@ Polymer('auction-lua', {
 
   setData: function(data) {
     this.lua = data;
-    this.updateInformation();
+    this.initialize();
 
     // Start the ajax timer when it is the first time.
     var self = this;
@@ -47,6 +47,12 @@ Polymer('auction-lua', {
     this.lua = json;
     this.updateInformation();
   },
+
+  initialize: function() {
+  //this function is only used by first prepare the web page.
+    console.log("initialization");
+    this.items = this.lua.itemList;
+  },
   
   updateInformation: function() {
     console.log("update info");
@@ -54,7 +60,6 @@ Polymer('auction-lua', {
     this.isFinal = this.lua.finalRound;
     if (currentRound <= 0) {
       //we only update the item price when auction is not started yet.
-      this.items = this.lua.itemList;
       this.auctionTableStarted = false;
     } else {
       if (!this.auctionTableStarted) {
@@ -85,7 +90,7 @@ Polymer('auction-lua', {
     var bidderList = this.lua.bidderList.list;
     for (var i = 0; i < bidderList.length; i++) {
 	if (bidderList[i].ipAddress === this.localIP &&	bidderList[i].name === this.username) {
-	  //this.reflectZeroValuationToDisableBidButton(bidderList[i].luaValuationsMessage);
+	  this.reflectZeroValuationToDisableBidButton(bidderList[i].luaValuationsMessage);
 	  return "Item valuations:<br/>" + bidderList[i].luaValuationsMessage;
 	} else {
 	  continue;
@@ -96,6 +101,7 @@ Polymer('auction-lua', {
 
   reflectZeroValuationToDisableBidButton: function(valuationMessage) {
      var floatRegex = /[+-]?\d+(\.\d+)?/g;
+     if (valuationMessage == null) return;
      var floats = valuationMessage.match(floatRegex).map(function(v) { return parseFloat(v); });
      //console.log(floats);
      for (var i=0; i<floats.length; i++) {
