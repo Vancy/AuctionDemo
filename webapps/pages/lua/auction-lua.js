@@ -6,6 +6,7 @@ Polymer('auction-lua', {
   items: [],
   auctionTableStarted: false,
   isFinal: false,
+  currentLuaValuationsMessage: "",
   data: "",
 
   updateUrl: "",
@@ -78,7 +79,7 @@ Polymer('auction-lua', {
     var bidderList = this.lua.bidderList.list;
     for (var i = 0; i < bidderList.length; i++) {
 	if (bidderList[i].ipAddress === this.localIP &&	bidderList[i].name === this.username) {
-	  return "My winning result:<br/>ID Name WinType WinPrice<br/>" + bidderList[i].luaWinningMessage;
+	  return "My winning results:<br/>ID Name   WinType   WinPrice<br/>" + bidderList[i].luaWinningMessage;
 	} else {
 	  continue;
 	}
@@ -90,8 +91,13 @@ Polymer('auction-lua', {
     var bidderList = this.lua.bidderList.list;
     for (var i = 0; i < bidderList.length; i++) {
 	if (bidderList[i].ipAddress === this.localIP &&	bidderList[i].name === this.username) {
-	  this.reflectZeroValuationToDisableBidButton(bidderList[i].luaValuationsMessage);
-	  return "Item valuations:<br/>" + bidderList[i].luaValuationsMessage;
+          if (this.currentLuaValuationsMessage == bidderList[i].luaValuationsMessage) {
+	    //needn't update default disable bid button
+	  } else {
+	    this.reflectZeroValuationToDisableBidButton(bidderList[i].luaValuationsMessage);
+	    this.currentLuaValuationsMessage = bidderList[i].luaValuationsMessage;
+	  }
+	  return (this.currentLuaValuationsMessage === "")? "" : "Item valuations:<br/>" + bidderList[i].luaValuationsMessage;
 	} else {
 	  continue;
 	}

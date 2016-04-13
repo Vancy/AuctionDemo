@@ -62,7 +62,6 @@
       startAuction: function(lua_context) {
 	//console.log("table start");
 	this.lua = lua_context;
-	this.items = this.lua.itemList;
         var tickDuration = this.lua.duration_ms;
   	this.minIncrement = this.lua.minIncreament;
         var self = this;
@@ -171,7 +170,6 @@
 	switch(bidType) {
     	    case 1:
               var btn = this.$.tbody.querySelector("#unlicense_price_" + bidID);
-	console.log(btn);
 	      if (valuation == 0) {
 		btn.disabled = true;
 	      } else {
@@ -179,8 +177,7 @@
  	      }
               break;
             case 2:
-             var btn = this.$.tbody.querySelector("#license_price_" + bidID);
-	console.log(btn);
+              var btn = this.$.tbody.querySelector("#license_price_" + bidID);
 	      if (valuation == 0) {
 		btn.disabled = true;
 	      } else {
