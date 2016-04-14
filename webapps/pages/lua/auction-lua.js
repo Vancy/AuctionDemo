@@ -7,6 +7,7 @@ Polymer('auction-lua', {
   auctionTableStarted: false,
   isFinal: false,
   currentLuaValuationsMessage: "",
+  valuationVector: [],
   data: "",
 
   updateUrl: "",
@@ -77,14 +78,46 @@ Polymer('auction-lua', {
 
   getMyResultMsg: function() {
     var bidderList = this.lua.bidderList.list;
+    var results = "";
     for (var i = 0; i < bidderList.length; i++) {
 	if (bidderList[i].ipAddress === this.localIP &&	bidderList[i].name === this.username) {
-	  return "My winning results:<br/>ID Name   WinType   WinPrice<br/>" + bidderList[i].luaWinningMessage;
+	  //We get the result message, not display immediately. Instead, we first calculate the payoff, then display.
+	  var winningList = bidderList[i].luaWinningMessage.split("<br/>");
+	  // the last one is an empty string, so ignore that.
+          for (var j=0; j<winningList.length-1; j++) {
+	    var infoList = winningList[j].split(" ");
+	    var itemID = parseInt(infoList[0]);
+            var itemName = infoList[1];
+            var winType = infoList[2];
+	    var myWinPrice = parseFloat(infoList[3]);
+	    myPayoff = calculatePayoff(this, itemID, winType, myWinPrice);
+	    results += itemName + " " + winType + " " + myWinPrice + " " + myPayoff + "<br/>";
+	  }
+	  return "<b>My winning results:</b><br/>Item &nbsp WinType &nbsp WinPrice  Payoff<br/>" + results;
 	} else {
 	  continue;
 	}
     }
-    return "";
+    return results;
+
+    function calculatePayoff(self, itemID, winType, myPrice) {
+        console.log("vars:", itemID, winType, myPrice);
+        var index;
+	if (winType === "(LicencedWin)") {
+	  index = itemID * 2;
+        } else if (winType === "(UnlicencedWin)") {
+	  index = itemID * 2 + 1;
+        } else {
+	console.log(winType);
+        }
+	if (self.valuationVector === "") {
+	  return myPrice;
+ 	}
+	myValuation = self.valuationVector[index];
+	console.log("index", index);
+	console.log("valuation", myValuation);
+	return myPrice - myValuation;
+    }
   },
 
   getMyValuationMsg: function() {
@@ -109,6 +142,7 @@ Polymer('auction-lua', {
      var floatRegex = /[+-]?\d+(\.\d+)?/g;
      if (valuationMessage == null) return;
      var floats = valuationMessage.match(floatRegex).map(function(v) { return parseFloat(v); });
+     this.valuationVector = floats;
      //console.log(floats);
      for (var i=0; i<floats.length; i++) {
 	this.$.table.updateBidButton(i,floats[i]);
