@@ -91,9 +91,9 @@ Polymer('auction-lua', {
             var winType = infoList[2];
 	    var myWinPrice = parseFloat(infoList[3]);
 	    myPayoff = calculatePayoff(this, itemID, winType, myWinPrice);
-	    results += itemName + " " + winType + " " + myWinPrice + " " + myPayoff + "<br/>";
+	    results += "<tr><td>" + itemName + "</td><td>" + winType + "</td><td>" + myWinPrice + "</td><td>" + myPayoff + "</td></tr>";
 	  }
-	  return "<b>My winning results:</b><br/>Item &nbsp WinType &nbsp WinPrice  Payoff<br/>" + results;
+	  return "<b>My winning results:</b><br/><table><tr> <td>Item</td> <td>WinType</td> <td>WinPrice</td>  <td>Payoff</td> </tr>" + results + "</table>";
 	} else {
 	  continue;
 	}
@@ -101,7 +101,7 @@ Polymer('auction-lua', {
     return results;
 
     function calculatePayoff(self, itemID, winType, myPrice) {
-        console.log("vars:", itemID, winType, myPrice);
+        //console.log("vars:", itemID, winType, myPrice);
         var index;
 	if (winType === "(LicencedWin)") {
 	  index = itemID * 2;
@@ -114,8 +114,6 @@ Polymer('auction-lua', {
 	  return myPrice;
  	}
 	myValuation = self.valuationVector[index];
-	console.log("index", index);
-	console.log("valuation", myValuation);
 	return myPrice - myValuation;
     }
   },
