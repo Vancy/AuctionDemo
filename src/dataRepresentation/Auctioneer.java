@@ -240,7 +240,7 @@ public class Auctioneer extends Thread{
 		saaLogger.addToExcelLog(this.requestedBids.values());
 		
 		if (!newBids) {
-			this.environment.context.setFinalRound();
+			this.environment.context.setFinalRound(true);
 			saaLogger.createExcelLogSheet(this.environment.context.getItemList(), this.environment.bidderList.getList(), "SAA Auction Results");
 		}
 	}
@@ -279,7 +279,7 @@ public class Auctioneer extends Thread{
 		
 		if (this.environment.context.allCCAItemBddingFinished()) {
 			// if all cca items are finished, set context finishTag as true
-			this.environment.context.setFinalRound();
+			this.environment.context.setFinalRound(true);
 		}
 	}
 	
@@ -287,7 +287,7 @@ public class Auctioneer extends Thread{
 		System.out.println("We now process LUA bids");
 
 		this.environment.context.LuaBids = this.LuaBids;
-		this.environment.context.setFinalRound();
+		this.environment.context.setFinalRound(true);
 		this.environment.context.bidsProcessingFinished = true;
 		this.luaLogger = new LUALogger(this.LuaBids, environment);
 		this.luaLogger.printResults();

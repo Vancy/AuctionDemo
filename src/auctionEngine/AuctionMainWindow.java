@@ -131,8 +131,7 @@ public class AuctionMainWindow {
 	
 	private void changeToAuctionCreation() {
 		
-		//clear previous round bidder winning message, if any.
-		this.environment.bidderList.clearBiddersLuaWinningMsg();
+		this.environment.resetEnv();
 				
 		CardLayout contentPaneLayout = (CardLayout)this.auctionContentPane.getLayout();
 		contentPaneLayout.show(auctionContentPane, "ConfigPane");

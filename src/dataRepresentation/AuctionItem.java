@@ -19,7 +19,7 @@ public class AuctionItem implements Comparable<AuctionItem> {
 	//the parameter maxPrice is only used in LUA. SAA and CCA needn't use this value
 	private double maxPrice;
 	
-	static int number_of_items = 0;
+	public static int number_of_items = 0;
 	
 	//default constructor, initial item object with invalid values.
 	public AuctionItem() {

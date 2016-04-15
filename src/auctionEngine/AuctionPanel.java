@@ -184,7 +184,7 @@ public class AuctionPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				environment.AuctionStarted = true;
 				environment.context.incrementRound(); // increment round from 0 to 1
-				environment.auctioneer.start();
+				environment.startAuctioneer();
 				startAuction();
 				System.err.println("Click Auction Start:"+ environment.AuctionStarted);
 				btn_Back.setEnabled(false);
@@ -265,7 +265,7 @@ public class AuctionPanel extends JPanel {
 		this.lblRound.setText("Round:"+Integer.toString(this.environment.context.getRound()));
 	}
 	private void setAuctionEndFlag() {
-		this.environment.context.setFinalRound();
+		this.environment.context.setFinalRound(true);
 	}
 	private void startAuction() {
 		this.environment.context.roundTimeRemain = this.environment.context.getDurationTime();
@@ -274,8 +274,7 @@ public class AuctionPanel extends JPanel {
 	
 	private void backToAuctionConfig() {
 		
-		//clear previous round bidder winning message, if any.
-		this.environment.bidderList.clearBiddersLuaWinningMsg();
+		this.environment.resetEnv();
 		
 		JSplitPane sp = (JSplitPane)(this.parentFrame.getContentPane());
 		JPanel auctionContentPanel = (JPanel) sp.getLeftComponent();

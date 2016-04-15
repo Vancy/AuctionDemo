@@ -120,8 +120,8 @@ public class AuctionContext {
 	public void setMinIncrement(double min) {
 		this.minIncreament = min;
 	}
-	public void setFinalRound() {
-		this.finalRound = true;
+	public void setFinalRound(boolean isFinal) {
+		this.finalRound = isFinal;
 	}
 	public boolean isFinalRound() {
 		return this.finalRound;
@@ -189,6 +189,11 @@ public class AuctionContext {
 			}
 		}
 		return null;
+	}
+	
+	public void clearAuctionItems() {
+		this.itemList = null;
+		AuctionItem.number_of_items = 0;
 	}
 	
 	public boolean allCCAItemBddingFinished() {
