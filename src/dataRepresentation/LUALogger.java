@@ -163,11 +163,12 @@ public class LUALogger {
 		for(int itemId: winnerResults.keySet()) {
 			LUAItemWinningResult itemWinResult = winnerResults.get(itemId);
 			String itemName = this.getItemNameByID(itemId);
+			String itemPrice = itemWinResult.getSecondHighestPrice() + "";
 			String winType = itemWinResult.getWinnerType().toString();
 			HashMap<Integer, Double> winnersAndPrices = itemWinResult.getWinnerBiddersAndPrices();
 			for(int winnerId: winnersAndPrices.keySet()) {
 				Bidder bidder = bidderList.getBidder(winnerId);
-				bidder.addWinningMsg(itemId +" "+ itemName +" ("+ winType + ") "+ winnersAndPrices.get(winnerId) + "<br/>");
+				bidder.addWinningMsg(itemId +" "+ itemName +" "+ itemPrice + " ("+ winType + ") "+ winnersAndPrices.get(winnerId) + "<br/>");
 			}
 		}
 	}

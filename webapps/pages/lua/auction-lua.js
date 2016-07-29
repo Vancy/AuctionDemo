@@ -88,12 +88,13 @@ Polymer('auction-lua', {
 	    var infoList = winningList[j].split(" ");
 	    var itemID = parseInt(infoList[0]);
             var itemName = infoList[1];
-            var winType = infoList[2];
-	    var myWinPrice = parseFloat(infoList[3]);
+            var itemPrice = infoList[2];
+            var winType = infoList[3];
+	    var myWinPrice = parseFloat(infoList[4]);
 	    myPayoff = calculatePayoff(this, itemID, winType, myWinPrice);
-	    results += "<tr><td>" + itemName + "</td><td>" + winType + "</td><td>" + myWinPrice + "</td><td>" + myPayoff + "</td></tr>";
+	    results += "<tr><td>" + itemName + "</td><td>" + itemPrice + "</td><td>" + winType + "</td><td>" + myWinPrice + "</td><td>" + myPayoff + "</td></tr>";
 	  }
-	  return "<b>My winning results:</b><br/><table><tr> <td>Item</td> <td>WinType</td> <td>WinPrice</td>  <td>Payoff</td> </tr>" + results + "</table>";
+	  return "<b>My winning results:</b><br/><table><tr> <td>Item</td>  <td>ItemPrice</td> <td>Win   Type</td> <td>WinPrice</td>  <td>Payoff</td> </tr>" + results + "</table>";
 	} else {
 	  continue;
 	}
