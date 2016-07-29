@@ -114,7 +114,7 @@ Polymer('auction-lua', {
 	  return myPrice;
  	}
 	myValuation = self.valuationVector[index];
-	return myPrice - myValuation;
+	  return myValuation - myPrice;
     }
   },
 
