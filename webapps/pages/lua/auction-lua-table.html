@@ -103,14 +103,37 @@
       },
 
       placeBid: function(event, detail, sender) {
-
-	if (this.auctionStarted == false) {
-	  console.log("place invalid bid");
-	} else {
-	  var args = sender.getAttribute('data-args').split(',');
+  	  var args = sender.getAttribute('data-args').split(',');
 	  var bidType = parseInt(args[0]);
 	  var bidID = parseInt(args[1]);
-	
+	  if (this.auctionStarted == false) {
+	    //If the auction is not start yet, when people click the bid it means the bidder in bidding interest claiming stage
+	    //Then, we tag this bid button as interested.
+	  switch(bidType) {
+    	    case 1:
+              var btn = this.$.tbody.querySelector("#unlicense_price_" + bidID);
+	      if (btn.innerHTML === "interested") {
+	        btn.innerHTML = "bid";
+		//btn.disabled = false;
+	      } else {
+	        btn.innerHTML = "interested";
+		//btn.disabled = true; 
+	      }
+              break;
+            case 2:
+              var btn = this.$.tbody.querySelector("#license_price_" + bidID);
+	      if (btn.innerHTML === "interested") {
+	        btn.innerHTML = "bid";
+		//btn.disabled = false;
+	      } else {
+	        btn.innerHTML = "interested";
+		//btn.disabled = true; 
+	      }
+              break;
+            default:
+		}
+	  } else {
+	    //If the auction starts. We get the price of current price tick and set the value to the button.
 	  switch(bidType) {
     	    case 1:
               var btn = this.$.tbody.querySelector("#unlicense_price_" + bidID);
@@ -188,6 +211,27 @@
 	} 
       },
 
+      //disable or enable the bid button according to interests of the bidders.
+      updateBidButtons: function() {
+	for (i=0; i < this.items.length; i++) {
+          var btn_ulc = this.$.tbody.querySelector("#unlicense_price_" + i);
+	  var btn_lcs = this.$.tbody.querySelector("#license_price_" + i);
+	  if (btn_ulc.innerHTML === "interested") {
+	    btn_ulc.innerHTML = "bid";
+	    btn_ulc.disabled = false;
+	  } else {
+	    btn_ulc.innerHTML = "bid";
+	    btn_ulc.disabled = true; 
+	  }
+	  if (btn_lcs.innerHTML === "interested") {
+	    btn_lcs.innerHTML = "bid";
+	    btn_lcs.disabled = false;
+	  } else {
+	    btn_lcs.innerHTML = "bid";
+	    btn_lcs.disabled = true; 
+	  }
+	}
+      },
       // successfully submit
       success: function(e) {
     	console.log("submit bids successes", e);

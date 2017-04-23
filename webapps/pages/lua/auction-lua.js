@@ -14,6 +14,7 @@ Polymer('auction-lua', {
   timer: undefined,
 
   domReady: function() {
+	this.$.submitInterests.disable = false;
   },
 
 
@@ -146,6 +147,18 @@ Polymer('auction-lua', {
      for (var i=0; i<floats.length; i++) {
 	this.$.table.updateBidButton(i,floats[i]);
      }
+  },
+
+  submitInterests: function() {
+      if (this.$.table.auctionStarted) {
+        this.$.submitInterests.innerHTML = "Auction has started";
+        this.$.submitInterests.disabled = true;
+	return;
+      }
+      console.log("submit interests");
+      this.$.table.updateBidButtons();
+      this.$.submitInterests.innerHTML = "Interests Submitted";
+      this.$.submitInterests.disabled = true;
   },
 
   // successfully submit
