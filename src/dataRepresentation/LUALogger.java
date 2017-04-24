@@ -60,8 +60,10 @@ public class LUALogger {
 			for (LuaBid bid: luaBids.get(bidderID)) {
 				double licenced = bid.getLicencedBidPrice();
 				double unlicenced = bid.getUnlicencedBidPrice();
-				thisRow.createCell(priceCursor++).setCellValue(licenced);
-				thisRow.createCell(priceCursor++).setCellValue(unlicenced);
+				boolean interest_licenced = bid.interestedInLicensed();
+				boolean interest_unlicenced = bid.interestedInUnlicensed();
+				thisRow.createCell(priceCursor++).setCellValue("("+ (interest_licenced?"interested":"not interested") + ")" + licenced);
+				thisRow.createCell(priceCursor++).setCellValue("("+ (interest_unlicenced?"interested":"not interested") + ")" + unlicenced);
 			}
 			contentRow++;
 		}

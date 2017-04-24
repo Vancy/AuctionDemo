@@ -229,8 +229,10 @@ public class BidServlet extends DefaultServlet{
 			String name = packageList.get(i).getAsJsonObject().get("item").getAsJsonObject().get("name").getAsString();
 			double licenced_price = packageList.get(i).getAsJsonObject().get("licence").getAsDouble();
 			double unlicenced_price = packageList.get(i).getAsJsonObject().get("unlicence").getAsDouble();
+			boolean unlicenced_interest = packageList.get(i).getAsJsonObject().get("interest_unlicence").getAsBoolean();
+			boolean licenced_interest = packageList.get(i).getAsJsonObject().get("interest_licence").getAsBoolean();
 			AuctionItem item = new AuctionItem(id, name, -1/*we use this constructor but required is not valid*/);
-			LuaBid luaBid = new LuaBid(item, licenced_price, unlicenced_price);
+			LuaBid luaBid = new LuaBid(item, licenced_price, unlicenced_price,licenced_interest, unlicenced_interest);
 			bids.add(luaBid);
 		}
 		return bids;

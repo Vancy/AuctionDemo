@@ -53,6 +53,8 @@
       auctionStarted: false,
       data: "",
 
+      myInterests: {},
+
       setUp: function(username, localIP) {
     	this.username = username;
     	this.localIP = localIP;
@@ -162,6 +164,8 @@
           ibid.item = this.items[i];
 	  ibid.unlicence = priceGetter(this, bidID, 1);
 	  ibid.licence = priceGetter(this, bidID, 2);
+	  ibid.interest_unlicence = this.myInterests[i].unlicence;
+	  ibid.interest_licence = this.myInterests[i].licence;
 	  data.bid.luaBidPackage[i] = ibid;
         }
 	return JSON.stringify(data);
@@ -211,12 +215,15 @@
 	} 
       },
 
-      //disable or enable the bid button according to interests of the bidders.
+      //disable or enable the bid button according to interests of the bidders.& Store the interests of every bidder.
       updateBidButtons: function() {
 	for (i=0; i < this.items.length; i++) {
+          var interest_ulc = false;
+          var interest_lcs = false;
           var btn_ulc = this.$.tbody.querySelector("#unlicense_price_" + i);
 	  var btn_lcs = this.$.tbody.querySelector("#license_price_" + i);
 	  if (btn_ulc.innerHTML === "interested") {
+	    interest_ulc = true;
 	    btn_ulc.innerHTML = "bid";
 	    btn_ulc.disabled = false;
 	  } else {
@@ -224,12 +231,14 @@
 	    btn_ulc.disabled = true; 
 	  }
 	  if (btn_lcs.innerHTML === "interested") {
+	    interest_lcs = true;
 	    btn_lcs.innerHTML = "bid";
 	    btn_lcs.disabled = false;
 	  } else {
 	    btn_lcs.innerHTML = "bid";
 	    btn_lcs.disabled = true; 
 	  }
+	  this.myInterests[i] = {"unlicence":interest_ulc,"licence":interest_lcs};
 	}
       },
       // successfully submit
