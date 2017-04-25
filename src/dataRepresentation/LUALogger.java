@@ -17,7 +17,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class LUALogger {
 	
-	private static String targetFile = "./LuaAuctionResults.xls"; 
+	private static String targetFile = "LuaAuctionResults.xls"; 
 
 	private ConcurrentHashMap<Integer, ArrayList<LuaBid>> luaBids;
 	private AuctionEnvironment environment;
@@ -62,8 +62,8 @@ public class LUALogger {
 				double unlicenced = bid.getUnlicencedBidPrice();
 				boolean interest_licenced = bid.interestedInLicensed();
 				boolean interest_unlicenced = bid.interestedInUnlicensed();
-				thisRow.createCell(priceCursor++).setCellValue("("+ (interest_licenced?"interested":"not interested") + ")" + licenced);
-				thisRow.createCell(priceCursor++).setCellValue("("+ (interest_unlicenced?"interested":"not interested") + ")" + unlicenced);
+				thisRow.createCell(priceCursor++).setCellValue("("+ (interest_licenced?"INT":"NO INT") + ")" + licenced);
+				thisRow.createCell(priceCursor++).setCellValue("("+ (interest_unlicenced?"INT":"NO INT") + ")" + unlicenced);
 			}
 			contentRow++;
 		}
