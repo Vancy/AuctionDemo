@@ -181,7 +181,7 @@ public class LUALogger {
 	
 	private void close(XSSFWorkbook workbook) {
 		try {
-			DateFormat dateFormat = new SimpleDateFormat("-yyyy-MM-dd-HH-mm-ss-");
+			DateFormat dateFormat = new SimpleDateFormat("-yyyy-MM-dd-HH-mm-ss");
 			Date date = new Date();
 			System.out.println();
 		    FileOutputStream out = new FileOutputStream(targetFile+dateFormat.format(date)+fileExt);
