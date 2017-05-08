@@ -54,6 +54,9 @@
       data: "",
 
       myInterests: {},
+      myInterestedItemNum: 0,
+      myBidItemNum: 0,
+      myBidsSubmitted: false,
 
       setUp: function(username, localIP) {
     	this.username = username;
@@ -94,7 +97,11 @@
 	//console.log("update price");
 	if (this.numOfFinishedItem == this.items.length) {
 	  clearTimeout(this.clockTick);
-	  this.submitBids();
+	  if (this.myBidsSubmitted == false) {
+             // If the bidder's bid is still not submitted, submit the bid (This is the last chance.)
+	     this.submitBids();
+             this.myBidsSubmitted = true;	  
+	  }
 	}
       },
 
@@ -136,6 +143,12 @@
 		}
 	  } else {
 	    //If the auction starts. We get the price of current price tick and set the value to the button.
+	  this.myBidItemNum++;
+	  if (this.myInterestedItemNum == this.myBidItemNum) {
+	    //If my bidding item num is already equals to my intereted item number, my bidding is finishd, then submit bids.
+	    this.submitBids();
+	    this.myBidsSubmitted = true;
+	  }
 	  switch(bidType) {
     	    case 1:
               var btn = this.$.tbody.querySelector("#unlicense_price_" + bidID);
@@ -223,6 +236,7 @@
           var btn_ulc = this.$.tbody.querySelector("#unlicense_price_" + i);
 	  var btn_lcs = this.$.tbody.querySelector("#license_price_" + i);
 	  if (btn_ulc.innerHTML === "interested") {
+	    this.myInterestedItemNum++; 
 	    interest_ulc = true;
 	    btn_ulc.innerHTML = "bid";
 	    btn_ulc.disabled = false;
@@ -231,6 +245,7 @@
 	    btn_ulc.disabled = true; 
 	  }
 	  if (btn_lcs.innerHTML === "interested") {
+	    this.myInterestedItemNum++; 
 	    interest_lcs = true;
 	    btn_lcs.innerHTML = "bid";
 	    btn_lcs.disabled = false;

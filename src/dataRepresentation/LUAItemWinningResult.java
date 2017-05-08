@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 
 public class LUAItemWinningResult {
-		public enum WinnerType {LicencedWin, UnlicencedWin};
+		public enum WinnerType {LicencedWin, UnlicencedWin, NoBid};
 		private int itemID;
 		private String itemName;
 		private double L_winner_price = 0;
@@ -40,6 +40,9 @@ public class LUAItemWinningResult {
 		}
 		
 		public WinnerType getWinnerType() {
+			if(this.L_winner_price<0.00001 && this.U_Sum<0.00001) {
+				return WinnerType.NoBid;
+			}
 			if(this.L_winner_price >= this.U_Sum) {
 				return WinnerType.LicencedWin;
 			} else {
@@ -76,6 +79,9 @@ public class LUAItemWinningResult {
 		public String getWinnerDistributionResult() {
 			StringBuffer result = new StringBuffer();
 			double payPrice = this.getSecondHighestPrice();
+			if (WinnerType.NoBid == this.getWinnerType()) {
+				return "";
+			}
 			if (WinnerType.LicencedWin == this.getWinnerType()) {
 				result.append(this.L_winner_bidder_id);
 				result.append("(");
@@ -109,12 +115,15 @@ public class LUAItemWinningResult {
     						.doubleValue(); //set float precision as 2, and using round half up
 					bidderAndPrice.put(bidderID, winPrice);
 				}
-			}
+			} 
+			//else if (WinnerType.NoBid == this.getWinnerType()){
 			return bidderAndPrice;
 		}
 		
 		public String getWinnerTypeAndDistributionResult() {
 			switch(getWinnerType()) {
+			case NoBid:
+				return "{No Bidding}";
 			case LicencedWin:
 				return "{L}" + getWinnerDistributionResult();
 			case UnlicencedWin:
