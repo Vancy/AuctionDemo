@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,7 +20,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class LUALogger {
 	
-	private static String targetFile = "LuaAuctionResults.xls"; 
+	private final static String targetFile = "LuaAuctionResults"; 
+	private final static String fileExt = ".xlsx";
 
 	private ConcurrentHashMap<Integer, ArrayList<LuaBid>> luaBids;
 	private AuctionEnvironment environment;
@@ -177,7 +181,10 @@ public class LUALogger {
 	
 	private void close(XSSFWorkbook workbook) {
 		try {
-		    FileOutputStream out = new FileOutputStream(new File(targetFile));
+			DateFormat dateFormat = new SimpleDateFormat("-yyyy-MM-dd-HH-mm-ss-");
+			Date date = new Date();
+			System.out.println();
+		    FileOutputStream out = new FileOutputStream(targetFile+dateFormat.format(date)+fileExt);
 		    workbook.write(out);
 		    out.close();  
 		} catch (FileNotFoundException e) {
