@@ -54,7 +54,12 @@
       username : "",
 
       getIP: function(e) {
-        this.localIP = e.detail.response.ip;
+	var trueIp = e.detail.response.ip;
+	if (typeof trueIp != 'undefined') {	
+        	this.localIP = trueIp;
+	} else {
+		this.localIP = "127.0.0.1";
+	}
       },
 
       handleResponse: function(e) {
