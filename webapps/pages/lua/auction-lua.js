@@ -49,6 +49,10 @@ Polymer('auction-lua', {
     var json = JSON.parse(e.detail.xhr.response); 
     this.lua = json;
     this.updateInformation();
+    //update the status of the bids are submitted.
+    if (this.$.table.myBidsSubmitted == true) {
+      this.$.status.innerHTML = "<b>Your bids have been submitted!</b>";
+    }
   },
 
   initialize: function() {

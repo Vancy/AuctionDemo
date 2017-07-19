@@ -78,29 +78,29 @@
 
       updatePrice() {
         for (i=0; i < this.items.length; i++) {
-	  var id = this.items[i].ID;
-	  var currentPrice = parseInt(this.$.tbody.querySelector("#price" + id).innerHTML);
-          var maxPrice = this.items[i].maxPrice;
-	  if (currentPrice < maxPrice) {
-	    currentPrice = currentPrice + this.minIncrement;
-	    if (currentPrice >= maxPrice) {
-		currentPrice = maxPrice;
-		//this item price reaches the highest, this item finishes bid
-		this.numOfFinishedItem++;
-	    }
-	    //console.log("id:" + id + "currentPrice:" + currentPrice);
-	    this.$.tbody.querySelector("#price" + id).innerHTML = currentPrice;
-	  } else if (currentPrice == maxPrice) {
-	    continue;
-	  }
+	      var id = this.items[i].ID;
+	      var currentPrice = parseInt(this.$.tbody.querySelector("#price" + id).innerHTML);
+        var maxPrice = this.items[i].maxPrice;
+	      if (currentPrice < maxPrice) {
+	        currentPrice = currentPrice + this.minIncrement;
+	        if (currentPrice >= maxPrice) {
+		        currentPrice = maxPrice;
+		        //this item price reaches the highest, this item finishes bid
+		        this.numOfFinishedItem++;
+	        }
+	       //console.log("id:" + id + "currentPrice:" + currentPrice);
+	       this.$.tbody.querySelector("#price" + id).innerHTML = currentPrice;
+	     } else if (currentPrice == maxPrice) {
+	       continue;
+	     }
 	}
 	//console.log("update price");
 	if (this.numOfFinishedItem == this.items.length) {
 	  clearTimeout(this.clockTick);
 	  if (this.myBidsSubmitted == false) {
-             // If the bidder's bid is still not submitted, submit the bid (This is the last chance.)
-	     this.submitBids();
-             this.myBidsSubmitted = true;	  
+      // If the bidder's bid is still not submitted, submit the bid (This is the last chance.)
+	    this.submitBids();
+      this.myBidsSubmitted = true;	  
 	  }
 	}
       },
@@ -160,7 +160,6 @@
     this.myBidItemNum++;
     if (this.myInterestedItemNum == this.myBidItemNum) {
       //If my bidding item num is already equals to my intereted item number, my bidding is finishd, then submit bids.
-      console.log("The bit is XXXXX");
       this.submitBids();
       this.myBidsSubmitted = true;
     }
