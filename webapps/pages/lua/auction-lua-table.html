@@ -141,14 +141,8 @@
               break;
             default:
 		}
-	  } else {
-	    //If the auction starts. We get the price of current price tick and set the value to the button.
-	  this.myBidItemNum++;
-	  if (this.myInterestedItemNum == this.myBidItemNum) {
-	    //If my bidding item num is already equals to my intereted item number, my bidding is finishd, then submit bids.
-	    this.submitBids();
-	    this.myBidsSubmitted = true;
-	  }
+      return;
+	  } 
 	  switch(bidType) {
     	    case 1:
               var btn = this.$.tbody.querySelector("#unlicense_price_" + bidID);
@@ -162,8 +156,16 @@
               break;
             default:
 	  } 
+    //If the auction starts. We get the price of current price tick and set the value to the button.
+    this.myBidItemNum++;
+    if (this.myInterestedItemNum == this.myBidItemNum) {
+      //If my bidding item num is already equals to my intereted item number, my bidding is finishd, then submit bids.
+      console.log("The bit is XXXXX");
+      this.submitBids();
+      this.myBidsSubmitted = true;
+    }
 	  console.log("place bid");
- 	}
+ 	
       },
 
       collectBids: function() {
