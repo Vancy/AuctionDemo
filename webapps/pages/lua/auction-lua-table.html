@@ -121,21 +121,21 @@
 	  switch(bidType) {
     	    case 1:
               var btn = this.$.tbody.querySelector("#unlicense_price_" + bidID);
-	      if (btn.innerHTML === "interested") {
+	      if (btn.innerHTML === "activated") {
 	        btn.innerHTML = "bid";
 		//btn.disabled = false;
 	      } else {
-	        btn.innerHTML = "interested";
+	        btn.innerHTML = "activated";
 		//btn.disabled = true; 
 	      }
               break;
             case 2:
               var btn = this.$.tbody.querySelector("#license_price_" + bidID);
-	      if (btn.innerHTML === "interested") {
+	      if (btn.innerHTML === "activated") {
 	        btn.innerHTML = "bid";
 		//btn.disabled = false;
 	      } else {
-	        btn.innerHTML = "interested";
+	        btn.innerHTML = "activated";
 		//btn.disabled = true; 
 	      }
               break;
@@ -236,7 +236,7 @@
           var interest_lcs = false;
           var btn_ulc = this.$.tbody.querySelector("#unlicense_price_" + i);
 	  var btn_lcs = this.$.tbody.querySelector("#license_price_" + i);
-	  if (btn_ulc.innerHTML === "interested") {
+	  if (btn_ulc.innerHTML === "activated") {
 	    this.myInterestedItemNum++; 
 	    interest_ulc = true;
 	    btn_ulc.innerHTML = "bid";
@@ -245,7 +245,7 @@
 	    btn_ulc.innerHTML = "bid";
 	    btn_ulc.disabled = true; 
 	  }
-	  if (btn_lcs.innerHTML === "interested") {
+	  if (btn_lcs.innerHTML === "activated") {
 	    this.myInterestedItemNum++; 
 	    interest_lcs = true;
 	    btn_lcs.innerHTML = "bid";

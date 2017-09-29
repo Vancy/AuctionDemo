@@ -2,7 +2,7 @@ Polymer('auction-lua', {
   localIP: "127.0.0.1",
   username: "",
   lua: {},
- 
+
   items: [],
   auctionTableStarted: false,
   isFinal: false,
@@ -46,7 +46,7 @@ Polymer('auction-lua', {
         this.$.status.innerHTML = "<b class='error'>Error. Cannot connect to the server.</b>";
         return;
     }
-    var json = JSON.parse(e.detail.xhr.response); 
+    var json = JSON.parse(e.detail.xhr.response);
     this.lua = json;
     this.updateInformation();
     //update the status of the bids are submitted.
@@ -60,7 +60,7 @@ Polymer('auction-lua', {
     console.log("initialization");
     this.items = this.lua.itemList;
   },
-  
+
   updateInformation: function() {
     console.log("update info");
     var currentRound = this.lua.round;
@@ -78,7 +78,7 @@ Polymer('auction-lua', {
     if (this.isFinal) {
       this.$.results.innerHTML = this.getMyResultMsg();
     }
-    this.$.valuations.innerHTML = this.getMyValuationMsg();       
+    this.$.valuations.innerHTML = this.getMyValuationMsg();
   },
 
   getMyResultMsg: function() {
@@ -161,7 +161,7 @@ Polymer('auction-lua', {
       }
       console.log("submit interests");
       this.$.table.updateBidButtons();
-      this.$.submitInterests.innerHTML = "Interests Submitted";
+      this.$.submitInterests.innerHTML = "Active Bids Submitted";
       this.$.submitInterests.disabled = true;
   },
 
