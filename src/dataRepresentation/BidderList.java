@@ -1,6 +1,7 @@
 package dataRepresentation;
 
 import java.awt.Color;
+import java.util.Random;
 import java.util.ArrayList;
 
 public class BidderList {
@@ -24,10 +25,27 @@ public class BidderList {
 		colorList.add(new Color(139,214,58));
 	}
 	
+	
 	private ArrayList<Bidder> list;
 	
 	public BidderList() {
 		this.list = new ArrayList<Bidder>();
+	}
+	
+	public static Color getColor(int row) {
+		int index = row + 1;
+		if (index <= (colorList.size()-1)) {
+			return colorList.get(index);
+		} else {
+			Random rand = new Random();
+			rand.setSeed(System.currentTimeMillis());
+			float r = rand.nextFloat();
+			float g = rand.nextFloat();
+			float b = rand.nextFloat();
+			Color newColor = new Color(r, g, b);
+			colorList.add(newColor);
+			return newColor;
+		}
 	}
 	
 	public void addBidder(Bidder b) {
